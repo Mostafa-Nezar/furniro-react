@@ -1,0 +1,71 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "user1",
+      "password": "pass1"
+    },
+    {
+      "id": "bf13",
+      "username": "mostafa",
+      "password": "232323"
+    },
+    {
+      "id": "70cf",
+      "username": "mostafa",
+      "password": "232323"
+    },
+    {
+      "id": "3c4b",
+      "username": "ahmed",
+      "password": "323232"
+    },
+    {
+      "id": "08fc",
+      "username": "mostafa",
+      "password": "232323"
+    },
+    {
+      "id": "fcb3",
+      "username": "mostafa",
+      "password": "232323"
+    },
+    {
+      "id": "0e32",
+      "username": "mostafa",
+      "password": "232323"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "96cc",
+      "name": "qq",
+      "priority": "Medium",
+      "dueDate": "2002-02-22",
+      "status": "Completed",
+      "userId": 1
+    },
+    {
+      "id": "5439",
+      "name": "",
+      "priority": "Medium",
+      "dueDate": "2002-02-02",
+      "status": "Pending",
+      "userId": 1
+    },
+    {
+      "id": "0631",
+      "name": "qqww",
+      "priority": "Medium",
+      "dueDate": "2002-02-02",
+      "status": "Pending"
+    },
+    {
+      "id": "0f5d",
+      "name": "hello",
+      "priority": "High",
+      "dueDate": "2024-02-02",
+      "status": "Pending"
+    }
+  ]
+}
