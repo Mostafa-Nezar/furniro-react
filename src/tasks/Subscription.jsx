@@ -1,20 +1,18 @@
 import { useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import MyContext from "./MyContext"; // تأكد من المسار الصحيح
+import MyContext from "./MyContext";
 
 const EmailSubscription = () => {
-  const { updateSubscription } = useContext(MyContext);
+  const { emails, updateEmails } = useContext(MyContext);
 
   const handleSubmit = (values, { resetForm }) => {
     const emailObject = {
       email: values.email,
       liked: false,
     };
-    const storedData = JSON.parse(localStorage.getItem("emails")) || [];
-    storedData.push(emailObject);
-    localStorage.setItem("emails", JSON.stringify(storedData));
-    updateSubscription(true);
+    const updatedEmails = [...emails, emailObject];
+    updateEmails(updatedEmails); // تحديث المصفوفة في الكونتكست
     resetForm();
   };
 
@@ -49,11 +47,10 @@ const EmailSubscription = () => {
 };
 
 const EmailUnSubscription = () => {
-  const { updateSubscription } = useContext(MyContext);
+  const { updateEmails } = useContext(MyContext);
 
   const handleSubmit = (_, { resetForm }) => {
-    localStorage.removeItem("emails");
-    updateSubscription(false); // تحديث حالة الاشتراك
+    updateEmails([]); // حذف جميع العناصر من المصفوفة
     resetForm();
   };
 
@@ -82,11 +79,11 @@ const EmailUnSubscription = () => {
 };
 
 function Subscription() {
-  const { isSubscribed } = useContext(MyContext);
+  const { emails } = useContext(MyContext);
 
   return (
     <>
-      {isSubscribed ? (
+      {emails.length > 0 ? ( // التحقق إذا كانت المصفوفة تحتوي على عناصر
         <EmailUnSubscription />
       ) : (
         <EmailSubscription />

@@ -3,16 +3,22 @@ import { createContext, useState, useContext } from "react";
 const MyContext = createContext();
 
 export const MyContextProvider = ({ children }) => {
-  const [isSubscribed, setIsSubscribed] = useState(
-    !!JSON.parse(localStorage.getItem("emails"))
-  );
+  const [emails, setEmails] = useState(() => {
+    const savedEmails = localStorage.getItem("emails");
+    return savedEmails ? JSON.parse(savedEmails) : [];
+  });
 
-  const updateSubscription = (status) => {
-    setIsSubscribed(status);
+  const updateEmails = (newEmails) => {
+    setEmails(newEmails);
+    if (newEmails) {
+      localStorage.setItem("emails", JSON.stringify(newEmails));
+    } else {
+      localStorage.removeItem("emails");
+    }
   };
 
   return (
-    <MyContext.Provider value={{ isSubscribed, updateSubscription }}>
+    <MyContext.Provider value={{ emails, updateEmails }}>
       {children}
     </MyContext.Provider>
   );

@@ -2,33 +2,18 @@ import { useEffect, useState } from "react";
 import { useMyContext } from "../tasks/MyContext";
 
 export default function Like() {
-  const { isSubscribed } = useMyContext();
-  const [liked, setLiked] = useState(false);
-  const [emails, setEmails] = useState(() => JSON.parse(localStorage.getItem("emails")) || []);
+  const { emails, updateEmails } = useMyContext();
   const [showPopup, setShowPopup] = useState(false);
+  const liked = emails.length > 0 ? emails[0].liked : false;
 
-  useEffect(() => {
-    if (emails.length > 0 && isSubscribed) {
-      setLiked(emails[0].liked || false);
-    } else {
-      setLiked(false);
-    }
-  }, [emails, isSubscribed]);
+  useEffect(() => {}, [emails]);
 
   const handleLikeClick = () => {
-    if (isSubscribed) {
-      const updatedLiked = !liked; 
-      setLiked(updatedLiked);
-
+    if (emails.length > 0) {
+      const updatedLiked = !liked;
       const updatedEmails = [...emails];
-      if (updatedEmails.length > 0) {
-        updatedEmails[0].liked = updatedLiked;
-        setEmails(updatedEmails);
-        localStorage.setItem("emails", JSON.stringify(updatedEmails));
-      }
-
-      localStorage.setItem("color", updatedLiked ? "red" : "black");
-      localStorage.setItem("fill", updatedLiked ? "currentColor" : "none");
+      updatedEmails[0].liked = updatedLiked;
+      updateEmails(updatedEmails);
     } else {
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);

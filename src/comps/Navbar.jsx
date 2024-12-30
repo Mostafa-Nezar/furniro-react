@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { useMyContext } from "../tasks/MyContext"; 
-import Like from "../tasks/Like"
+import { useContext } from "react";
+import MyContext from "../tasks/MyContext";
+import Like from "../tasks/Like";
 function Navbar() {
-  const { isSubscribed, toggleSubscription } = useMyContext(); 
-
   function SubscribeIcon() {
+    const { emails } = useContext(MyContext);
+    const isSubscribed = emails.length > 0;
+
     return !isSubscribed ? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -36,12 +38,16 @@ function Navbar() {
       </svg>
     );
   }
-  
+
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`navbar navbar-expand-md ${location.pathname == "/shop" ? "sticky-top":""}`}>
+    <nav
+      className={`navbar navbar-expand-md ${
+        location.pathname == "/shop" ? "sticky-top" : ""
+      }`}
+    >
       <div className="container-fluid">
         <Link className="ms-4 navbar-brand fw-bold fs-4" to="/">
           <img
@@ -118,11 +124,7 @@ function Navbar() {
           </ul>
           <ul className="navbar-nav ms-5 me-5">
             <li>
-              <Link
-                className="nav-link mt-0 mb-0 vali text-black"
-                to="#sub"
-                onClick={toggleSubscription} // تغيير حالة الاشتراك عند النقر على الأيقونة
-              >
+              <Link className="nav-link mt-0 mb-0 vali text-black" to="#sub">
                 <SubscribeIcon />
               </Link>
             </li>
@@ -150,10 +152,7 @@ function Navbar() {
               </Link>
             </li>
             <li className="icon-cart">
-              <Link
-                className="nav-link mt-0 mb-0 text-black"
-                to="#"
-              >
+              <Link className="nav-link mt-0 mb-0 text-black" to="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="26"
