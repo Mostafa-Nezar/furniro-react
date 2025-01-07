@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ProductCart from "../comps/Items";
 import { motion } from "framer-motion";
+import ProductItem from "../comps/Items";
+import ShareButtons from "../comps/Share";
 const useScrollObserver = (selector, threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -509,10 +510,11 @@ const Home = () => {
       <div className="p-5 product-list">
         <div className="row">
           {products.map((product, index) => (
-            <ProductCart key={index} product={product} />
+            <ProductItem key={index} product={product} />
           ))}
         </div>
       </div>
+      <ShareButtons />
       <div className="text-center my-5">
         <a href="/shop#car">
           <button className="show-more mb-5 mt-3 text-center">Show More</button>

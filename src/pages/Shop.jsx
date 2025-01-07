@@ -3,7 +3,8 @@ import Features from "../comps/Features.jsx";
 import Landing from "../comps/Landing.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductCart from "../comps/Items";
+import ProductItem from "../comps/Items";
+import ShareButtons from "../comps/Share";
 const Edit = () => (
   <div className="edit p-3 pb-2">
     <div className="row">
@@ -120,7 +121,7 @@ const Carousel = () => {
             <div className="p-5 product-list">
               <div className="row">
                 {chunk.map((product, idx) => (
-                  <ProductCart key={idx} product={product} />
+                  <ProductItem key={idx} product={product} />
                 ))}
               </div>
             </div>
@@ -159,6 +160,7 @@ const Shop = () => (
     <Landing land="Shop" showImage={false} />
     <Edit />
     <Carousel />
+    <ShareButtons/>
     <Features />
   </>
 );

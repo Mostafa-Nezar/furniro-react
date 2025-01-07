@@ -1,12 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { useContext } from "react";
-import MyContext from "../tasks/MyContext";
 import Like from "../tasks/Like";
-function Navbar() {
+import { useAppContext } from "../tasks/MyContext";
+function Navbar({ toggle }) {
+  const { total } = useAppContext(); // استهلاك الكونتكست
   function SubscribeIcon() {
-    const { emails } = useContext(MyContext);
+    const { emails } = useAppContext();
     const isSubscribed = emails.length > 0;
-
     return !isSubscribed ? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +150,7 @@ function Navbar() {
                 <Like />
               </Link>
             </li>
-            <li className="icon-cart">
+            <li className="icon-cart" onClick={toggle}>
               <Link className="nav-link mt-0 mb-0 text-black" to="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +164,7 @@ function Navbar() {
                   />
                 </svg>
               </Link>
-              <span>0</span>
+              <span>{total}</span>
             </li>
           </ul>
         </div>

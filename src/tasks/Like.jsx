@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useMyContext } from "../tasks/MyContext";
+import { useAppContext } from "../tasks/MyContext";
 
 export default function Like() {
-  const { emails, updateEmails } = useMyContext();
+  const { emails, updateEmails } = useAppContext();
   const [showPopup, setShowPopup] = useState(false);
   const liked = emails.length > 0 ? emails[0].liked : false;
 
