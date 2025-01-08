@@ -25,7 +25,7 @@ export const AppProvider = ({ children }) => {
   });
 
   const [total, setTotal] = useState(0);
-
+  const [showPopup, setShowPopup] = useState(false);
   useEffect(() => {
     const newTotal = cart.reduce((acc, item) => acc + item.quantity, 0);
     setTotal(newTotal);
@@ -52,6 +52,8 @@ export const AppProvider = ({ children }) => {
     }
 
     setCart(updatedCart);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 3000);
   };
 
   const removeItemFromCart = (id) => {
@@ -70,6 +72,7 @@ export const AppProvider = ({ children }) => {
         setView,
         addItemToCart,
         removeItemFromCart,
+        showPopup,
       }}
     >
       {children}

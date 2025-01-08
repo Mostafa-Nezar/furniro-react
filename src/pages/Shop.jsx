@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductItem from "../comps/Items";
 import ShareButtons from "../comps/Share";
+import { useAppContext } from "../tasks/MyContext.jsx";
 const Edit = () => (
   <div className="edit p-3 pb-2">
     <div className="row">
@@ -155,14 +156,18 @@ const Carousel = () => {
   );
 };
 
-const Shop = () => (
-  <>
-    <Landing land="Shop" showImage={false} />
-    <Edit />
-    <Carousel />
-    <ShareButtons/>
-    <Features />
-  </>
-);
+const Shop = () => {
+  const { showPopup } = useAppContext();
+  return (
+    <>
+      <Landing land="Shop" showImage={false} />
+      <Edit />
+      <Carousel />
+      <ShareButtons />
+      <Features />
+      {showPopup && <div className="popup show">Added To Cart!</div>}
+    </>
+  );
+};
 
 export default Shop;

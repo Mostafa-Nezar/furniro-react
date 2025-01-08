@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import ProductItem from "../comps/Items";
 import ShareButtons from "../comps/Share";
+import { useAppContext } from "../tasks/MyContext";
 const useScrollObserver = (selector, threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -491,6 +492,7 @@ const Random = () => {
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const { showPopup } = useAppContext();
 
   useEffect(() => {
     axios.get("productlist.json").then((response) => {
@@ -523,6 +525,7 @@ const Home = () => {
       <div>
         <Inspiration />
         <Random />
+        {showPopup && <div className="popup show">Added To Cart!</div>}
       </div>
     </div>
   );
