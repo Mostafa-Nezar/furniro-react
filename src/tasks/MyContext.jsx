@@ -19,9 +19,11 @@ export const AppProvider = ({ children }) => {
   };
 
   // Cart State and Functions
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
+  const [cart, setCart] = useState(() => {
+    const storedItems = localStorage.getItem("cart");
+    return storedItems ? JSON.parse(storedItems) : [];
+  });
+
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -37,6 +39,25 @@ export const AppProvider = ({ children }) => {
     setShow((prevShow) => (prevShow === "" ? "d-none" : ""));
   };
 
+  // Add and Remove Item Functions
+  const addItemToCart = (item) => {
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    let updatedCart = [...cart];
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      item.quantity = 1;
+      updatedCart.push(item);
+    }
+
+    setCart(updatedCart);
+  };
+
+  const removeItemFromCart = (id) => {
+    setCart((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -47,6 +68,8 @@ export const AppProvider = ({ children }) => {
         total,
         show,
         setView,
+        addItemToCart,
+        removeItemFromCart,
       }}
     >
       {children}

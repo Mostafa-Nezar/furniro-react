@@ -1,22 +1,14 @@
-import { useState } from "react";
+import { useAppContext } from "../tasks/MyContext";
 
-const CartSection = ({toggle,settoggle}) => {
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
-
-  const handleDelete = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart);
-  };
+const CartSection = ({ toggle, settoggle }) => {
+  const { cart, removeItemFromCart } = useAppContext(); // استيراد cart و removeItemFromCart
 
   const calculateSubtotal = () => {
-    return cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
   return (
-    <section id="listcardparent" className={`${toggle?"disp":""}`}>
+    <section id="listcardparent" className={`${toggle ? "disp" : ""}`}>
       <div className="d-flex justify-content-between align-items-center p-2 pb-0">
         <h4 className="d-inline dont">Shopping Cart</h4>
         <img
@@ -37,7 +29,12 @@ const CartSection = ({toggle,settoggle}) => {
           >
             <div className="image dont">
               <a className="dont">
-                <img width={"50"} className="img-fluid dont sth" src={`../${p.image}`} />
+                <img
+                  width={"50"}
+                  className="img-fluid dont sth"
+                  src={`../${p.image}`}
+                  alt={p.name}
+                />
               </a>
             </div>
             <div className="dont">
@@ -56,7 +53,7 @@ const CartSection = ({toggle,settoggle}) => {
                 style={{ width: "20px", cursor: "pointer" }}
                 src="../images/x.png"
                 alt="Delete"
-                onClick={() => handleDelete(p.id)}
+                onClick={() => removeItemFromCart(p.id)} // تفعيل الحذف
               />
             </div>
           </div>
