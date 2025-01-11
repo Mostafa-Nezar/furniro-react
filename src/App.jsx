@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import Scrollbutton from "./comps/Scrollbutton.jsx";
 import "./main.css";
 import Navbar from "./comps/Navbar.jsx";
+import Cart from "./comps/Cart.jsx";
 import CartSection from "./comps/CartSection.jsx";
 import { useState } from "react";
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Scrollbutton />
         <Footer />

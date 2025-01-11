@@ -151,12 +151,13 @@ function Navbar({ toggle }) {
               </Link>
             </li>
             <li className="icon-cart" onClick={toggle}>
-              <Link className="nav-link mt-0 mb-0 text-black" to="#">
+              <Link className={`nav-link mt-0 mb-0 text-black`} to="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="26"
                   height="26"
                   viewBox="0 0 1024 1024"
+                  className={`${isActive("/cart") ? "active" : ""}`}
                 >
                   <path
                     fill="currentColor"

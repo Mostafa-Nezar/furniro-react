@@ -1,10 +1,12 @@
 import { useAppContext } from "../tasks/MyContext";
-
+import { Link } from "react-router-dom";
 const CartSection = ({ toggle, settoggle }) => {
   const { cart, removeItemFromCart } = useAppContext(); // استيراد cart و removeItemFromCart
 
   const calculateSubtotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    return cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
   };
 
   return (
@@ -65,9 +67,9 @@ const CartSection = ({ toggle, settoggle }) => {
       <hr style={{ width: "110%" }} className="me-5" />
       <div className="dont btncart d-flex">
         <button className="dont carting">
-          <a style={{ border: "none" }} href="../cart/cart.html">
+          <Link className={`nav-link mt-0 mb-0 text-black`} to="/cart">
             Cart
-          </a>
+          </Link>
         </button>
         <a href="../checkout/checkout.html">
           <button className="dont checkout">Checkout</button>
