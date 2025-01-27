@@ -12,7 +12,7 @@ const CartSection = ({ toggle, settoggle }) => {
   return (
     <section id="listcardparent" className={`${toggle ? "disp" : ""}`}>
       <div className="d-flex justify-content-between align-items-center p-2 pb-0">
-        <h4 className="d-inline dont">Shopping Cart</h4>
+        <h4 className="d-inline ">Shopping Cart</h4>
         <img
           src="../images/cart.png"
           className="closing"
@@ -22,36 +22,36 @@ const CartSection = ({ toggle, settoggle }) => {
         />
       </div>
       <hr />
-      <section id="listcard" className="dont mb-3">
+      <section id="listcard" className="mb-3">
         {cart.map((p, index) => (
           <div
             key={p.id || index}
-            className="myitem d-flex justify-content-between align-items-center ps-3 dont"
+            className="d-flex justify-content-between align-items-center ps-3 my-2"
             style={{ width: "92%" }}
           >
-            <div className="image dont">
-              <a className="dont">
+            <div>
+              <a className="">
                 <img
                   width={"50"}
-                  className="img-fluid dont sth"
+                  className="img-fluid"
                   src={`../${p.image}`}
                   alt={p.name}
                 />
               </a>
             </div>
-            <div className="dont">
-              <div className="dont name">{p.name}</div>
+            <div className="">
+              <div className=" name">{p.name}</div>
               <div>{p.quantity}</div>
-              <div className="dont">
+              <div className="">
                 <span className="mx-2">X</span>
-                <span className="dont" style={{ color: "var(--primary)" }}>
+                <span className="" style={{ color: "var(--primary)" }}>
                   Rs {p.price * p.quantity}.00
                 </span>
               </div>
             </div>
-            <div className="dont">
+            <div className="">
               <img
-                className="deleteitem dont"
+                className="deleteitem "
                 style={{ width: "20px", cursor: "pointer" }}
                 src="../images/x.png"
                 alt="Delete"
@@ -65,17 +65,21 @@ const CartSection = ({ toggle, settoggle }) => {
         Subtotal: <strong>Rs {calculateSubtotal()}</strong>
       </div>
       <hr style={{ width: "110%" }} className="me-5" />
-      <div className="dont btncart d-flex">
-        <button className="dont carting">
-          <Link className={`nav-link mt-0 mb-0 text-black`} to="/cart">
+      <div className=" btncart d-flex">
+        <button className=" carting">
+          <Link
+            onClick={settoggle}
+            className={`nav-link mt-0 mb-0 text-black`}
+            to="/cart"
+          >
             Cart
           </Link>
         </button>
         <a href="../checkout/checkout.html">
-          <button className="dont checkout">Checkout</button>
+          <button className=" checkout">Checkout</button>
         </a>
         <a href="#">
-          <button className="dont">Comparison</button>
+          <button className="">Comparison</button>
         </a>
       </div>
     </section>

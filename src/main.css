@@ -734,3 +734,16 @@ nav .active {
 .home-carousel-indicators .indicator.active {
   color: var(--primary);
 }
+
+
+
+
+
+.disp {
+  transform: translateX(0) !important;
+  transition: 1s;
+}
+
+.red {
+  color: var(--redcolor) !important;
+}
