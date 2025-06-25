@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fontsource/poppins": "^5.1.0",
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "formik": "^2.4.6",

@@ -493,15 +493,13 @@ const Random = () => {
 const Home = () => {
   const [products, setProducts] = useState([]);
   const { showPopup } = useAppContext();
-
   useEffect(() => {
-    axios.get("productlist.json").then((response) => {
-      const nestedArray = response.data;
+    axios.get("http://localhost:3001/api/products/db").then((res) => {
+      const nestedArray = res.data;
       const flattenedProducts = nestedArray.flat();
       setProducts(flattenedProducts.slice(0, 8));
     });
   }, []);
-
   return (
     <div>
       <Banner />

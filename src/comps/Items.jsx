@@ -4,19 +4,7 @@ const ProductItem = ({ product }) => {
   const addToCart = () => {
     addItemToCart(product); // استدعاء الدالة مع المنتج
   };
-  // const openShareWindow = (e) => {
-  //   e.preventDefault();
-  //   const windowFeatures = `width=${600},height=${400},left=${500},top=${50},scrollbars=yes`;
-  //   const shareWindow = window.open(
-  //     "/sharePopup.html",
-  //     "_blank",
-  //     windowFeatures
-  //   );
 
-  //   if (shareWindow) {
-  //     shareWindow.onload = () => {};
-  //   }
-  // };
   return (
     <div className="col-md-6 col-lg-3">
       <div className="cont semiwhite">
