@@ -13,14 +13,12 @@ const storage = {
     }
   },
   setItem(key, value) {
-    try {
       localStorage.setItem(key, value);
-    } catch {}
+    
   },
   removeItem(key) {
-    try {
       localStorage.removeItem(key);
-    } catch {}
+    
   },
 };
 const fetchInstance = async (endpoint, options = {}) => {

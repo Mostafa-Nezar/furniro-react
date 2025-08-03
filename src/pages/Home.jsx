@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { motion } from "framer-motion";
-import ProductItem from "../comps/Items";
+import Productcart from "../comps/Productcart";
 import { useAppContext } from "../context/AppContext";
 const useScrollObserver = (selector, threshold = 0.1) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,17 +29,49 @@ const useScrollObserver = (selector, threshold = 0.1) => {
   return isVisible;
 };
 
+
 const Banner = () => {
   return (
-    <div className="banner">
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        backgroundImage:
+          'url("https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/banner.png")',
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        height: "780px",
+      }}
+    >
       <motion.div
-        className="mask container-fluid"
+        className="container-fluid"
+        style={{
+          backgroundColor: "var(--color3)",
+          height: "55%",
+          width: "40%",
+          position: "relative",
+          left: "45%",
+          top: "48%",
+          transform: "translate(-50%, -50%)",
+          padding: "50px",
+          borderRadius: "10px",
+        }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <span>New Arrival</span>
+        <span
+          style={{
+            wordSpacing: "10px",
+            letterSpacing: "5px",
+            margin: "20px",
+            fontWeight: "bold",
+            display: "block",
+          }}
+        >
+          New Arrival
+        </span>
         <motion.h1
+          style={{ color: "var(--primary)", fontWeight: "bold", margin: "20px" }}
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -50,6 +81,7 @@ const Banner = () => {
           New Collection
         </motion.h1>
         <motion.p
+          style={{ margin: "20px" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.4 }}
@@ -57,9 +89,16 @@ const Banner = () => {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. ut aperiam
           aspernatur error itaque minima odio.
         </motion.p>
-        <a className="ms-5" href="/shop">
+        <a href="/shop" className="ms-5">
           <motion.button
-            className="mt-4"
+            className="mt-4 text-white border-0"
+            style={{
+              backgroundColor: "var(--primary)",
+              padding: "20px",
+              width: "200px",
+              fontWeight: "bold",
+              margin: "20px",
+            }}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
@@ -102,7 +141,7 @@ const Landing = () => {
           >
             <img
               className="img-fluid"
-              src="images/Image-living room.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Image-living room.png"
               alt="Dining"
             />
             <span className="d-block mt-3 fw-bold fs-4">Dining</span>
@@ -115,7 +154,7 @@ const Landing = () => {
           >
             <img
               className="img-fluid"
-              src="images/Mask Group.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Mask Group.png"
               alt="Living"
             />
             <div className="d-block mt-3 fw-bold fs-4">Living</div>
@@ -128,7 +167,7 @@ const Landing = () => {
           >
             <img
               className="img-fluid"
-              src="images/Mask Group2.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Mask Group2.png"
               alt="Bedroom"
             />
             <div className="d-block mt-3 fw-bold fs-4">Bedroom</div>
@@ -181,7 +220,7 @@ const Inspiration = () => {
         {/* Image Section */}
         <div className="col-lg-4 mb-0 pb-0 col-md-6">
           <motion.img
-            src="images/baby.png"
+            src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/baby.png"
             alt="Baby Room"
             className="img-fluid"
             initial={{ opacity: 0 }}
@@ -254,25 +293,25 @@ const Inspiration = () => {
               <div className="carousel-inner p-md-4 p-lg-0">
                 <div className="carousel-item active">
                   <img
-                    src="images/Rectangle 26.png"
+                    src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 26.png"
                     className="d-block w-100 pe-5 carimg"
                   />
                 </div>
                 <div className="carousel-item">
                   <img
-                    src="images/bed.png"
+                    src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/bed.png"
                     className="d-block w-100 pe-5 carimg"
                   />
                 </div>
                 <div className="carousel-item">
                   <img
-                    src="images/library.png"
+                    src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/library.png"
                     className="d-block w-100 pe-5 carimg"
                   />
                 </div>
                 <div className="carousel-item">
                   <img
-                    src="images/kit.png"
+                    src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/kit.png"
                     className="d-block w-100 pe-5 carimg"
                   />
                 </div>
@@ -376,7 +415,7 @@ const Random = () => {
             transition={{ duration: 1, delay: 0.2 }}
           >
             <motion.img
-              src="images/library.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/library.png"
               style={{
                 gridArea: "m1",
                 width: "100%",
@@ -390,7 +429,7 @@ const Random = () => {
               transition={{ duration: 0.8 }}
             />
             <motion.img
-              src="images/table.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/table.png"
               className="img-fluid m3"
               style={{
                 gridArea: "m3",
@@ -411,7 +450,7 @@ const Random = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             ></motion.div>
             <motion.img
-              src="images/bed.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/bed.png"
               className="img-fluid m4"
               style={{ gridArea: "m4", width: "100%", height: "80%" }}
               alt=""
@@ -420,7 +459,7 @@ const Random = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
             />
             <motion.img
-              src="images/vas.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/vas.png"
               className="img-fluid m5"
               style={{ gridArea: "m5", width: "100%", height: "70%" }}
               alt=""
@@ -436,7 +475,7 @@ const Random = () => {
             animate={{ opacity: isVisible ? 1 : 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <img className="img-fluid" src="images/lunch.png" alt="" />
+            <img className="img-fluid" src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/lunch.png" alt="" />
           </motion.div>
 
           <motion.div
@@ -446,7 +485,7 @@ const Random = () => {
             transition={{ duration: 1, delay: 0.6 }}
           >
             <motion.img
-              src="images/kit.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/kit.png"
               className="img-fluid m6"
               style={{ gridArea: "m6", width: "100%", height: "100%" }}
               alt=""
@@ -455,7 +494,7 @@ const Random = () => {
               transition={{ duration: 0.8 }}
             />
             <motion.img
-              src="images/bedroom.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/bedroom.png"
               className="img-fluid m8 mb-5"
               style={{ gridArea: "m8", width: "100%", marginTop: "30%" }}
               alt=""
@@ -464,7 +503,7 @@ const Random = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
             />
             <motion.img
-              src="images/chef.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/chef.png"
               className="img-fluid m9"
               style={{ gridArea: "m9", width: "100%", height: "40%" }}
               alt=""
@@ -473,7 +512,7 @@ const Random = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             />
             <motion.img
-              src="images/block.png"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/block.png"
               className="img-fluid m10"
               style={{ gridArea: "m10", width: "100%", height: "70%" }}
               alt=""
@@ -490,17 +529,8 @@ const Random = () => {
 };
 
 const Home = () => {
-  // const [products, setProducts] = useState([]);
-  const { showPopup, products } = useAppContext();
-  console.log(products);
-  
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/api/products/db").then((res) => {
-  //     const nestedArray = res.data;
-  //     const flattenedProducts = nestedArray.flat();
-  //     setProducts(flattenedProducts.slice(0, 8));
-  //   });
-  // }, []);
+  const { products } = useAppContext();
+  const showPopup = false
   return (
     <div>
       <Banner />
@@ -510,8 +540,8 @@ const Home = () => {
       </h1>
       <div className="p-5 product-list">
         <div className="row">
-          {products.map((product, index) => (
-            <ProductItem key={index} product={product} />
+          {products.slice(0, 8).map((product, index) => (
+            <Productcart key={index} product={product} />
           ))}
         </div>
       </div>

@@ -7,6 +7,7 @@ import Profile from "./comps/Profile.jsx";
 import Home from "./pages/Home.jsx";
 import Payment from "./comps/Payment.jsx";
 import Myfooter from "./comps/Footer.jsx";
+import Shop from "./pages/Shop.jsx";
 
 function Layout() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function Layout() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
         <Route path="/Payment" element={<Payment />} />
+        <Route path="/shop" element={<Shop />} />
       </Routes>
       {!hideLayout && <Myfooter />}
     </>

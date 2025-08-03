@@ -315,7 +315,7 @@ ul li .subscribe:hover {
 }
 
 .contacting {
-  background-image: url(../images/Rectangle\ 1x.png);
+  background-image: url(https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle\ 1x.png);
   background-size: 100% 100%;
   width: 100%;
   background-repeat: no-repeat;
@@ -404,12 +404,6 @@ ul li .subscribe:hover {
   fill: var(--primary);
 }
 
-.banner {
-  background-image: url("images/scandinavian-interior-mockup-wall-decal-background\ 1.png");
-  background-size: cover;
-  height: 780px;
-  background-repeat: no-repeat;
-}
 
 @media(max-width:768px) {
   .navbar ul {
@@ -421,17 +415,7 @@ nav .active {
   color: var(--color) !important;
 }
 
-.mask {
-  background-color: var(--color3);
-  height: 55%;
-  width: 40% !important;
-  position: relative;
-  left: 45%;
-  top: 48%;
-  transform: translate(-50%, -50%);
-  padding: 50px;
-  border-radius: 10px;
-}
+
 
 @media(max-width:1050px) {
   .mask {
@@ -442,33 +426,7 @@ nav .active {
   }
 }
 
-.mask *:not(br) {
-  margin: 20px;
-}
 
-.mask span {
-  word-spacing: 10px;
-  letter-spacing: 5px;
-  margin: 20px;
-}
-
-.mask h1 {
-  color: var(--primary);
-  font-weight: bold;
-}
-
-.mask button {
-  background-color: var(--primary);
-  padding: 20px;
-  border: none;
-  width: 200px;
-  color: white;
-  font-weight: bold;
-}
-
-.mask span {
-  font-weight: bold;
-}
 
 .landing .row div img:hover {
   transform: rotateY(30deg);

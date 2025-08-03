@@ -23,7 +23,7 @@ export default function Features() {
           transition={{ duration: 1 }}
         >
           <div className="feature d-flex mb-md-0 mb-5">
-            <img src="images/trophy 1.svg" className="p-2" alt="" />
+            <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/trophy 1.svg" className="p-2" alt="" />
             <div className="p-2">
               <h6 className="fw-bold">High Quality</h6>
               <div className="fs-7 text-black-50">crafted from top materials</div>
@@ -39,7 +39,7 @@ export default function Features() {
           transition={{ duration: 1, delay: 0.2 }}
         >
           <div className="feature d-flex mb-md-0 mb-5">
-            <img src="images/true.svg" className="p-2" alt="" />
+            <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/true.svg" className="p-2" alt="" />
             <div className="p-2">
               <h6 className="fw-bold">Warranty Protection</h6>
               <div className="fs-7 text-black-50">over 2 years</div>
@@ -55,7 +55,7 @@ export default function Features() {
           transition={{ duration: 1, delay: 0.4 }}
         >
           <div className="feature d-flex">
-            <img src="images/handcarrybox.svg" className="p-2" alt="" />
+            <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/handcarrybox.svg" className="p-2" alt="" />
             <div className="p-2">
               <h6 className="fw-bold">Free Shipping</h6>
               <div className="fs-7 text-black-50">order over 150 $</div>
@@ -71,7 +71,7 @@ export default function Features() {
           transition={{ duration: 1, delay: 0.6 }}
         >
           <div className="feature d-flex">
-            <img src="images/girl.svg" className="p-2" alt="" />
+            <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/girl.svg" className="p-2" alt="" />
             <div className="p-2">
               <h6 className="fw-bold">24 / 7 Support</h6>
               <div className="fs-7 text-black-50">Dedicated Support</div>

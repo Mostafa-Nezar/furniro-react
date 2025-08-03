@@ -6,19 +6,24 @@ function Navbar({ toggle }) {
   const { user } = useAppContext();
 
   const isAuthenticated = !!user;
-  const cartLength = user?.cart?.length || 0;
+  const cartLength = user?.cart?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
 
-  function SubscribeIcon() {
+
+  function Authicon() {
     if (!isAuthenticated) {
       return (
         <Link className="" to="/register">
-        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M20 12V7h2v6h-2m0 4h2v-2h-2m-10-2c2.67 0 8 1.34 8 4v3H2v-3c0-2.66 5.33-4 8-4
-            m0-9a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4"
-          />
-        </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="26"
+        height="26"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="M20 12V7h2v6h-2m0 4h2v-2h-2m-10-2c2.67 0 8 1.34 8 4v3H2v-3c0-2.66 5.33-4 8-4m0-9a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10.9c-2.97 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1m0-9A2.1 2.1 0 0 0 7.9 8a2.1 2.1 0 0 0 2.1 2.1A2.1 2.1 0 0 0 12.1 8A2.1 2.1 0 0 0 10 5.9"
+        />
+      </svg>
         </Link>
       );
     }
@@ -95,7 +100,7 @@ function Navbar({ toggle }) {
           <ul className="navbar-nav ms-5 me-5">
             <li>
               <Link className="nav-link mt-0 mb-0 vali text-black" to="#sub">
-                <SubscribeIcon />
+                <Authicon />
               </Link>
             </li>
             <li>
@@ -139,15 +144,7 @@ function Navbar({ toggle }) {
             {/* سلة */}
             <li className="icon-cart" onClick={toggle}>
               <Link className="nav-link mt-0 mb-0 text-black" to="#">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="26"
-                  height="26"
-                  viewBox="0 0 1024 1024"
-                  className={`${isActive("/cart") ? "active text-primary" : ""}`}
-                >
-                  <path fill="currentColor" d="M922.9 701.9H327.4l29.9-60.9..." />
-                </svg>
+                <svg className="icon-cart" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 1024 1024"><path className="icon-cart" fill="currentColor" d="M922.9 701.9H327.4l29.9-60.9l496.8-.9c16.8 0 31.2-12 34.2-28.6l68.8-385.1c1.8-10.1-.9-20.5-7.5-28.4a34.99 34.99 0 0 0-26.6-12.5l-632-2.1l-5.4-25.4c-3.4-16.2-18-28-34.6-28H96.5a35.3 35.3 0 1 0 0 70.6h125.9L246 312.8l58.1 281.3l-74.8 122.1a34.96 34.96 0 0 0-3 36.8c6 11.9 18.1 19.4 31.5 19.4h62.8a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7h161.1a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7H923c19.4 0 35.3-15.8 35.3-35.3a35.42 35.42 0 0 0-35.4-35.2M305.7 253l575.8 1.9l-56.4 315.8l-452.3.8zm96.9 612.7c-17.4 0-31.6-14.2-31.6-31.6s14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6m325.1 0c-17.4 0-31.6-14.2-31.6-31.6s14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6"></path></svg>
               </Link>
               <span>{cartLength}</span>
             </li>
