@@ -21,9 +21,10 @@ export default function Myfooter() {
 
     if (result.success) {
       console.log(
-        result.user.isSubscribed ? "✅ Subscribed successfully" : "✅ Unsubscribed successfully"
+        result.user.isSubscribed
+          ? "✅ Subscribed successfully"
+          : "✅ Unsubscribed successfully"
       );
-      // ممكن تفضّل تفضي الحقل بعد الاشتراك
       resetForm();
       alert(result.user.isSubscribed ? "تم الاشتراك بنجاح." : "تم إلغاء الاشتراك.");
     } else {
@@ -81,14 +82,20 @@ export default function Myfooter() {
                         type="email"
                         name="email"
                         placeholder="Enter your email"
-                        className="myemail me-2"
-                        // هنسيب الفيلد متاح علشان المستخدم يدخل الإيميل اللي لازم يطابق حسابه
+                        className="me-2 border-0 border-bottom border-3 border-black bg-transparent"
+                        style={{
+                          width: "250px",
+                          outline: "none",
+                        }}
                         disabled={false}
                       />
                       <ErrorMessage name="email" component="div" className="red" />
                       <button
                         type="submit"
-                        className="subscribe"
+                        className="subscribe border-0 border-bottom border-3 border-black bg-transparent"
+                        style={{
+                          outline: "none"
+                        }}
                         disabled={isSubmitting}
                       >
                         {isSubscribed ? "Unsubscribe" : "Subscribe"}

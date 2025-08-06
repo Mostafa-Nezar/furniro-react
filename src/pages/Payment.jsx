@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Payment = () => {
-  const { user, theme } = useAppContext();
+  const { user } = useAppContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 

@@ -3,7 +3,7 @@ import Features from "../comps/Features.jsx";
 const Blog = () => {
   const blogPosts = [
     {
-      image: "../images/laptop-blog.png",
+      image: "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/laptop-blog.png",
       date: "24 Oct 2022",
       category: "Wood",
       title: "Going all-in With Millennial design",
@@ -11,7 +11,7 @@ const Blog = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mus mauris vitae ultricies leo integer malesuada nunc. In nulla posuere sollicitudin aliquam ultrices. Morbi blandit cursus risus at ultrices mi tempus imperdiet. Libero enim sed faucibus turpis in. Cursus mattis molestie a iaculis at erat. Nibh cras pulvinar mattis nunc sed blandit libero. Pellentesque elit ullamcorper dignissim cras tincidunt. Pharetra et ultrices neque ornare aenean euismod elementum.",
     },
     {
-      image: "../images/Rectangle 68.png",
+      image: "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 68.png",
       date: "24 Oct 2022",
       category: "Wood",
       title: "Exploring new ways of decorating",
@@ -19,7 +19,7 @@ const Blog = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mus mauris vitae ultricies leo integer malesuada nunc. In nulla posuere sollicitudin aliquam ultrices. Morbi blandit cursus risus at ultrices mi tempus imperdiet. Libero enim sed faucibus turpis in. Cursus mattis molestie a iaculis at erat. Nibh cras pulvinar mattis nunc sed blandit libero. Pellentesque elit ullamcorper dignissim cras tincidunt. Pharetra et ultrices neque ornare aenean euismod elementum.",
     },
     {
-      image: "../images/Rectangle 68(1).png",
+      image: "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 68(1).png",
       date: "24 Oct 2022",
       category: "Wood",
       title: "Experimenting with color palettes",
@@ -176,7 +176,7 @@ const Blog = () => {
                 >
                   <div>
                     <img
-                      src={`../images/Rectangle 69${
+                      src={`https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69${
                         index > 0 ? `(${index})` : ""
                       }.png`}
                       className="img-fluid"

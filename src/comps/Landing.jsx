@@ -17,7 +17,7 @@ export default function Landing({ land, showImage = true }) {
         >
           {showImage && (
             <motion.img
-              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Meubel House_Logos-05.jpg"
+              src="/images/logo.png"
               alt="Meubel House Logo"
               className="logo"
               initial={{ opacity: 0, y: -20 }}

@@ -540,7 +540,7 @@ const Home = () => {
       </h1>
       <div className="p-5 product-list">
         <div className="row">
-          {products.slice(0, 8).map((product, index) => (
+          {products.sort((a,b)=> a.id - b.id).slice(0, 8).map((product, index) => (
             <Productcart key={index} product={product} />
           ))}
         </div>

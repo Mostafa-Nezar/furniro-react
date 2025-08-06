@@ -12,30 +12,30 @@
   --mygray: #9F9F9F;
 }
 /* Background classes */
-.bg-color { background-color: var(--color); }
-.bg-primary { background-color: var(--primary); }
-.bg-black { background-color: var(--black); }
-.bg-color3 { background-color: var(--color3); }
-.bg-greencolor { background-color: var(--greencolor); }
-.bg-redcolor { background-color: var(--redcolor); }
-.bg-semi-white { background-color: var(--semi-white); }
-.bg-gray { background-color: var(--gray); }
-.bg-wired { background-color: var(--wired); }
-.bg-x { background-color: var(--x); }
-.bg-mygray { background-color: var(--mygray); }
+.my-bg-color { background-color: var(--color); }
+.my-bg-black { background-color: var(--black); }
+.my-bg-primary { background-color: var(--primary); }
+.my-bg-color3 { background-color: var(--color3); }
+.my-bg-greencolor { background-color: var(--greencolor); }
+.my-bg-redcolor { background-color: var(--redcolor); }
+.my-bg-semi-white { background-color: var(--semi-white); }
+.my-bg-gray { background-color: var(--gray); }
+.my-bg-wired { background-color: var(--wired); }
+.my-bg-x { background-color: var(--x); }
+.my-bg-mygray { background-color: var(--mygray); }
 
 /* Text classes */
-.text-color { color: var(--color); }
-.text-primary { color: var(--primary); }
-.text-black { color: var(--black); }
-.text-color3 { color: var(--color3); }
-.text-greencolor { color: var(--greencolor); }
-.text-redcolor { color: var(--redcolor); }
-.text-semi-white { color: var(--semi-white); }
-.text-gray { color: var(--gray); }
-.text-wired { color: var(--wired); }
-.text-x { color: var(--x); }
-.text-mygray { color: var(--mygray); }
+.my-text-color { color: var(--color); }
+.my-text-primary { color: var(--primary); }
+.my-text-black { color: var(--black); }
+.my-text-color3 { color: var(--color3); }
+.my-text-greencolor { color: var(--greencolor); }
+.my-text-redcolor { color: var(--redcolor); }
+.my-text-semi-white { color: var(--semi-white); }
+.my-text-gray { color: var(--gray); }
+.my-text-wired { color: var(--wired); }
+.my-text-x { color: var(--x); }
+.my-text-mygray { color: var(--mygray); }
 body {
   margin: 0px;
   font-family: "Poppins", sans-serif !important;
@@ -53,49 +53,15 @@ a * {
 }
 
 /* -----------------------------------nav-start----and-----banner-start---------------------------- */
-nav {
-  background-color: white;
-}
 
-.nav-link {
-  color: black;
-}
 
 .nav-link:hover {
   color: var(--color) !important;
 }
 
-nav .active {
-  color: var(--color) !important;
-}
 
-.icon-cart {
-  position: relative;
-}
 
-.icon-cart span {
-  background-color: var(--redcolor);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #ffffff;
-  width: 20px;
-  height: 20px;
-  border-radius: 25px;
-  position: absolute;
-  left: 25px;
-  top: 0%;
-  padding: 12px;
-  font-size: 12px;
-}
-
-.gray {
-  color: var(--mygray);
-}
-
-button,
-a,
-.hover-red svg {
+button, a, .hover-red svg {
   transition: 1s !important;
 }
 
@@ -114,21 +80,7 @@ a,
 
 /* footer */
 
-ul li input {
-  width: 250px;
-  border: none;
-  outline: none;
-  border-bottom: black 3px solid;
-}
-
-ul li .subscribe {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  border-bottom: black 3px solid;
-}
-
-ul li .subscribe:hover {
+.subscribe:hover {
   color: var(--primary);
 }
 
@@ -205,25 +157,6 @@ ul li .subscribe:hover {
   pointer-events: none;
 }
 
-#scrollToTopBtn {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99;
-  font-size: 18px;
-  border: none;
-  outline: none;
-  background-color: #333;
-  color: white;
-  cursor: pointer;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-#scrollToTopBtn:hover {
-  background-color: var(--primary);
-}
 
 .show-more {
   background-color: white;
