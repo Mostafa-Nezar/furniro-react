@@ -27,7 +27,7 @@ export const SocketProvider = ({ children }) => {
         if (token && user) {
           const userData = JSON.parse(user);
           
-          const newSocket = io('http://localhost:3001', {
+          const newSocket = io('https://furniro-back-2-production.up.railway.app/', {
             auth: {
               token: token
             }
@@ -91,7 +91,7 @@ export const SocketProvider = ({ children }) => {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/notifications/test', {
+      const response = await fetch('https://furniro-back-2-production.up.railway.app/api/notifications/test', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

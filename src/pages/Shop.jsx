@@ -2,7 +2,6 @@ import Features from "../comps/Features.jsx";
 import Landing from "../comps/Landing.jsx";
 import Productcart from "../comps/Productcart.jsx";
 import { useAppContext } from "../context/AppContext";
-// import ShareButtons from "../comps/Share";
 const Edit = () => (
   <div className="edit p-3 pb-2">
     <div className="row">
@@ -150,7 +149,6 @@ const Shop = () => {
       <Landing land="Shop" showImage={false} />
       <Edit />
       <Carousel />
-      {/* <ShareButtons /> */}
       <Features />
       {showPopup && <div className="popup show">Added To Cart!</div>}
     </>

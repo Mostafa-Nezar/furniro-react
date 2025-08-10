@@ -45,7 +45,7 @@ const Payment = () => {
   const createCheckoutSession = async (values) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/payment/create-checkout-session", {
+      const res = await fetch("https://furniro-back-2-production.up.railway.app/api/payment/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

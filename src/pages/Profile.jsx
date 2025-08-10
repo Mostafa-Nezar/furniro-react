@@ -12,7 +12,6 @@ const Profile = () => {
     updateUser,
     products,
     getImageUrl,
-    toggleFavorite
   } = useAppContext();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -31,7 +30,7 @@ const Profile = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/upload/${user?.id}/update-image`,
+        `https://furniro-back-2-production.up.railway.app/api/upload/${user?.id}/update-image`,
         {
           method: "PATCH",
           headers: { Authorization: `Bearer ${user?.token}` },
@@ -58,7 +57,7 @@ const Profile = () => {
   const handleLogout = async () => {
     await logout();
     localStorage.clear();
-    navigate("/login");
+    navigate("/signin");
   };
 
   if (!isAuthenticated) {

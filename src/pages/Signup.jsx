@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext"; // جلب الكونتكست
 import axios from "axios";
 import "../index.css";
 
 function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const { register } = useAppContext(); // جلب register من الكونتكست
+  const navigate = useNavigate();
 
-  // ⬇️ تهيئة Google Sign-Up
   useEffect(() => {
     window.google?.accounts.id.initialize({
       client_id:
@@ -21,11 +24,13 @@ function Signup() {
 
   const handleGoogleSignup = async (response) => {
     try {
-      const res = await axios.post("https://furniro-back-production.up.railway.app/api/auth/google", {
-        token: response.credential,
-      });
+      const res = await axios.post(
+        "https://furniro-back-production.up.railway.app/api/auth/google",
+        { token: response.credential }
+      );
       alert(res.data.msg || "Google account created!");
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      navigate("/");
     } catch (err) {
       alert(err.response?.data?.msg || "Google sign-up error");
     }
@@ -33,15 +38,13 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(
-        "https://furniro-back-production.up.railway.app/api/auth/signup",
-        form
-      );
-      alert(res.data.msg);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-    } catch (err) {
-      alert(err.response?.data?.msg || "Error");
+    const result = await register(form);
+
+    if (result.success) {
+      alert("✅ Account created successfully");
+      navigate("/");
+    } else {
+      alert(result.message || "Sign-up failed");
     }
   };
 

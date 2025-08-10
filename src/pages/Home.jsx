@@ -530,7 +530,6 @@ const Random = () => {
 
 const Home = () => {
   const { products } = useAppContext();
-  const showPopup = false
   return (
     <div>
       <Banner />
@@ -545,7 +544,6 @@ const Home = () => {
           ))}
         </div>
       </div>
-      {/* <ShareButtons /> */}
       <div className="text-center my-5">
         <a href="/shop#car">
           <button className="show-more mb-5 mt-3 text-center">Show More</button>
@@ -554,7 +552,6 @@ const Home = () => {
       <div>
         <Inspiration />
         <Random />
-        {showPopup && <div className="popup show">Added To Cart!</div>}
       </div>
     </div>
   );

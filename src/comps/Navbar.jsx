@@ -12,7 +12,7 @@ function Navbar({ toggle }) {
   function Authicon() {
     if (!isAuthenticated) {
       return (
-        <Link className="" to="/register">
+        <Link className="" to="/signin">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="26"
@@ -54,7 +54,7 @@ function Navbar({ toggle }) {
       <div className="container-fluid">
         {/* Logo */}
         <Link className="ms-4 navbar-brand fw-bold fs-4 text-black" to="/">
-          <img src="../../images/logo.png" className="d-inline-block align-text-top" alt="Furniro logo" />
+          <img src="/images/logo.png" className="d-inline-block align-text-top" alt="Furniro logo" />
           Furniro
         </Link>
 

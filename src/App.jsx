@@ -12,10 +12,20 @@ import Cart from "./pages/Cart.jsx";
 import About from "./pages/About.jsx";
 import Scrollbutton from "./comps/Scrollbutton.jsx";
 import CartSection from "./comps/CartSection.jsx";
+import ShareButtons from "./comps/Share.jsx";
+import Popup from "./comps/Popup.jsx";
 
 function Layout() {
   const location = useLocation();
-  const hideLayout = ["/signup", "/signin",].includes(location.pathname);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const hideLayout = ["/signup", "/signin"].includes(location.pathname);
+
+  if (!user?.id && !hideLayout) {
+    window.location.href = "/signin";
+    return null;
+  }
+
   return (
     <>
       {!hideLayout && <Navbar />}
@@ -34,6 +44,7 @@ function Layout() {
   );
 }
 
+
 function App() {
   return (
     <AppProvider>
@@ -41,6 +52,8 @@ function App() {
         <Scrollbutton/>
         <Layout />
         <CartSection/>
+        <ShareButtons/>
+        <Popup/>
       </Router>
     </AppProvider>
   );

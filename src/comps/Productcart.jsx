@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useCallback } from "react";
 
 const Productcart = ({ product }) => {
-  const { addToCart, toggleFavorite, favorites } = useAppContext();
+  const { addToCart, toggleFavorite, favorites, setShareButtons, setpopup } = useAppContext();
 
   const isFavorite = favorites.includes(product.id);
 
@@ -54,17 +54,16 @@ const Productcart = ({ product }) => {
 
         <div className="lay d-grid align-items-center">
           <div className="text-center">
-            <button className="addbutton mb-5" onClick={handleAddToCart}>
-              Add To Cart
+            <button className="addbutton mb-5" onClick={() => {handleAddToCart(); setpopup(true);}}>
+              Add to Cart
             </button>
-
             <div className="d-flex justify-content-center">
               <a
                 className="text-white sharep fw-bold"
                 href="/"
                 onClick={(e) => {
                   e.preventDefault();
-                  // setView(); // فعلها لو محتاجها
+                   setShareButtons(true)
                 }}
               >
                 {/* Share SVG */}
@@ -81,7 +80,6 @@ const Productcart = ({ product }) => {
                 </svg>{" "}
                 Share
               </a>
-
               <a
                 className="mx-2 text-white fw-bold hover-red"
                 href={`../details/detail.html?id=${product.id}`}

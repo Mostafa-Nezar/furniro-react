@@ -1,12 +1,12 @@
-import { MdDeleteForever } from "react-icons/md";
 import { MdClose } from "react-icons/md"; 
+import { useAppContext } from "../context/AppContext";
+
 const ShareButtons = () => {
+  const { ShareButtons, setShareButtons } = useAppContext();
   const projectTitle = encodeURIComponent("Check out this project!");
-  const { show } = true // استهلاك show من الكونتكست
-  const setView = true // استخدام setView من AppContext
 
   const handleShareClick = (platform) => {
-    const url = "http://localhost:5173/";
+    const url = "https://furniro-react-jade.vercel.app/";
     let shareUrl = "";
 
     switch (platform) {
@@ -33,7 +33,7 @@ const ShareButtons = () => {
 
   return (
     <div
-      className={`page ${show}`}
+      className={`page ${ShareButtons? "" :"d-none"}`}
       style={{
         position: "fixed",
         top: "50%",
@@ -49,24 +49,22 @@ const ShareButtons = () => {
       }}
     >
       <div
-        onClick={() => setView()}
+      onClick={()=>{setShareButtons(!ShareButtons)}}
         style={{
           cursor: "pointer",
           display: "inline",
-          // position:"absolute",
-          // right:"20px",
+
           padding: "5px 10px",
           color: "white",
           backgroundColor:"var(--redcolor)"
         }}
       >
-       {/* <MdDeleteForever/> */}
        <MdClose/>
       </div>
       <div className="container pt-4 mt-5">
         <div className="text-center">
           <img
-            src="../images/Meubel House_Logos-05.jpg"
+            src="/images/logo.png"
             alt="Product"
             className="img-fluid"
           />

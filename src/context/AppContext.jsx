@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
 const AppContext = createContext();
 
-const API_BASE_URL = "https://furniro-back-production.up.railway.app/api";
+const API_BASE_URL = "https://furniro-back-2-production.up.railway.app/api";
 
 const storage = {
   getItem(key) {
@@ -84,6 +84,8 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(initial.user);
   const [products, setProducts] = useState([]);
   const [isOffline, setIsOffline] = useState(false);
+  const [ popup, setpopup ] = useState(false)
+  const [ShareButtons,setShareButtons] = useState(false)
   useEffect(()=>{
     getProducts()
   },[])
@@ -370,6 +372,10 @@ export const AppProvider = ({ children }) => {
         setProducts,
         searchProducts,
         clearCartAndUpdateOrsers,
+        ShareButtons,
+        setShareButtons,
+        popup,
+        setpopup
       }}
     >
       {children}
