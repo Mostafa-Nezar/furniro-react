@@ -1,5 +1,4 @@
 import { useAppContext } from "../context/AppContext";
-import { toast } from "react-toastify";
 import { useCallback } from "react";
 
 const Productcart = ({ product }) => {
@@ -9,18 +8,12 @@ const Productcart = ({ product }) => {
 
   const handleAddToCart = useCallback(() => {
     addToCart(product);
-    toast.success(`Order Placed - ${product.name}`);
   }, [product, addToCart]);
 
   const handleToggleFavorite = useCallback(
     (e) => {
       e.preventDefault();
       toggleFavorite(product.id);
-      toast.success(
-        `${isFavorite ? "Removed from Favorites" : "Added to Favorites"} - ${
-          product.name
-        }`
-      );
     },
     [product.id, isFavorite, toggleFavorite]
   );
@@ -106,7 +99,6 @@ const Productcart = ({ product }) => {
               >
                 {/* Like SVG */}
                 <svg
-                  className="likesvgitem"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"

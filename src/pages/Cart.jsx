@@ -74,7 +74,7 @@ const Cart = () => {
                 <br />
                 <br />
               </div>
-              <a href="../checkout/checkout.html">
+              <Link to={"/Payment"}>
                 <button
                   className="fs-5 checkout w-50"
                   style={{
@@ -86,7 +86,7 @@ const Cart = () => {
                 >
                   Check Out
                 </button>
-              </a>
+                </Link>
             </div>
           </div>
         </div>

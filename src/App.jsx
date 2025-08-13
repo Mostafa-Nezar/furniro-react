@@ -1,5 +1,5 @@
 import { AppProvider } from "./context/AppContext.jsx";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./comps/Navbar.jsx";
 import Signup from "./pages/Signup.jsx"; 
 import Signin from "./pages/Signin.jsx";
@@ -16,19 +16,11 @@ import ShareButtons from "./comps/Share.jsx";
 import Popup from "./comps/Popup.jsx";
 
 function Layout() {
-  const location = useLocation();
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  const hideLayout = ["/signup", "/signin"].includes(location.pathname);
-
-  if (!user?.id && !hideLayout) {
-    window.location.href = "/signin";
-    return null;
-  }
 
   return (
     <>
-      {!hideLayout && <Navbar />}
+       <Navbar />
       <Routes>
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Signin" element={<Signin />} />
@@ -39,7 +31,7 @@ function Layout() {
         <Route path="/About" element={<About />} />
         <Route path="/Cart" element={<Cart />} />
       </Routes>
-      {!hideLayout && <Myfooter />}
+      <Myfooter />
     </>
   );
 }

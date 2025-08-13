@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext"; // جلب الكونتكست
+import { useAppContext } from "../context/AppContext";
 import axios from "axios";
 import "../index.css";
 
 function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const { register } = useAppContext(); // جلب register من الكونتكست
+  const { register } = useAppContext(); 
   const navigate = useNavigate();
 
   useEffect(() => {
