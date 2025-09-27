@@ -14,12 +14,15 @@ const Profile = () => {
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const favoriteProducts = products.filter(p => favorites.includes(p.id));
-  const API = "https://furniro-back-2-production.up.railway.app/api/notifications";
+  console.log(user);
+  console.log(user.image);
+  
+  const API = "https://furniro-back-production.up.railway.app/api/notifications";
   const getToken = () => localStorage.getItem("token");
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("https://furniro-back-2-production.up.railway.app/api/orders", { headers: { Authorization: `Bearer ${user?.token}` } });
+      const res = await fetch("https://furniro-back-production.up.railway.app/api/orders", { headers: { Authorization: `Bearer ${user?.token}` } });
       const data = await res.json();
       if (data.success) setOrders(data.orders || []);
     } catch (err) { console.error("Error fetching orders:", err); }
@@ -63,7 +66,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("avatar", file);
     try {
-      const res = await fetch(`https://furniro-back-2-production.up.railway.app/api/upload/${user?.id}/update-image`, {
+      const res = await fetch(`https://furniro-back-production.up.railway.app/api/upload/${user?.id}/update-image`, {
         method: "PATCH", headers: { Authorization: `Bearer ${user?.token}` }, body: formData
       });
       const data = await res.json();
