@@ -1,6 +1,7 @@
 import { AppProvider } from "./context/AppContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { SocketProvider } from "./context/SocketContext.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./comps/Navbar.jsx";
 import Signup from "./pages/Signup.jsx"; 
@@ -44,6 +45,7 @@ function App() {
     <AuthProvider>
   <CartProvider>
     <AppProvider>
+      <SocketProvider>
       <Router>
         <Scrollbutton/>
         <Layout />
@@ -51,6 +53,7 @@ function App() {
         <ShareButtons/>
         <Popup/>
       </Router>
+      </SocketProvider>
     </AppProvider>
   </CartProvider>
 </AuthProvider>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,64 +7,20 @@ import Landing from "../comps/Landing.jsx";
 import { FaShoppingCart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
+import { useSocket } from "../context/SocketContext.jsx";
+
 const Profile = () => {
   const navigate = useNavigate();
-  const { logout, favorites,   toggleFavorite, } = useAppContext();
+  const { notifications, refreshing, fetchNotifications, handleDeleteNotification, formatDate } = useSocket();
+  const { logout, favorites,   toggleFavorite, orders } = useAppContext();
+  console.log(orders);
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
-  const [orders, setOrders] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const { cart } = useCart();
-  const token = localStorage.getItem("token")
-      const { products, getProducts } = useAppContext();
-      const favoriteProducts = products.filter(p => favorites.includes(p.id));
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-  const API = "https://furniro-back-production.up.railway.app/api/notifications";
-  const getToken = () => localStorage.getItem("token");
-
-  const fetchOrders = async () => {
-    try {
-      const res = await fetch("https://furniro-back-production.up.railway.app/api/orders", { headers: { Authorization: `Bearer ${token}` } });
-      const data = await res.json();
-      if (data.success) setOrders(data.orders || []);
-    } catch (err) { console.error("Error fetching orders:", err); }
-  };
-
-  const fetchNotifications = async () => {
-    try {
-      const token = getToken(), user = JSON.parse(localStorage.getItem("user"));
-      if (!token || !user?.id) return;
-      const res = await fetch(API, { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } });
-      if (res.ok) setNotifications((await res.json()).notifications.filter(n => n.userId === user.id) || []);
-    } catch (err) { console.error("Fetch error:", err); } finally { setRefreshing(false); }
-  };
-
-  const markAllAsReadInDB = async () => {
-    try {
-      await fetch(`${API}/mark-all-read`, { method: "PUT", headers: { Authorization: `Bearer ${getToken()}`, "Content-Type": "application/json" } });
-    } catch (err) { console.error("Mark all read error:", err); }
-  };
-
-  const handleDeleteNotification = async id => {
-    try {
-      const res = await fetch(`${API}/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${getToken()}` } });
-      if (res.ok) setNotifications(prev => prev.filter(n => n._id !== id));
-    } catch (err) { console.error("Delete error:", err); }
-  };
-
-  const formatDate = str => {
-    const date = new Date(str), now = new Date(), diff = (now - date) / 60000;
-    return diff < 1 ? "Just now" : diff < 60 ? `${Math.floor(diff)}m ago` : diff < 1440 ? `${Math.floor(diff / 60)}h ago` : date.toLocaleDateString();
-  };
-
-  useEffect(() => {
-    if (activeSection === "notifications") (async () => { await fetchNotifications(); await markAllAsReadInDB(); })();
-  }, [activeSection]);
+  const { cart, removeFromCart } = useCart();
+  const { products } = useAppContext();
+  const favoriteProducts = products.filter(p => favorites.includes(p.id));
+  const token = localStorage.getItem("token");
 
   const handleImageChange = async e => {
     const file = e.target.files[0];
@@ -74,7 +30,7 @@ const Profile = () => {
     formData.append("avatar", file);
     try {
       const res = await fetch(`https://furniro-back-production.up.railway.app/api/upload/${user?.id}/update-image`, {
-        method: "PATCH", headers: { Authorization: `Bearer ${user?.token}` }, body: formData
+        method: "PATCH", headers: { Authorization: `Bearer ${token}` }, body: formData
       });
       const data = await res.json();
       if (data.success && data.imageUrl) {
@@ -234,39 +190,10 @@ const Profile = () => {
             <p className="text-muted mb-0">{user?.email}</p>
           </div>
         </motion.div>
-        <motion.div className="row mb-5 align-items-stretch"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-      {/* أيقونة وعدد العناصر */}
-      <div className="col-md-3 text-center"
-      >
-        <div className="p-4 rounded my-bg-gray">
-          <FaShoppingCart size={40} className="mb-2 my-text-black" />
-          <h4 className="my-text-black mb-1">{cart.length}</h4>
-          <p className="mb-0">In Cart</p>
-        </div>
-      </div>
-
-          <div className="col-md-6">
-            <div className="p-3 bg-light rounded h-100 overflow-auto" style={{ maxHeight: 200 }}>
-              {cart.length ? cart.map((item, i) => (
-                <div key={i} className="d-flex align-items-center mb-2 border-bottom pb-2">
-                  <img src={item.image} alt={item.name} className="rounded" width="50" height="50" />
-                  <div className="ms-3">
-                    <p className="m-0 fw-bold">{item.name}</p>
-                    <small className="text-muted">${item.price}</small>
-                  </div>
-                  <button className="btn btn-sm btn-danger ms-auto" onClick={() => removeFromCart(item.id)}>×</button>
-                </div>
-              )) : <p className="text-center m-0">Cart is empty</p>}
-            </div>
-          </div>
-        </motion.div>
         <div className="list-group">
           {menuItems.map((item, i) => (
             <motion.div key={i} initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-              <motion.button className="list-group-item list-group-item-action d-flex align-items-center rounded" onClick={item.onClick} whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+              <motion.button className="list-group-item list-group-item-action d-flex align-items-center" style={{borderRadius:12}} onClick={item.onClick} whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className={`bi bi-${item.icon} me-2 ${item.icon === "heart" ? "my-text-redcolor" : "my-text-primary"}`} viewBox="0 0 16 16">
                   <path d={item.icon === "heart" ? "m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385C2.885 9.279 5.481 11.9 8 14.058c2.519-2.158 5.115-4.78 6.286-6.62.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z" :
                     item.icon === "box-seam" ? "M8.44.146a.5.5 0 0 0-.88 0L5.162 3H2.5a.5.5 0 0 0-.5.5v9.6a.5.5 0 0 0 .257.437l6 3.2a.5.5 0 0 0 .486 0l6-3.2a.5.5 0 0 0 .257-.437V3.5a.5.5 0 0 0-.5-.5h-2.662L8.44.146zM3 4h2.661l1.377 2.297a.5.5 0 0 0 .866 0L9.339 4H13v1.5l-5 2.667L3 5.5V4z" :
