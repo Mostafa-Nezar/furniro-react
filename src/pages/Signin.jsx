@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext"; // استدعاء الكونتكست
+import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
 function Signin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { login } = useAppContext(); // جلب login من الكونتكست
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +14,7 @@ function Signin() {
 
     if (result.success) {
       alert("✅ Login successful");
-      navigate("/"); // يروح للصفحة الرئيسية
+      navigate("/"); 
     } else {
       alert(result.message || "Login failed");
     }

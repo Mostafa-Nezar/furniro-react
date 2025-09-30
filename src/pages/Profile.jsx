@@ -11,22 +11,25 @@ const Profile = () => {
   const navigate = useNavigate();
   const { logout, favorites,   toggleFavorite, } = useAppContext();
   const { user, isAuthenticated, updateUser } = useAuth();
-  const {  products } = useCart();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [orders, setOrders] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const favoriteProducts = products.filter(p => favorites.includes(p.id));
-  console.log(user);
-  console.log(user.image);
-  
+  const { cart } = useCart();
+  const token = localStorage.getItem("token")
+      const { products, getProducts } = useAppContext();
+      const favoriteProducts = products.filter(p => favorites.includes(p.id));
+
+  useEffect(() => {
+    getProducts();
+  }, []);
   const API = "https://furniro-back-production.up.railway.app/api/notifications";
   const getToken = () => localStorage.getItem("token");
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("https://furniro-back-production.up.railway.app/api/orders", { headers: { Authorization: `Bearer ${user?.token}` } });
+      const res = await fetch("https://furniro-back-production.up.railway.app/api/orders", { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (data.success) setOrders(data.orders || []);
     } catch (err) { console.error("Error fetching orders:", err); }
