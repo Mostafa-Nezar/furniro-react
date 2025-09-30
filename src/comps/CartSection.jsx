@@ -1,7 +1,7 @@
-import { useAppContext } from "../context/AppContext";
+import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 const CartSection = ({ toggle, settoggle }) => {
-  const { cart, removeFromCart } = useAppContext(); 
+  const { cart, removeFromCart } = useCart(); 
   const calculateSubtotal = () => {
     return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)

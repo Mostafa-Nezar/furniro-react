@@ -1,9 +1,9 @@
-import { useAppContext } from "../context/AppContext";
+import {  useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import Features from "../comps/Features";
 import Landing from "../comps/Landing";
 const Cart = () => {
-  const { cart, removeFromCart } = useAppContext();
+  const { cart, removeFromCart } = useCart();
   return (
     <>
       <Landing land={"Cart"} />

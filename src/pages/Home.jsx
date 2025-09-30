@@ -529,7 +529,11 @@ const Random = () => {
 };
 
 const Home = () => {
-  const { products } = useAppContext();
+    const { products, getProducts } = useAppContext();
+
+  useEffect(() => {
+    getProducts();
+  }, []);
   return (
     <div>
       <Banner />

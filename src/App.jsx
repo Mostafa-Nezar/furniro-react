@@ -1,4 +1,6 @@
 import { AppProvider } from "./context/AppContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./comps/Navbar.jsx";
 import Signup from "./pages/Signup.jsx"; 
@@ -39,6 +41,8 @@ function Layout() {
 
 function App() {
   return (
+    <AuthProvider>
+  <CartProvider>
     <AppProvider>
       <Router>
         <Scrollbutton/>
@@ -48,6 +52,8 @@ function App() {
         <Popup/>
       </Router>
     </AppProvider>
+  </CartProvider>
+</AuthProvider>
   );
 }
 

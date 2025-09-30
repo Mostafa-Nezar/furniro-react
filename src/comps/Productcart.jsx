@@ -1,8 +1,10 @@
 import { useAppContext } from "../context/AppContext";
 import { useCallback } from "react";
+import { useCart } from "../context/CartContext";
 
 const Productcart = ({ product }) => {
-  const { addToCart, toggleFavorite, favorites, setShareButtons, setpopup } = useAppContext();
+  const {  toggleFavorite, favorites, setShareButtons } = useAppContext();
+  const { addToCart } = useCart();
 
   const isFavorite = favorites.includes(product.id);
 
@@ -47,7 +49,7 @@ const Productcart = ({ product }) => {
 
         <div className="lay d-grid align-items-center">
           <div className="text-center">
-            <button className="addbutton mb-5" onClick={() => {handleAddToCart(); setpopup(true);}}>
+            <button className="addbutton mb-5" onClick={() => {handleAddToCart(); }}>
               Add to Cart
             </button>
             <div className="d-flex justify-content-center">

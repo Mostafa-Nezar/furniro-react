@@ -5,9 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Features from "../comps/Features.jsx";
 import Landing from "../comps/Landing.jsx";
 import { FaShoppingCart } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 const Profile = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout, favorites, updateUser, products, toggleFavorite, cart,removeFromCart } = useAppContext();
+  const { logout, favorites,   toggleFavorite, } = useAppContext();
+  const { user, isAuthenticated, updateUser } = useAuth();
+  const {  products } = useCart();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [orders, setOrders] = useState([]);

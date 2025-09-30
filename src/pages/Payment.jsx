@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { FaLock, FaCreditCard, FaWallet } from "react-icons/fa";
@@ -10,11 +11,9 @@ import Features from "../comps/Features";
 const Payment = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme = "dark", user, clearCartAndUpdateOrders } = useAppContext();
+  const  theme = "dark" ,{ cart, clearCartAndUpdateOrders } = useCart(), { user } =useAuth();
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
-
-  const cart = user?.cart || [];
   const subtotal = cart.reduce((t, i) => t + i.price * i.quantity, 0);
   const shipping = subtotal >= 100 ? 0 : 10;
   const total = subtotal + shipping;

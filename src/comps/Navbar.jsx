@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 function Navbar({ toggle }) {
   const location = useLocation();
-  const { user } = useAppContext();
+  const { user } = useAuth();
+  const { cart } = useCart();
 
   const isAuthenticated = !!user;
-  const cartLength = user?.cart?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
+  const cartLength = cart.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
 
 
   function Authicon() {
