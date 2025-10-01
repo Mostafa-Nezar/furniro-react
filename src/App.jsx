@@ -18,12 +18,15 @@ import CartSection from "./comps/CartSection.jsx";
 import ShareButtons from "./comps/Share.jsx";
 import Popup from "./comps/Popup.jsx";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("pk_test_51RfzAo4hpzh6swtTe5XoqvV6DcUlufkptuTb7Q4DKfuVgnDDH76ICrTlrw8pXwKGpHscUSZCr9vwniO6e0zc0VT900tEcvmgjR");
+
 function Layout() {
-
-
   return (
     <>
-       <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Signin" element={<Signin />} />
@@ -39,24 +42,25 @@ function Layout() {
   );
 }
 
-
 function App() {
   return (
-    <AuthProvider>
-  <CartProvider>
-    <AppProvider>
-      <SocketProvider>
-      <Router>
-        <Scrollbutton/>
-        <Layout />
-        <CartSection/>
-        <ShareButtons/>
-        <Popup/>
-      </Router>
-      </SocketProvider>
-    </AppProvider>
-  </CartProvider>
-</AuthProvider>
+    <Elements stripe={stripePromise}>
+      <AuthProvider>
+        <CartProvider>
+          <AppProvider>
+            <SocketProvider>
+              <Router>
+                <Scrollbutton />
+                <Layout />
+                <CartSection />
+                <ShareButtons />
+                <Popup />
+              </Router>
+            </SocketProvider>
+          </AppProvider>
+        </CartProvider>
+      </AuthProvider>
+    </Elements>
   );
 }
 

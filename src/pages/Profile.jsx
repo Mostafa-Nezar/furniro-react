@@ -4,7 +4,6 @@ import { useAppContext } from "../context/AppContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 import Features from "../comps/Features.jsx";
 import Landing from "../comps/Landing.jsx";
-import { FaShoppingCart } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import { useSocket } from "../context/SocketContext.jsx";
@@ -13,7 +12,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const { notifications, refreshing, fetchNotifications, handleDeleteNotification, formatDate } = useSocket();
   const { logout, favorites,   toggleFavorite, orders } = useAppContext();
-  console.log(orders);
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);

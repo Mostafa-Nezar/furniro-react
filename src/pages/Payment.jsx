@@ -1,44 +1,38 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useCart } from "../context/CartContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { FaLock, FaCreditCard, FaWallet } from "react-icons/fa";
-import Landing from "../comps/Landing";
-import Features from "../comps/Features";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { useCart } from "../context/CartContext.jsx";
+import { MdPayment, MdSecurity } from "react-icons/md";
+
+const InputField = ({ theme, handleChange, handleBlur, value, placeholder, type = "text", name }) => (
+  <div className="mb-3">
+    <input
+      className="form-control p-3"
+      style={{ backgroundColor: theme.semiWhite, color: theme.black }}
+      onChange={handleChange(name)}
+      onBlur={handleBlur(name)}
+      value={value}
+      placeholder={placeholder}
+      type={type}
+    />
+  </div>
+);
 
 const Payment = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const  theme = "dark" ,{ cart, clearCartAndUpdateOrders } = useCart(), { user } =useAuth();
+  const nav = useNavigate();
+  const theme = ""
+  const { user } = useAuth();
+  const { cart } = useCart();
+  const stripe = useStripe();
+  const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
+
   const subtotal = cart.reduce((t, i) => t + i.price * i.quantity, 0);
-  const shipping = subtotal >= 100 ? 0 : 10;
+  const shipping = subtotal >= 100 ? 0 : 0;
   const total = subtotal + shipping;
-
-  useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const status = query.get("payment_status");
-
-    if (status === "success") {
-      setPaymentStatus("success");
-      clearCartAndUpdateOrders();
-    } else if (status === "cancelled") {
-      setPaymentStatus("cancelled");
-    }
-  }, [location, clearCartAndUpdateOrders]);
-
-  const formatCardNumber = (v) => {
-    v = v.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    return (v.match(/\d{4,16}/g)?.[0] || "").match(/.{1,4}/g)?.join(" ") || v;
-  };
-
-  const formatExpiryDate = (v) => {
-    v = v.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    return v.length >= 2 ? `${v.substring(0, 2)}/${v.substring(2, 4)}` : v;
-  };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -46,269 +40,189 @@ const Payment = () => {
     address: Yup.string().required("Address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string().required("State is required"),
-    zipCode: Yup.string().required("ZIP code is required"),
-    cardNumber: Yup.string().min(19, "Card number must be 16 digits").required("Card number is required"),
-    expiryDate: Yup.string().matches(/^\d{2}\/\d{2}$/, "Invalid expiry date").required("Expiry date is required"),
-    cvv: Yup.string().min(3, "CVV must be 3 or 4 digits").max(4, "CVV must be 3 or 4 digits").required("CVV is required"),
-    cardholderName: Yup.string().required("Cardholder name is required"),
+    zipCode: Yup.string().required("ZIP Code is required"),
   });
 
-  const createCheckoutSession = async (values) => {
-    setLoading(true);
-    try {
-      const res = await fetch("https://furniro-back-2-production.up.railway.app/api/payment/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          products: cart.map((i ) => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
-          customerInfo: {
-            email: values.email,
-            name: values.fullName,
-            address: { line1: values.address, city: values.city, state: values.state, postal_code: values.zipCode },
-          },
-          success_url: `${window.location.origin}${location.pathname}?payment_status=success`,
-          cancel_url: `${window.location.origin}${location.pathname}?payment_status=cancelled`,
-        }),
-      });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        window.alert("Payment Failure: " + (data.error || "Unknown error"));
-      }
-    } catch {
-      window.alert("Network Error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePayWithPayPal = async () => {
-    if (!user) {
-      window.alert("User Not Found");
+  const handlePaymentSubmit = async (formValues) => {
+    if (cart.length === 0) {
+      alert("Your cart is empty");
       return;
     }
     setLoading(true);
+
+    let clientSecret;
     try {
-      const res = await fetch("https://furniro-back-2-production.up.railway.app/api/paypal/create-paypal-order", {
+      const response = await fetch("https://furniro-back-production.up.railway.app/api/payment2/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          total: total.toFixed(2 ),
+          total: total,
           userId: user.id,
-          success_url: `${window.location.origin}${location.pathname}?payment_status=success`,
-          cancel_url: `${window.location.origin}${location.pathname}?payment_status=cancelled`,
-        }),
+          products: cart,
+          customerInfo: {
+            fullName: formValues.fullName,
+            email: formValues.email,
+            address: formValues.address,
+            city: formValues.city,
+            state: formValues.state,
+            zipCode: formValues.zipCode
+          }
+        })
       });
-      const data = await res.json();
-      if (res.ok && data.approveUrl) {
-        window.location.href = data.approveUrl;
-      } else {
-        window.alert("Payment Failure: " + (data.error || "Unknown error"));
+      const data = await response.json();
+      if (data.error || !data.clientSecret) {
+        throw new Error(data.error || "Failed to get payment secret from server.");
       }
-    } catch (e) {
-      console.error("❌ PayPal error:", e);
-      window.alert("Disconnected");
+      clientSecret = data.clientSecret;
+    } catch (error) {
+      console.error("❌ Server Error (create-payment-intent):", error);
+      alert("Server Error: " + error.message);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const cardElement = elements.getElement(CardElement);
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            email: formValues.email,
+            name: formValues.fullName,
+            address: {
+              line1: formValues.address,
+              city: formValues.city,
+              state: formValues.state,
+              postal_code: formValues.zipCode,
+              country: "US",
+            },
+          },
+        },
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      console.log("✅ Payment successful! Payment Intent ID:", paymentIntent.id);
+      alert("Payment Successful!");
+      nav("/ordersuccessscreen");
+    } catch (paymentError) {
+      console.error("❌ Stripe Payment Error:", paymentError);
+      alert("Payment Failed: " + paymentError.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const getCardType = (number) => {
-    const clean = number.replace(/\s+/g, "");
-    if (/^4/.test(clean)) return "visa";
-    if (/^5[1-5]/.test(clean) || /^2(2[2-9]|[3-6]|7[01]|720)/.test(clean)) return "mastercard";
-    if (/^3[47]/.test(clean)) return "amex";
-    return null;
-  };
-
-  // ===== ✅ [الحل] تعريف المكونات المساعدة هنا =====
-  const InputField = ({ handleChange, handleBlur, value, placeholder, type = "text", maxLength, name }) => (
-    <div className="mb-3">
-      <input
-        className="form-control"
-        style={{ backgroundColor: theme.semiWhite, borderColor: theme.lightGray, color: theme.black }}
-        onChange={handleChange(name)}
-        onBlur={handleBlur(name)}
-        value={value}
-        placeholder={placeholder}
-        type={type}
-        maxLength={maxLength}
-      />
-    </div>
-  );
-
-  const InputCardField = ({ handleChange, handleBlur, value, placeholder, name }) => {
-    const [cardType, setCardType] = useState(null);
-
-    const handleInputChange = (e) => {
-      const formatted = formatCardNumber(e.target.value);
-      handleChange(name)(formatted);
-      const type = getCardType(formatted);
-      setCardType(type);
-    };
-
-    const renderCardLogo = () => {
-      const logoStyle = "w-8 h-6 rounded bg-white";
-      switch (cardType) {
-        case "mastercard": return <img src="/images/mastercard.png" className={logoStyle} alt="Mastercard" />;
-        case "visa": return <img src="/images/visa.png" className={logoStyle} alt="Visa" />;
-        case "paypal": return <img src="/images/paypal.png" className={logoStyle} alt="PayPal" />;
-        case "amex": return <img src="/images/amex.png" className={logoStyle} alt="Amex" />;
-        default: return (
-          <div className="d-flex gap-2">
-            <img src="/images/mastercard.png" className={logoStyle} alt="Mastercard" />
-            <img src="/images/visa.png" className={logoStyle} alt="Visa" />
-            <img src="/images/paypal.png" className={logoStyle} alt="PayPal" />
-            <img src="/images/amex.png" className={logoStyle} alt="Amex" />
-          </div>
-        );
-      }
-    };
-
-    return (
-      <div className="mb-3">
-        <div className="d-flex align-items-center p-2 rounded border" style={{ backgroundColor: theme.semiWhite, borderColor: theme.lightGray }}>
-          <input
-            className="form-control flex-grow-1 border-0"
-            style={{ color: theme.black, backgroundColor: "transparent" }}
-            onChange={handleInputChange}
-            onBlur={handleBlur(name)}
-            value={value}
-            placeholder={placeholder}
-            type="text"
-            maxLength={19}
-          />
-          <div className="d-flex gap-2 ms-2">{renderCardLogo()}</div>
-        </div>
-      </div>
-    );
-  };
-
-  if (paymentStatus === "success") {
-    return (
-      <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: theme.white }}>
-        <div className="text-center p-5 shadow-sm rounded" style={{ backgroundColor: theme.semiWhite }}>
-          <h2 className="text-success">Payment Successful!</h2>
-          <p style={{ color: theme.darkGray }}>Your order has been placed. Thank you for your purchase!</p>
-          <button onClick={() => navigate("/")} className="btn btn-primary" style={{ backgroundColor: theme.primary }}>
-            Continue Shopping
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (paymentStatus === "cancelled") {
-    return (
-      <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: theme.white }}>
-        <div className="text-center p-5 shadow-sm rounded" style={{ backgroundColor: theme.semiWhite }}>
-          <h2 className="text-danger">Payment Cancelled</h2>
-          <p style={{ color: theme.darkGray }}>Your payment was not completed. Your cart has not been cleared.</p>
-          <button onClick={() => navigate("/cart")} className="btn btn-secondary me-2">
-            Back to Cart
-          </button>
-          <button onClick={() => setPaymentStatus(null)} className="btn btn-primary" style={{ backgroundColor: theme.primary }}>
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-  <>
-  <Landing land="Check Out" />
-    <div className="min-vh-100" style={{ backgroundColor: theme.white }}>
+    <div className="container py-4" style={{ backgroundColor: theme.white }}>
       <Formik
         initialValues={{
           email: user?.email || "",
-          fullName: "",
-          address: "",
+          fullName: user?.name || "",
+          address: user?.location || "",
           city: "",
           state: "",
-          zipCode: "",
-          cardNumber: "",
-          expiryDate: "",
-          cvv: "",
-          cardholderName: "",
+          zipCode: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={createCheckoutSession}
+        onSubmit={handlePaymentSubmit}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <div className="container px-4 py-4" style={{ maxWidth: "720px" }}>
-            <div className="p-4 rounded shadow-sm mb-4 mt-4" style={{ backgroundColor: theme.semiWhite }}>
-              <h2 className="h5 fw-bold mb-3" style={{ color: theme.black }}>Order Summary</h2>
-              {cart.map((item, i) => (
-                <div key={i} className="d-flex justify-content-between mb-2">
-                  <span style={{ color: theme.darkGray }}>{item.name} x {item.quantity}</span>
-                  <span className="fw-medium" style={{ color: theme.black }}>${(item.price * item.quantity).toFixed(2)}</span>
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <form onSubmit={handleSubmit} className="mt-4">
+            {/* Order Summary */}
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Order Summary</h5>
+                {cart.map((item, i) => (
+                  <div key={i} className="d-flex justify-content-between mb-2">
+                    <span>{item.name} x {item.quantity}</span>
+                    <strong>${(item.price * item.quantity).toFixed(2)}</strong>
+                  </div>
+                ))}
+                <hr />
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal:</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
-              ))}
-              <div className="border-top pt-3 mt-3" style={{ borderColor: theme.lightGray }}>
-                <div className="d-flex justify-content-between mb-1">
-                  <span style={{ color: theme.darkGray }}>Subtotal:</span>
-                  <span style={{ color: theme.black }}>${subtotal.toFixed(2)}</span>
+                <div className="d-flex justify-content-between">
+                  <span>Shipping:</span>
+                  <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
                 </div>
-                <div className="d-flex justify-content-between mb-1">
-                  <span style={{ color: theme.darkGray }}>Shipping:</span>
-                  <span style={{ color: shipping === 0 ? theme.green : theme.black }}>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
-                </div>
-                <div className="d-flex justify-content-between mt-2 pt-2 border-top">
-                  <span className="h5 fw-bold" style={{ color: theme.black }}>Total:</span>
-                  <span className="h5 fw-bold" style={{ color: theme.primary }}>${total.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-            <div className="mb-4">
-              <InputField name="email" value={values.email} handleChange={handleChange} handleBlur={handleBlur} placeholder="Email Address" type="email" />
-              <InputField name="fullName" value={values.fullName} handleChange={handleChange} handleBlur={handleBlur} placeholder="Full Name" />
-              <InputField name="address" value={values.address} handleChange={handleChange} handleBlur={handleBlur} placeholder="Address" />
-              <div className="row g-3">
-                <div className="col-md-6"><InputField name="city" value={values.city} handleChange={handleChange} handleBlur={handleBlur} placeholder="City" /></div>
-                <div className="col-md-6"><InputField name="state" value={values.state} handleChange={handleChange} handleBlur={handleBlur} placeholder="State" /></div>
-              </div>
-              <InputField name="zipCode" value={values.zipCode} handleChange={handleChange} handleBlur={handleBlur} placeholder="ZIP Code" type="text" maxLength={10} />
-            </div>
-            <div className="mb-4">
-              <InputField name="cardholderName" value={values.cardholderName} handleChange={handleChange} handleBlur={handleBlur} placeholder="Cardholder Name" />
-              <InputCardField name="cardNumber" value={values.cardNumber} handleChange={handleChange} handleBlur={handleBlur} placeholder="Card Number" />
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <InputField name="expiryDate" value={values.expiryDate} handleChange={(n) => (e) => handleChange(n)(formatExpiryDate(e.target.value))} handleBlur={handleBlur} placeholder="MM/YY" type="text" maxLength={5} />
-                </div>
-                <div className="col-md-6">
-                  <InputField name="cvv" value={values.cvv} handleChange={(n) => (e) => handleChange(n)(e.target.value.replace(/[^0-9]/g, ""))} handleBlur={handleBlur} placeholder="CVV" type="password" maxLength={4} />
+                <hr />
+                <div className="d-flex justify-content-between fw-bold">
+                  <span>Total:</span>
+                  <span className="text-primary">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
-            <div className="p-4 rounded shadow-sm mb-4 d-flex align-items-start" style={{ backgroundColor: theme.lightBeige }}>
-              <FaLock className="me-3 mt-1" size={20} style={{ color: theme.primary }} />
+
+            {/* Payment Form */}
+            <div className="card mb-4">
+              <div className="card-body">
+                <h5 className="card-title">Payment Details</h5>
+
+                <InputField theme={theme} name="email" value={values.email} handleChange={handleChange} handleBlur={handleBlur} placeholder="Email Address" type="email" />
+                {errors.email && touched.email && <div className="text-danger">{errors.email}</div>}
+
+                <InputField theme={theme} name="fullName" value={values.fullName} handleChange={handleChange} handleBlur={handleBlur} placeholder="Full Name" />
+                {errors.fullName && touched.fullName && <div className="text-danger">{errors.fullName}</div>}
+
+                <InputField theme={theme} name="address" value={values.address} handleChange={handleChange} handleBlur={handleBlur} placeholder="Address" />
+                {errors.address && touched.address && <div className="text-danger">{errors.address}</div>}
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <InputField theme={theme} name="city" value={values.city} handleChange={handleChange} handleBlur={handleBlur} placeholder="City" />
+                    {errors.city && touched.city && <div className="text-danger">{errors.city}</div>}
+                  </div>
+                  <div className="col-md-6">
+                    <InputField theme={theme} name="state" value={values.state} handleChange={handleChange} handleBlur={handleBlur} placeholder="State" />
+                    {errors.state && touched.state && <div className="text-danger">{errors.state}</div>}
+                  </div>
+                </div>
+
+                <InputField theme={theme} name="zipCode" value={values.zipCode} handleChange={handleChange} handleBlur={handleBlur} placeholder="ZIP Code" type="number" />
+                {errors.zipCode && touched.zipCode && <div className="text-danger">{errors.zipCode}</div>}
+
+                <div className="mb-3">
+                  <CardElement
+  options={{
+    style: {
+      base: {
+        fontSize: "16px",
+        color: "#424770",
+        "::placeholder": { color: "#aab7c4" },
+      },
+      invalid: { color: "#9e2146" },
+    },
+    hidePostalCode: true,
+  }}
+/>
+
+                </div>
+              </div>
+            </div>
+
+            <div className="alert alert-light d-flex align-items-start mb-4">
+              <MdSecurity size={20} className="me-2 text-primary" />
               <div>
-                <p className="mb-1 fw-medium" style={{ color: theme.black }}>Secure Payment</p>
-                <p className="small" style={{ color: theme.darkGray }}>Your payment information is encrypted and secure. We use Stripe for payment processing.</p>
+                <strong>Secure Payment</strong>
+                <p className="mb-0 small">Your payment information is encrypted and secure. We use Stripe for payment processing.</p>
               </div>
             </div>
-            <div className="p-4 border-top" style={{ borderColor: theme.lightGray }}>
-              <button onClick={handleSubmit} disabled={loading} className={`w-100 btn btn-lg mb-3 ${loading ? "btn-secondary" : "btn-primary"} d-flex align-items-center justify-content-center`} style={loading ? {} : { backgroundColor: theme.primary }}>
-                {loading ? (<span className="me-2">Processing...</span>) : (<> <FaCreditCard className="me-2" /> <span>Pay ${total.toFixed(2)}</span> </>)}
-              </button>
-              <button onClick={handlePayWithPayPal} disabled={loading} className="w-100 btn btn-lg btn-dark mb-3 d-flex align-items-center justify-content-center" style={{ backgroundColor: theme.black }}>
-                <FaWallet className="me-2" />
-                <span>Pay with PayPal</span>
-              </button>
-              <button onClick={() => navigate("/")} className="w-100 btn btn-lg btn-outline-primary" style={{ borderColor: theme.primary, color: theme.primary }}>
-                Back to Cart
+
+            {/* Pay Button */}
+            <div className="text-center">
+              <button type="submit" className="btn btn-primary w-100 py-3" disabled={loading || !stripe}>
+                {loading ? "Processing..." : <><MdPayment size={20} className="me-2" /> Pay ${total.toFixed(2)}</>}
               </button>
             </div>
-          </div>
+          </form>
         )}
       </Formik>
     </div>
-    <Features />
-    </>
   );
 };
 
