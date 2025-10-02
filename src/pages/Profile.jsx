@@ -11,15 +11,16 @@ import { useSocket } from "../context/SocketContext.jsx";
 const Profile = () => {
   const navigate = useNavigate();
   const { notifications, refreshing, fetchNotifications, handleDeleteNotification, formatDate } = useSocket();
-  const { logout, favorites,   toggleFavorite, orders } = useAppContext();
+  const { logout, favorites, fetchOrders, toggleFavorite, orders } = useAppContext();
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const { cart, removeFromCart } = useCart();
   const { products } = useAppContext();
   const favoriteProducts = products.filter(p => favorites.includes(p.id));
+  const [phone, setPhone] = useState(user?.phoneNumber || "");
   const token = localStorage.getItem("token");
-
+  const [locationLoading, setLocationLoading] = useState(false);
   const handleImageChange = async e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -39,75 +40,6 @@ const Profile = () => {
       } else alert("❌ Upload failed");
     } catch (err) { alert("Error uploading image"); } finally { setIsUploading(false); }
   };
-
-  const handleLogout = async () => { await logout(); localStorage.clear(); navigate("/signin"); };
-
-  const renderEmptyContent = (icon, title, subtitle) => (
-    <motion.div className="text-center py-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#6c757d" className={`bi bi-${icon} mb-3`} viewBox="0 0 16 16">
-        <path d={icon === "favorite-border" ? "m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385C2.885 9.279 5.481 11.9 8 14.058c2.519-2.158 5.115-4.78 6.286-6.62.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z" :
-          icon === "history" ? "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.5 2.5v5.5l4.5 2.7.7-1.2-3.8-2.3V3.5H7.5z" :
-          icon === "location-on" ? "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" :
-          icon === "payment" ? "M2.5 4A1.5 1.5 0 0 0 1 5.5V6h14v-.5A1.5 1.5 0 0 0 13.5 4h-11zM1 7.5v5A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-5H1zm1 2h12v1H2v-1z" :
-          icon === "notifications" ? "M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16zM3 5a5 5 0 0 1 10 0v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5z" :
-          "M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0-2a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"} />
-      </svg>
-      <h5 className="my-text-black">{title}</h5>
-      <p className="text-muted">{subtitle}</p>
-    </motion.div>
-  );
-
-  const renderFavoritesContent = () => (
-    <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      {favoriteProducts.length > 0 ? favoriteProducts.map((item, i) => (
-        <motion.div key={i} className="d-flex mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-          <img src={item.image} alt={item.name} width="60" height="60" className="rounded me-3" />
-          <div className="flex-grow-1">
-            <strong className="my-text-black">{item.name}</strong>
-            <p className="mb-0 text-muted">${item.price}</p>
-          </div>
-          <button className="btn btn-outline-danger btn-sm" onClick={() => toggleFavorite(item.id)}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill={favorites.includes(item.id) ? "#dc3545" : "#6c757d"} className="bi bi-heart-fill" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-            </svg>
-          </button>
-        </motion.div>
-      )) : renderEmptyContent("favorite-border", "No Favorites", "Add items to your favorites")}
-    </motion.div>
-  );
-    const renderCartContent = () => (
-    <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      {cart.length > 0 ? cart.map((item, i) => (
-        <motion.div key={i} className="d-flex mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-          <img src={item.image} alt={item.name} width="60" height="60" className="rounded me-3" />
-          <div className="flex-grow-1">
-            <strong className="my-text-black">{item.name}</strong>
-            <p className="mb-0 text-muted">${item.price}</p>
-          </div>
-          <button className="my-text-redcolor border-0 bg-transparent btn btn-sm" onClick={() => removeFromCart(item.id)}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
-          </button>
-        </motion.div>
-      )) : renderEmptyContent("cart-border", "Cart is empty", "Add items to your favorites")}
-    </motion.div>
-  );
-
-  const renderOrdersContent = () => {
-    if (activeSection === "orders" && orders.length === 0) fetchOrders();
-    return (
-      <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        {orders.length > 0 ? orders.map((order, i) => (
-          <motion.div key={order._id} className="mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-            <strong>Order #{order._id.slice(-6)}</strong>
-            <p className="mb-0">Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-            <p className="mb-0">Total: ${order.totalPrice}</p>
-            <p className="mb-0">Status: {order.status}</p>
-          </motion.div>
-        )) : renderEmptyContent("history", "No Orders", "You have no order history yet")}
-      </motion.div>
-    );
-  };
-
   const renderNotificationsContent = () => (
     <motion.div className="p-4 my-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -142,22 +74,205 @@ const Profile = () => {
       )) : renderEmptyContent("notifications", "No Notifications", "You have no notifications")}
     </motion.div>
   );
+  const updatePhone = async (userId, newPhone) => {
+    try {
+      const res = await fetch(`https://furniro-back-production.up.railway.app/api/${userId}/phone`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: newPhone }),
+      });
 
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.msg || "Failed to update phone");
+
+      const updatedUser = { ...user, phoneNumber: data.phoneNumber };
+      updateUser(updatedUser);
+      setPhone(data.phoneNumber);
+    } catch (err) {
+      console.error("Error updating phone:", err.message);
+    }
+  };
+  const getAddressFromCoords = async (lat, lng) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en`,
+        { headers: { "User-Agent": "furniro-app/1.0" } }
+      );
+      const data = await res.json();
+      return data?.display_name || "Unknown location";
+    } catch {
+      return "Could not fetch address";
+    }
+  };
+  const getCurrentLocation = async () => {
+    try {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+      }
+
+      setLocationLoading(true);
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude } = pos.coords;
+          const address = await getAddressFromCoords(latitude, longitude);
+
+          const token = localStorage.getItem("token");
+          const res = await fetch(
+            `https://furniro-back-production.up.railway.app/api/auth/users/${user.id}/location`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ location: address }),
+            }
+          );
+          const data = await res.json();
+          if (!res.ok) throw new Error(data?.msg || "Failed to update location");
+
+          updateUser({ ...user, location: address });
+          alert(`Location updated: ${address}`);
+        },
+        (err) => {
+          alert("Location permission denied or unavailable");
+        },
+        { enableHighAccuracy: true }
+      );
+    } catch (e) {
+      alert(`Update failed: ${e.message}`);
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+  const renderEmptyContent = (icon, title, subtitle) => (
+    <motion.div className="text-center py-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#6c757d" className={`bi bi-${icon} mb-3`} viewBox="0 0 16 16">
+        <path d={icon === "favorite-border" ? "m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385C2.885 9.279 5.481 11.9 8 14.058c2.519-2.158 5.115-4.78 6.286-6.62.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z" :
+          icon === "history" ? "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.5 2.5v5.5l4.5 2.7.7-1.2-3.8-2.3V3.5H7.5z" :
+          icon === "location-on" ? "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" :
+          icon === "payment" ? "M2.5 4A1.5 1.5 0 0 0 1 5.5V6h14v-.5A1.5 1.5 0 0 0 13.5 4h-11zM1 7.5v5A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-5H1zm1 2h12v1H2v-1z" :
+          icon === "notifications" ? "M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16zM3 5a5 5 0 0 1 10 0v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5z" :
+          "M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0-2a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"} />
+      </svg>
+      <h5 className="my-text-black">{title}</h5>
+      <p className="text-muted">{subtitle}</p>
+    </motion.div>
+  );
+  const renderFavoritesContent = () => (
+    <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      {favoriteProducts.length > 0 ? favoriteProducts.map((item, i) => (
+        <motion.div key={i} className="d-flex mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
+          <img src={item.image} alt={item.name} width="60" height="60" className="rounded me-3" />
+          <div className="flex-grow-1">
+            <strong className="my-text-black">{item.name}</strong>
+            <p className="mb-0 text-muted">${item.price}</p>
+          </div>
+          <button className="btn btn-outline-danger btn-sm" onClick={() => toggleFavorite(item.id)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill={favorites.includes(item.id) ? "#dc3545" : "#6c757d"} className="bi bi-heart-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+            </svg>
+          </button>
+        </motion.div>
+      )) : renderEmptyContent("favorite-border", "No Favorites", "Add items to your favorites")}
+    </motion.div>
+  );
+  const renderCartContent = () => (
+    <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      {cart.length > 0 ? cart.map((item, i) => (
+        <motion.div key={i} className="d-flex mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
+          <img src={item.image} alt={item.name} width="60" height="60" className="rounded me-3" />
+          <div className="flex-grow-1">
+            <strong className="my-text-black">{item.name}</strong>
+            <p className="mb-0 text-muted">${item.price}</p>
+          </div>
+          <button className="my-text-redcolor border-0 bg-transparent btn btn-sm" onClick={() => removeFromCart(item.id)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
+          </button>
+        </motion.div>
+      )) : renderEmptyContent("cart-border", "Cart is empty", "Add items to your favorites")}
+    </motion.div>
+  );
+  const renderLocationContent = () => (
+  <div className="p-3 border rounded bg-light">
+    <h5>Your Saved Location</h5>
+    {user ? (
+      <div>
+        <p><strong>Address:</strong> {user.location}</p>
+      </div>
+    ) : (
+      <p>No location saved </p>
+    )}
+    <button className="btn btn-outline-primary mt-2" onClick={getCurrentLocation}>
+      Get Current Location
+    </button>
+  </div>
+  );
+  const renderPhoneContent = () => {
+    const handleSavePhone = async () => {
+      if (!/^0\d{9,11}$/.test(phone)) {
+        return alert("Invalid phone number. Must start with 0 and be 10–12 digits.");
+      }
+      try {
+        await updatePhone(user.id, phone); 
+        alert("Phone number saved successfully!");
+      } catch (err) {
+        console.error("Error saving phone number:", err);
+        alert("Failed to save phone number");
+      }
+    };
+
+    return (
+      <div className="p-3 border rounded bg-light">
+        <h5>Your Phone Number</h5>
+        <input
+          type="text"
+          className="form-control mb-2"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Enter your phone number"
+        />
+        <button className="btn btn-outline-success" onClick={handleSavePhone}>
+          Save Phone Number
+        </button>
+      </div>
+    );
+  };
+  const renderOrdersContent = () => {
+    if (activeSection === "orders" && orders.length === 0) fetchOrders();
+    return (
+      <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        {orders.length > 0 ? orders.map((order, i) => (
+          <motion.div key={order._id} className="mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
+            <strong>Order #{order._id.slice(-6)}</strong>
+            <p className="mb-0">Date: {formatDate(order.date)}</p>
+            <p className="mb-0">Total: ${order.total}</p>
+            <p className="mb-0">Status: {order.status}</p>
+          </motion.div>
+        )) : renderEmptyContent("history", "No Orders", "You have no order history yet")}
+      </motion.div>
+    );
+  };
   const renderGenericContent = (title, icon) => (
     <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       {renderEmptyContent(icon, "Coming Soon", "This feature will be available soon")}
     </motion.div>
   );
+  const handleLogout = async () => { await logout(); localStorage.clear(); navigate("/signin"); };
 
   const menuItems = [
     { icon: "cart", title: "Cart", subtitle: `${cart.length} items`, onClick: () => setActiveSection(activeSection === "cart" ? null : "cart"), content: renderCartContent() },
     { icon: "heart", title: "Favorites", subtitle: `${favorites.length} items`, onClick: () => setActiveSection(activeSection === "favorites" ? null : "favorites"), content: renderFavoritesContent() },
-    { icon: "box-seam", title: "Order History", subtitle: "Your previous orders", onClick: () => setActiveSection(activeSection === "orders" ? null : "orders"), content: renderOrdersContent() },
-    { icon: "geo-alt", title: "Addresses", subtitle: "Manage delivery", onClick: () => setActiveSection(activeSection === "addresses" ? null : "addresses"), content: renderGenericContent("Addresses", "location-on") },
+    { icon: "box-seam", title: "Order History", subtitle: "Your previous orders", onClick: () => setActiveSection(activeSection === "order history" ? null : "order history"), content: renderOrdersContent() },
+    { icon: "geo-alt", title: "Addresses", subtitle: "Manage delivery", onClick: () => setActiveSection(activeSection === "addresses" ? null : "addresses"), content: renderLocationContent() },
     { icon: "credit-card", title: "Payment", subtitle: "Manage cards", onClick: () => setActiveSection(activeSection === "payment" ? null : "payment"), content: renderGenericContent("Payment Methods", "payment") },
     { icon: "bell", title: "Notifications", subtitle: "Notification settings", onClick: () => setActiveSection(activeSection === "notifications" ? null : "notifications"), content: renderNotificationsContent() },
     { icon: "question-circle", title: "Help & Support", subtitle: "FAQs", onClick: () => setActiveSection(activeSection === "help" ? null : "help"), content: renderGenericContent("Help & Support", "help") },
+    { icon: "phone", title: "Phone", subtitle: "set phone number", onClick: () => setActiveSection(activeSection === "phone" ? null : "phone"), content: renderPhoneContent() },
     { icon: "info-circle", title: "About App", subtitle: "App info", onClick: () => alert("Furniro v1.0.0", "Modern furniture app"), content: null },
+
   ];
 
   if (!isAuthenticated) return (
