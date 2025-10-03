@@ -148,12 +148,12 @@ const Payment = () => {
                 </div>
                 <div className="d-flex justify-content-between">
                   <span>Shipping:</span>
-                  <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                  <span className="my-text-greencolor">{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between fw-bold">
                   <span>Total:</span>
-                  <span className="text-primary">${total.toFixed(2)}</span>
+                  <span className="my-text-primary">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -164,28 +164,26 @@ const Payment = () => {
                 <h5 className="card-title">Payment Details</h5>
 
                 <InputField theme={theme} name="email" value={values.email} handleChange={handleChange} handleBlur={handleBlur} placeholder="Email Address" type="email" />
-                {errors.email && touched.email && <div className="text-danger">{errors.email}</div>}
+                {errors.email && touched.email && <div className="my-text-redcolor">{errors.email}</div>}
 
                 <InputField theme={theme} name="fullName" value={values.fullName} handleChange={handleChange} handleBlur={handleBlur} placeholder="Full Name" />
-                {errors.fullName && touched.fullName && <div className="text-danger">{errors.fullName}</div>}
+                {errors.fullName && touched.fullName && <div className="my-text-redcolor">{errors.fullName}</div>}
 
                 <InputField theme={theme} name="address" value={values.address} handleChange={handleChange} handleBlur={handleBlur} placeholder="Address" />
-                {errors.address && touched.address && <div className="text-danger">{errors.address}</div>}
+                {errors.address && touched.address && <div className="my-text-redcolor">{errors.address}</div>}
 
                 <div className="row">
                   <div className="col-md-6">
                     <InputField theme={theme} name="city" value={values.city} handleChange={handleChange} handleBlur={handleBlur} placeholder="City" />
-                    {errors.city && touched.city && <div className="text-danger">{errors.city}</div>}
+                    {errors.city && touched.city && <div className="my-text-redcolor">{errors.city}</div>}
                   </div>
                   <div className="col-md-6">
                     <InputField theme={theme} name="state" value={values.state} handleChange={handleChange} handleBlur={handleBlur} placeholder="State" />
-                    {errors.state && touched.state && <div className="text-danger">{errors.state}</div>}
+                    {errors.state && touched.state && <div className="my-text-redcolor">{errors.state}</div>}
                   </div>
                 </div>
-
                 <InputField theme={theme} name="zipCode" value={values.zipCode} handleChange={handleChange} handleBlur={handleBlur} placeholder="ZIP Code" type="number" />
-                {errors.zipCode && touched.zipCode && <div className="text-danger">{errors.zipCode}</div>}
-
+                {errors.zipCode && touched.zipCode && <div className="my-text-redcolor">{errors.zipCode}</div>}
                 <div className="mb-3">
                   <CardElement
   options={{
@@ -206,7 +204,7 @@ const Payment = () => {
             </div>
 
             <div className="alert alert-light d-flex align-items-start mb-4">
-              <MdSecurity size={20} className="me-2 text-primary" />
+              <MdSecurity size={20} className="me-2 my-text-primary" />
               <div>
                 <strong>Secure Payment</strong>
                 <p className="mb-0 small">Your payment information is encrypted and secure. We use Stripe for payment processing.</p>
@@ -215,7 +213,7 @@ const Payment = () => {
 
             {/* Pay Button */}
             <div className="text-center">
-              <button type="submit" className="btn btn-primary w-100 py-3" disabled={loading || !stripe}>
+              <button type="submit" className="btn text-white my-bg-primary w-100 py-3" disabled={loading || !stripe}>
                 {loading ? "Processing..." : <><MdPayment size={20} className="me-2" /> Pay ${total.toFixed(2)}</>}
               </button>
             </div>
