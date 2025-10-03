@@ -10,7 +10,7 @@ import { useSocket } from "../context/SocketContext.jsx";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { notifications, refreshing, fetchNotifications, handleDeleteNotification, formatDate } = useSocket();
+  const { notifications,unreadCount, refreshing, fetchNotifications, handleDeleteNotification, formatDate, markAllAsReadInDB } = useSocket();
   const { logout, favorites, fetchOrders, toggleFavorite, orders } = useAppContext();
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
@@ -50,7 +50,7 @@ const Profile = () => {
       </div>
       {notifications.length > 0 ? notifications.map((notif, i) => (
         <motion.div key={notif._id} className="d-flex align-items-center mb-3 rounded" style={{ backgroundColor: "#fff", borderLeft: "4px solid", padding: "14px 16px", gap: "14px" }} initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 50, opacity: 0 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-          <div className="d-flex align-items-center justify-content-center">
+          <div onClick={() => markAllAsReadInDB()} className="d-flex align-items-center justify-content-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
               <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                 <g>
@@ -75,23 +75,13 @@ const Profile = () => {
     </motion.div>
   );
   const updatePhone = async (userId, newPhone) => {
-    try {
-      const res = await fetch(`https://furniro-back-production.up.railway.app/api/${userId}/phone`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: newPhone }),
-      });
-
+      const res = await fetch(`https://furniro-back-production.up.railway.app/api/auth/users/${userId}/phone`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phoneNumber: newPhone }) });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.msg || "Failed to update phone");
-
-      const updatedUser = { ...user, phoneNumber: data.phoneNumber };
-      updateUser(updatedUser);
-      setPhone(data.phoneNumber);
-    } catch (err) {
-      console.error("Error updating phone:", err.message);
-    }
-  };
+      if (res.ok) {
+        const updatedUser = { ...user, phoneNumber: data.phoneNumber };
+        updateUser(updatedUser);
+      } 
+    };
   const getAddressFromCoords = async (lat, lng) => {
     try {
       const res = await fetch(
@@ -223,35 +213,89 @@ const Profile = () => {
         alert("Failed to save phone number");
       }
     };
-
     return (
-      <div className="p-3 border rounded bg-light">
-        <h5>Your Phone Number</h5>
-        <input
-          type="text"
-          className="form-control mb-2"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="Enter your phone number"
-        />
-        <button className="btn btn-outline-success" onClick={handleSavePhone}>
-          Save Phone Number
-        </button>
-      </div>
-    );
+  <div className="p-3 rounded">
+    <h5 className="d-flex align-items-center my-text-primary mb-3">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        fill="currentColor"
+        className="bi bi-phone me-2 my-text-primary"
+        viewBox="0 0 16 16"
+      >
+        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 
+        1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 
+        0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 
+        0 0 0-2-2H5z"/>
+        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+      </svg>
+      Your Phone Number
+    </h5>
+    <input
+      type="text"
+      className="mb-2 px-3 py-2 rounded border my-text-black w-100"
+      style={{ borderColor: "#ced4da", fontSize: "1rem", outline: "none" }}
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      placeholder="Enter your phone number"
+    />
+    <button
+      className="btn my-bg-greencolor my-text-semi-white"
+      onClick={handleSavePhone}
+    >
+      Save Phone Number
+    </button>
+  </div>
+);
+
   };
   const renderOrdersContent = () => {
     if (activeSection === "orders" && orders.length === 0) fetchOrders();
     return (
-      <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        {orders.length > 0 ? orders.map((order, i) => (
-          <motion.div key={order._id} className="mb-3 p-3 rounded bg-light" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-            <strong>Order #{order._id.slice(-6)}</strong>
-            <p className="mb-0">Date: {formatDate(order.date)}</p>
-            <p className="mb-0">Total: ${order.total}</p>
-            <p className="mb-0">Status: {order.status}</p>
-          </motion.div>
-        )) : renderEmptyContent("history", "No Orders", "You have no order history yet")}
+      <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} >
+        {orders.length > 0 ? (
+          orders.map((order, i) => (
+            <motion.div key={order._id} className="mb-3 p-3 rounded my-bg-semi-white" initial={{ x: -50, opacity: 0 }}animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }} onClick={() => navigate(`/orders/${order._id}`)} style={{cursor:"pointer"}}>
+              <div className="d-flex align-items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                  className="my-text-primary"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M20 6H4V4h16v2zm0 2v12H4V8h16zm-2 2H6v8h12v-8z" />
+                </svg>
+                <strong className="my-text-black">Order #{order._id.slice(-6)}</strong>
+              </div>
+              <p className="mb-0 my-text-gray d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="my-text-primary" viewBox="0 0 24 24"> <path d="M7 10h5v5H7z" /><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" /></svg>
+                Date: {formatDate(order.date)}
+              </p>
+
+              <p className="mb-0 my-text-black d-flex align-items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M11.25 7.847c-.936.256-1.5.975-1.5 1.653s.564 1.397 1.5 1.652zm1.5 5.001v3.304c.936-.255 1.5-.974 1.5-1.652s-.564-1.397-1.5-1.652"/><path fill="currentColor" fill-rule="evenodd" d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2s10 4.477 10 10M12 5.25a.75.75 0 0 1 .75.75v.317c1.63.292 3 1.517 3 3.183a.75.75 0 0 1-1.5 0c0-.678-.564-1.397-1.5-1.653v3.47c1.63.292 3 1.517 3 3.183s-1.37 2.891-3 3.183V18a.75.75 0 0 1-1.5 0v-.317c-1.63-.292-3-1.517-3-3.183a.75.75 0 0 1 1.5 0c0 .678.564 1.397 1.5 1.652v-3.469c-1.63-.292-3-1.517-3-3.183s1.37-2.891 3-3.183V6a.75.75 0 0 1 .75-.75" clip-rule="evenodd"/></svg>
+                Total: ${order.total}
+              </p>
+              <p className="mb-0 d-flex align-items-center gap-1">
+                {order.status?
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 16" className="my-text-greencolor"><path fill="currentColor" d="m7.536 8.657l2.828-2.83a1 1 0 0 1 1.414 1.416l-3.535 3.535a1 1 0 0 1-1.415.001l-2.12-2.12a1 1 0 1 1 1.413-1.415zM8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16m0-2A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/></svg>
+                  :
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" className="my-text-redcolor"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="m20 33l6 2s15-3 17-3s2 2 0 4s-9 8-15 8s-10-3-14-3H4"/><path d="M4 29c2-2 6-5 10-5s13.5 4 15 6s-3 5-3 5M16 18v-8a2 2 0 0 1 2-2h24a2 2 0 0 1 2 2v16"/><path fill="currentColor" d="M25 8h10v9H25z"/></g></svg>
+                  }
+                <span className="my-text-black">Status: {order.status}</span>
+              </p>
+            </motion.div>
+          ))
+        ) : (
+          renderEmptyContent(
+            "history",
+            "No Orders",
+            "You have no order history yet"
+          )
+        )}
       </motion.div>
     );
   };
@@ -269,8 +313,7 @@ const Profile = () => {
     { icon: "geo-alt", title: "Addresses", subtitle: "Manage delivery", onClick: () => setActiveSection(activeSection === "addresses" ? null : "addresses"), content: renderLocationContent() },
     { icon: "credit-card", title: "Payment", subtitle: "Manage cards", onClick: () => setActiveSection(activeSection === "payment" ? null : "payment"), content: renderGenericContent("Payment Methods", "payment") },
     { icon: "bell", title: "Notifications", subtitle: "Notification settings", onClick: () => setActiveSection(activeSection === "notifications" ? null : "notifications"), content: renderNotificationsContent() },
-    { icon: "question-circle", title: "Help & Support", subtitle: "FAQs", onClick: () => setActiveSection(activeSection === "help" ? null : "help"), content: renderGenericContent("Help & Support", "help") },
-    { icon: "phone", title: "Phone", subtitle: "set phone number", onClick: () => setActiveSection(activeSection === "phone" ? null : "phone"), content: renderPhoneContent() },
+    { icon: "phone", title: "Phone", subtitle: user?.phoneNumber ?"phone saved":"set phone number", onClick: () => setActiveSection(activeSection === "phone" ? null : "phone"), content: renderPhoneContent() },
     { icon: "info-circle", title: "About App", subtitle: "App info", onClick: () => alert("Furniro v1.0.0", "Modern furniture app"), content: null },
 
   ];
@@ -314,8 +357,14 @@ const Profile = () => {
                     item.icon === "credit-card" ? "M2.5 4A1.5 1.5 0 0 0 1 5.5V6h14v-.5A1.5 1.5 0 0 0 13.5 4h-11zM1 7.5v5A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-5H1zm1 2h12v1H2v-1z" :
                     item.icon === "bell" ? "M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16zM3 5a5 5 0 0 1 10 0v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5z" :
                     item.icon === "question-circle" ? "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.5-5a.5.5 0 0 1-1 0V6a.5.5 0 0 1 1 0v5zm0 2.5a.5.5 0 0 1-.5.5h-.5a.5.5 0 0 1 0-1h.5a.5.5 0 0 1 .5.5z" :
+                    item.icon === "phone" ? "M21 16.42v3.536a1 1 0 0 1-.93.998Q19.415 21 19 21C10.163 21 3 13.837 3 5q0-.414.046-1.07A1 1 0 0 1 4.044 3H7.58a.5.5 0 0 1 .498.45q.034.344.064.552A13.9 13.9 0 0 0 9.35 8.003c.095.2.033.439-.147.567l-2.158 1.542a13.05 13.05 0 0 0 6.844 6.844l1.54-2.154a.46.46 0 0 1 .573-.149a13.9 13.9 0 0 0 4 1.205q.208.03.55.064a.5.5 0 0 1 .449.498":
                     "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"} />
                 </svg>
+                {item.icon === "bell" && unreadCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge my-bg-redcolor d-flex justify-content-center " style={{borderRadius:"100%", padding:"12px"}}>
+                    {unreadCount}
+                  </span>
+                )}
                 <div className="flex-grow-1">
                   <span className="my-text-black">{item.title}</span>
                   <p className="mb-0 text-muted">{item.subtitle}</p>
