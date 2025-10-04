@@ -124,7 +124,6 @@ const Profile = () => {
           if (!res.ok) throw new Error(data?.msg || "Failed to update location");
 
           updateUser({ ...user, location: address });
-          alert(`Location updated: ${address}`);
         },
         (err) => {
           alert("Location permission denied or unavailable");
@@ -185,21 +184,63 @@ const Profile = () => {
       )) : renderEmptyContent("cart-border", "Cart is empty", "Add items to your favorites")}
     </motion.div>
   );
-  const renderLocationContent = () => (
-  <div className="p-3 border rounded bg-light">
-    <h5>Your Saved Location</h5>
-    {user ? (
-      <div>
-        <p><strong>Address:</strong> {user.location}</p>
-      </div>
-    ) : (
-      <p>No location saved </p>
-    )}
-    <button className="btn btn-outline-primary mt-2" onClick={getCurrentLocation}>
-      Get Current Location
-    </button>
-  </div>
+  const renderLocationContent = () => {
+  const hasLocation = !!user?.location;
+
+  return (
+    <div className="p-3 border rounded my-bg-color3">
+      <h5 className="my-text-primary d-flex align-items-center gap-2">
+        {hasLocation ? (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-greencolor">
+              <path fill="currentColor" d="M10.115 21.811c.606.5 1.238.957 1.885 1.403a27 27 0 0 0 1.885-1.403a28 28 0 0 0 2.853-2.699C18.782 16.877 21 13.637 21 10a9 9 0 1 0-18 0c0 3.637 2.218 6.876 4.262 9.112a28 28 0 0 0 2.853 2.7M12 13.25a3.25 3.25 0 1 1 0-6.5a3.25 3.25 0 0 1 0 6.5"/>
+            </svg>
+            Your Saved Location
+          </>
+        ) : (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-redcolor">
+              <path fill="currentColor" d="M2.22 2.22a.75.75 0 0 1 1.06 0l18.5 18.5l.051.056a.75.75 0 0 1-1.055 1.055l-.056-.05l-3.738-3.738l-.012.014q-1.312 1.288-3.406 3.312a2.25 2.25 0 0 1-3.129 0l-3.49-3.396q-.66-.646-1.102-1.09A8.71 8.71 0 0 1 4.787 5.848L2.22 3.28a.75.75 0 0 1 0-1.06m4.65 1.468a8.708 8.708 0 0 1 12.166 12.166l-4.13-4.128A3 3 0 0 0 15 11a3 3 0 0 0-3.726-2.91zm2.245 6.488a3 3 0 0 0 3.708 3.708z"/>
+            </svg>
+            No location saved
+          </>
+        )}
+      </h5>
+
+      {hasLocation && (
+        <p className="my-text-black">
+          <strong className="my-text-primary">location:</strong> {user.location}
+        </p>
+      )}
+
+      <button
+        className="btn my-bg-primary my-text-semi-white mt-2 d-flex align-items-center gap-2"
+        onClick={async () => {
+          setLocationLoading(true);
+          try {
+            await getCurrentLocation();
+          } finally {
+            setLocationLoading(false);
+          }
+        }}
+        disabled={locationLoading}
+      >
+        {locationLoading ? (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-semi-white">
+              <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/>
+              <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12" type="rotate" repeatCount="indefinite"/>
+              </path>
+            </svg>
+            Loading...
+          </>
+        ) : "Get Current Location"}
+      </button>
+    </div>
   );
+};
+
   const renderPhoneContent = () => {
     const handleSavePhone = async () => {
       if (!/^0\d{9,11}$/.test(phone)) {
