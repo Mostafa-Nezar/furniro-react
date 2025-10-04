@@ -549,7 +549,7 @@ const Home = () => {
         </div>
       </div>
       <div className="text-center my-5">
-        <a href="/shop#car">
+        <a href="/shop">
           <button className="show-more mb-5 mt-3 text-center">Show More</button>
         </a>
       </div>

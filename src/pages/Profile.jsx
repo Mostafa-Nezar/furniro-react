@@ -21,6 +21,7 @@ const Profile = () => {
   const [phone, setPhone] = useState(user?.phoneNumber || "");
   const token = localStorage.getItem("token");
   const [locationLoading, setLocationLoading] = useState(false);
+  
   const handleImageChange = async e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -81,7 +82,7 @@ const Profile = () => {
         const updatedUser = { ...user, phoneNumber: data.phoneNumber };
         updateUser(updatedUser);
       } 
-    };
+  };
   const getAddressFromCoords = async (lat, lng) => {
     try {
       const res = await fetch(
@@ -216,34 +217,13 @@ const Profile = () => {
     return (
   <div className="p-3 rounded">
     <h5 className="d-flex align-items-center my-text-primary mb-3">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        fill="currentColor"
-        className="bi bi-phone me-2 my-text-primary"
-        viewBox="0 0 16 16"
-      >
-        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 
-        1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 
-        0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 
-        0 0 0-2-2H5z"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-phone me-2 my-text-primary" viewBox="0 0 16 16">
+      <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
         <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
-      </svg>
-      Your Phone Number
+      </svg> Your Phone Number
     </h5>
-    <input
-      type="text"
-      className="mb-2 px-3 py-2 rounded border my-text-black w-100"
-      style={{ borderColor: "#ced4da", fontSize: "1rem", outline: "none" }}
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      placeholder="Enter your phone number"
-    />
-    <button
-      className="btn my-bg-greencolor my-text-semi-white"
-      onClick={handleSavePhone}
-    >
+    <input type="text" className="mb-2 px-3 py-2 rounded border my-text-black w-100" style={{ borderColor: "#ced4da", fontSize: "1rem", outline: "none" }} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter your phone number"/>
+    <button className="btn my-bg-greencolor my-text-semi-white" onClick={handleSavePhone}>
       Save Phone Number
     </button>
   </div>
@@ -258,14 +238,7 @@ const Profile = () => {
           orders.map((order, i) => (
             <motion.div key={order._id} className="mb-3 p-3 rounded my-bg-semi-white" initial={{ x: -50, opacity: 0 }}animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }} onClick={() => navigate(`/orders/${order._id}`)} style={{cursor:"pointer"}}>
               <div className="d-flex align-items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  fill="currentColor"
-                  className="my-text-primary"
-                  viewBox="0 0 24 24"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="my-text-primary" viewBox="0 0 24 24">
                   <path d="M20 6H4V4h16v2zm0 2v12H4V8h16zm-2 2H6v8h12v-8z" />
                 </svg>
                 <strong className="my-text-black">Order #{order._id.slice(-6)}</strong>
@@ -280,9 +253,8 @@ const Profile = () => {
                 Total: ${order.total}
               </p>
               <p className="mb-0 d-flex align-items-center gap-1">
-                {order.status?
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 16" className="my-text-greencolor"><path fill="currentColor" d="m7.536 8.657l2.828-2.83a1 1 0 0 1 1.414 1.416l-3.535 3.535a1 1 0 0 1-1.415.001l-2.12-2.12a1 1 0 1 1 1.413-1.415zM8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16m0-2A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/></svg>
-                  :
+                {["paid", "deliverd"].includes(order.status)?
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 16" className="my-text-greencolor"><path fill="currentColor" d="m7.536 8.657l2.828-2.83a1 1 0 0 1 1.414 1.416l-3.535 3.535a1 1 0 0 1-1.415.001l-2.12-2.12a1 1 0 1 1 1.413-1.415zM8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16m0-2A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/></svg>:
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" className="my-text-redcolor"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="m20 33l6 2s15-3 17-3s2 2 0 4s-9 8-15 8s-10-3-14-3H4"/><path d="M4 29c2-2 6-5 10-5s13.5 4 15 6s-3 5-3 5M16 18v-8a2 2 0 0 1 2-2h24a2 2 0 0 1 2 2v16"/><path fill="currentColor" d="M25 8h10v9H25z"/></g></svg>
                   }
                 <span className="my-text-black">Status: {order.status}</span>
@@ -290,9 +262,7 @@ const Profile = () => {
             </motion.div>
           ))
         ) : (
-          renderEmptyContent(
-            "history",
-            "No Orders",
+          renderEmptyContent("history", "No Orders",
             "You have no order history yet"
           )
         )}

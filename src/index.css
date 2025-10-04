@@ -1,7 +1,7 @@
 .auth-page {
   background-color: #F4F5F7; 
   min-height: 100vh;
-  padding-top: 40px;
+  padding-block: 40px;
 }
 
 .auth-header {
@@ -46,7 +46,7 @@
 }
 
 .auth-button {
-  background-color: #B88E2F; /* primary */
+  background-color: #B88E2F;
   color: #fff;
   padding: 12px;
   font-size: 16px;

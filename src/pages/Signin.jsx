@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
 
@@ -48,9 +48,10 @@ function Signin() {
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
-          <button type="submit" className="auth-button">
-            Sign In
-          </button>
+          <button type="submit" className="auth-button">Sign In </button>
+          <hr />
+          <p className="text-center mt-3 small text-muted">Don’t have an account?{" "}</p>      
+          <Link to="/signup" className="mx-auto m-3"><div className="auth-button">sign up</div></Link>
         </form>
       </div>
     </div>
