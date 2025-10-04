@@ -1,9 +1,7 @@
-import { useEffect } from "react";
-import { useAppContext } from "../context/AppContext";
+import { useEffect, useState } from "react";
 
-export default function Popup() {
-  const { user, popup, setpopup } = useAppContext();
-  const message = !user?.id ? "Not Authenticated !" : "Added To Cart !";
+export default function Popup({message = "hello !"}) {
+  const [ popup, setpopup ] = useState(false);
 
   useEffect(() => {
     if (popup) {
