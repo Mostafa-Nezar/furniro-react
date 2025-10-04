@@ -18,10 +18,9 @@ const Profile = () => {
   const { cart, removeFromCart } = useCart();
   const { products } = useAppContext();
   const favoriteProducts = products.filter(p => favorites.includes(p.id));
-  const [phone, setPhone] = useState(user?.phoneNumber || "");
+  const [phone, setPhone] = useState(user?.phoneNumber);
   const token = localStorage.getItem("token");
   const [locationLoading, setLocationLoading] = useState(false);
-  
   const handleImageChange = async e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -45,13 +44,13 @@ const Profile = () => {
     <motion.div className="p-4 my-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="my-text-black mb-0">Notifications</h5>
-        <button className="btn my-bg-primary text-white btn-md" onClick={fetchNotifications} disabled={refreshing}>
+        <button className="btn my-bg-primary text-white btn-md" onClick={()=>{fetchNotifications(); markAllAsReadInDB();}} disabled={refreshing}>
           {refreshing ? "Refreshing..." : "Refresh"}
         </button>
       </div>
       {notifications.length > 0 ? notifications.map((notif, i) => (
         <motion.div key={notif._id} className="d-flex align-items-center mb-3 rounded" style={{ backgroundColor: "#fff", borderLeft: "4px solid", padding: "14px 16px", gap: "14px" }} initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 50, opacity: 0 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-          <div onClick={() => markAllAsReadInDB()} className="d-flex align-items-center justify-content-center">
+          <div className="d-flex align-items-center justify-content-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
               <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                 <g>

@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     loadUser();
   }, []);
-    const toggleSubscription = async (emailInput) => {
+  const toggleSubscription = async (emailInput) => {
     const user = state.user;
     if (!user?.id) {
       return { success: false, message: "No user logged in." };
@@ -70,7 +70,6 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: "RESTORE_USER", payload: null });
       }
   };
-
   const register = async (userData) => {
     try {
       const data = await fetchInstance("/auth/signup", {
