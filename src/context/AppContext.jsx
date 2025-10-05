@@ -4,10 +4,12 @@ import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext"; 
 
 const AppContext = createContext();
-const initialState = { isDarkMode: false, favorites: [], products: [],  loadingCancel: null, orders: [] };
+const initialState = { isDarkMode: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" } };
 const appReducer = (state, action) => {
   switch (action.type) {
     case "SET_FAVORITES": return { ...state, favorites: action.payload };
+    case "SHOW_POPUP": return { ...state, popup: { visible: true, message: action.payload || state.popup.message }};
+    case "HIDE_POPUP": return { ...state, popup: { visible: false, message: state.popup.message }};
     case "TOGGLE_FAVORITE": return state.favorites.includes(action.payload) ? { ...state, favorites: state.favorites.filter((id) => id !== action.payload) } : { ...state, favorites: [...state.favorites, action.payload] };
     case "SET_PRODUCTS": return { ...state, products: action.payload };
     case "SET_ORDERS": return { ...state, orders: action.payload };
@@ -24,7 +26,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => { loadStoredData();  }, []);
   useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
-
+  const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
     const data = await fetchInstance(`/orders/user/${userId}`);
     dispatch({ type: "SET_ORDERS", payload: data });
@@ -57,6 +59,12 @@ export const AppProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
     }
   };
+  const togglePopup = (message = "") => {
+    dispatch({ type: "SHOW_POPUP", payload: message });
+    setTimeout(() => {
+      dispatch({ type: "HIDE_POPUP" });
+    }, 1500);
+  };
   const logout = async () => {
      localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -65,7 +73,6 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: "RESET" });
     return true;
   };
-  const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const getProducts = async () => {
     try {
       const data = await fetchInstance("/products/db");
@@ -99,30 +106,27 @@ export const AppProvider = ({ children }) => {
       return [];
     }
   };
-
  const cancelOrder = async (orderId) => {
-  try {
-    dispatch({ type: "SET_LOADING_CANCEL", payload: orderId });
-    const data = await fetchInstance(`/orders/${orderId}/status`, {
-      method: "PATCH",
-      body: JSON.stringify({ status: "canceled" })
-    });
-    dispatch({
-      type: "SET_ORDERS",
-      payload: state.orders.map((o) =>
-        o._id === orderId ? { ...o, status: "canceled" } : o
-      )
-    });
-    return data;
-  } finally {
-    dispatch({ type: "SET_LOADING_CANCEL", payload: null });
-  }
-};
-
-
+    try {
+      dispatch({ type: "SET_LOADING_CANCEL", payload: orderId });
+      const data = await fetchInstance(`/orders/${orderId}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: "canceled" })
+      });
+      dispatch({
+        type: "SET_ORDERS",
+        payload: state.orders.map((o) =>
+          o._id === orderId ? { ...o, status: "canceled" } : o
+        )
+      });
+      return data;
+    } finally {
+      dispatch({ type: "SET_LOADING_CANCEL", payload: null });
+    }
+  };
 
   return (
-    <AppContext.Provider value={{ ...state,  toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers,fetchOrders }} >
+    <AppContext.Provider value={{ ...state, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
       {children}
     </AppContext.Provider>
   );

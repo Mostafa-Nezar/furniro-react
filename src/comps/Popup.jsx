@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import { useAppContext } from "../context/AppContext.jsx";
 
-export default function Popup({message = "hello !"}) {
-  const [ popup, setpopup ] = useState(false);
+export default function Popup() {
+  const { popup } = useAppContext();
 
-  useEffect(() => {
-    if (popup) {
-      const timer = setTimeout(() => setpopup(false), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [popup, setpopup]);
-
-  return (<div className={`popup ${popup? "show":""}`}>{message}</div>);
+  return (
+    <div className={`popup ${popup.visible ? "show" : ""}`}>
+      {popup.message}
+    </div>
+  );
 }
