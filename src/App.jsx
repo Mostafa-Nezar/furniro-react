@@ -17,6 +17,8 @@ import Scrollbutton from "./comps/Scrollbutton.jsx";
 import CartSection from "./comps/CartSection.jsx";
 import ShareButtons from "./comps/Share.jsx";
 import Popup from "./comps/Popup.jsx";
+import Ordersuccessscreen from "./pages/ordersuccessscreen.jsx";
+import Details from "./pages/Details.jsx";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -36,6 +38,8 @@ function Layout() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/About" element={<About />} />
         <Route path="/Cart" element={<Cart />} />
+        <Route path="/Details/:id" element={<Details />} />
+        <Route path="/ordersuccessscreen" element={<Ordersuccessscreen />} />
       </Routes>
       <Myfooter />
     </>

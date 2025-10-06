@@ -651,9 +651,6 @@ nav .active {
 }
 
 
-
-
-
 .disp {
   transform: translateX(0) !important;
   transition: 1s;

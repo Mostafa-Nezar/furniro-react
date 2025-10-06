@@ -4,12 +4,13 @@ import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext"; 
 
 const AppContext = createContext();
-const initialState = { isDarkMode: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" } };
+const initialState = { isDarkMode: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false };
 const appReducer = (state, action) => {
   switch (action.type) {
     case "SET_FAVORITES": return { ...state, favorites: action.payload };
     case "SHOW_POPUP": return { ...state, popup: { visible: true, message: action.payload || state.popup.message }};
     case "HIDE_POPUP": return { ...state, popup: { visible: false, message: state.popup.message }};
+    case "TOGGLE_SHARE": return { ...state, ShareButtons:!state.ShareButtons};
     case "TOGGLE_FAVORITE": return state.favorites.includes(action.payload) ? { ...state, favorites: state.favorites.filter((id) => id !== action.payload) } : { ...state, favorites: [...state.favorites, action.payload] };
     case "SET_PRODUCTS": return { ...state, products: action.payload };
     case "SET_ORDERS": return { ...state, orders: action.payload };
@@ -26,6 +27,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => { loadStoredData();  }, []);
   useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
+    useEffect(() => {getProducts()}, []);
   const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
     const data = await fetchInstance(`/orders/user/${userId}`);
@@ -65,10 +67,14 @@ export const AppProvider = ({ children }) => {
       dispatch({ type: "HIDE_POPUP" });
     }, 1500);
   };
+  const toggleShareButtons = () =>{
+    dispatch({type: "TOGGLE_SHARE"})
+  };
   const logout = async () => {
      localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("cart");
+    localStorage.removeItem("products");
     authDispatch({ type: "LOGOUT" });
     dispatch({ type: "RESET" });
     return true;
@@ -126,7 +132,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
+    <AppContext.Provider value={{ ...state, toggleShareButtons, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
       {children}
     </AppContext.Provider>
   );

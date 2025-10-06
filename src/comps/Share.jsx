@@ -2,7 +2,7 @@ import { MdClose } from "react-icons/md";
 import { useAppContext } from "../context/AppContext";
 
 const ShareButtons = () => {
-  const { ShareButtons, setShareButtons } = useAppContext();
+  const { ShareButtons,toggleShareButtons } = useAppContext();
   const projectTitle = encodeURIComponent("Check out this project!");
 
   const handleShareClick = (platform) => {
@@ -49,7 +49,7 @@ const ShareButtons = () => {
       }}
     >
       <div
-      onClick={()=>{setShareButtons(!ShareButtons)}}
+      onClick={()=>{toggleShareButtons()}}
         style={{
           cursor: "pointer",
           display: "inline",

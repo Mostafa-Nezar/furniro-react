@@ -1,9 +1,10 @@
 import { useAppContext } from "../context/AppContext";
 import { useCallback } from "react";
 import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
 const Productcart = ({ product }) => {
-  const { togglePopup, toggleFavorite, favorites, setShareButtons } = useAppContext();
+  const { togglePopup, toggleFavorite, favorites, toggleShareButtons } = useAppContext();
   const { addToCart } = useCart();
 
   const isFavorite = favorites.includes(product.id);
@@ -37,18 +38,18 @@ const Productcart = ({ product }) => {
           <div className="text-center">
             <button className="addbutton mb-5" onClick={() => {handleAddToCart();togglePopup("Added To Cart !") }}>Add to Cart</button>
             <div className="d-flex justify-content-center">
-              <a className="text-white sharep fw-bold" href="/" onClick={(e) => { e.preventDefault(); setShareButtons(true) }}>
+              <a className="text-white sharep fw-bold" href="/" onClick={(e) => { e.preventDefault(); toggleShareButtons(); }}>
                 {/* Share SVG */}
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81c1.66 0 3-1.34 3-3s-1.34-3-3-3s-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65c0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92"></path>
                 </svg>{" "} Share
               </a>
-              <a className="mx-2 text-white fw-bold hover-red" href={`../details/detail.html?id=${product.id}`} >
                 {/* Compare Icon */}
+                <Link to={`/Details/${product.id}`} className="mx-2 text-white fw-bold hover-red">
                 <svg fill="#ffffff" width="24px" height="24px" viewBox="0 0 16 16">
                   <path d="M10.08,7l1,1,3.44-3.45L11,1,10,2l1.8,1.8H2v1.4h9.82ZM5.86,9l-1-1L1.42,11.5,4.91,15l1-1L4.1,12.2H14V10.8H4.1Z" />
                 </svg>{" "}Compare
-              </a>
+                </Link>
               <a className={`text-white fw-bold likex ${ isFavorite ? "red" : ""}`} href="#" data-id={product.id} onClick={handleToggleFavorite}>
                 {/* Like SVG */}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">

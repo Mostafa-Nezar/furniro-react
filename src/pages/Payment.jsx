@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useCart } from "../context/CartContext.jsx";
 import { MdPayment, MdSecurity } from "react-icons/md";
+import { useAppContext } from "../context/AppContext.jsx";
 
 const InputField = ({ theme, handleChange, handleBlur, value, placeholder, type = "text", name }) => (
   <div className="mb-3">
@@ -24,8 +25,8 @@ const InputField = ({ theme, handleChange, handleBlur, value, placeholder, type 
 const Payment = () => {
   const nav = useNavigate();
   const theme = ""
-  const { user } = useAuth();
-  const { cart } = useCart();
+  const { user } = useAuth(), { cart } = useCart(), { togglePopup } = useAppContext();
+  
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const Payment = () => {
 
   const handlePaymentSubmit = async (formValues) => {
     if (cart.length === 0) {
-      alert("Your cart is empty");
+      togglePopup("Your cart is empty !");
       return;
     }
     setLoading(true);
@@ -105,7 +106,7 @@ const Payment = () => {
       }
 
       console.log("✅ Payment successful! Payment Intent ID:", paymentIntent.id);
-      alert("Payment Successful!");
+      togglePopup("Payment Successful!");
       nav("/ordersuccessscreen");
     } catch (paymentError) {
       console.error("❌ Stripe Payment Error:", paymentError);
