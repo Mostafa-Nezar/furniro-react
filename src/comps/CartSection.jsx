@@ -9,7 +9,7 @@ const CartSection = ({ toggle, settoggle }) => {
   };
 
   return (
-    <section id="listcardparent" className={`${toggle ? "disp" : ""}`} style={{zIndex:"2000"}}>
+    <section id="listcardparent" className={`position-absolute bg-white p-3 top-0 ${toggle ? "disp" : ""}`} style={{zIndex:"2000"}}>
       <div className="d-flex justify-content-between align-items-center p-2 pb-0">
         <h4 className="d-inline ">Shopping Cart</h4>
         <button

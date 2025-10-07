@@ -51,7 +51,7 @@ export const CartProvider = ({ children }) => {
     } else {
       updatedCart = [
         ...state.cart,
-        { id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 },
+        { id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1, size:"l",color:"primary" },
       ];
     }
     syncCart(updatedCart);

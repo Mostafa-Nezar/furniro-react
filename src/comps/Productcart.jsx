@@ -26,7 +26,7 @@ const Productcart = ({ product }) => {
       <div className="cont semiwhite">
         <div className="innercontent">
           <img width="100%" className="img-fluid" src={product.image} alt={product.name} style={{ height: "316.85px" }}/>
-          <div className={`sale ${product.new ? "new" : ""}`}> {product.sale ? `${product.sale}%` : product.new ? "New" : ""}</div>
+          <div className={`sale my-bg-redcolor position-absolute rounded-circle d-flex justify-content-center align-items-center text-white ${product.new ? "new my-bg-greencolor" : ""}`}>{product.new ? "New" : product.sale ? `${product.sale}%` : ""}</div>
         </div>
         <div className="des">
           <h4 className="fw-bold">{product.name}</h4>
@@ -34,7 +34,7 @@ const Productcart = ({ product }) => {
           <div className="d-inline me-5" style={{ fontWeight: 700 }}> {product.price}.00 </div>
           <del className="gray"> {product.oldprice ? `${product.oldprice}.000.00` : ""}</del>
         </div>
-        <div className="lay d-grid align-items-center">
+        <div className="lay my-bg-gray position-relative w-100 overflow-hidden d-grid align-items-center">
           <div className="text-center">
             <button className="addbutton mb-5" onClick={() => {handleAddToCart();togglePopup("Added To Cart !") }}>Add to Cart</button>
             <div className="d-flex justify-content-center">
