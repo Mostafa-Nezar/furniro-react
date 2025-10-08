@@ -70,7 +70,7 @@ const Cart = () => {
                 <span className="subtotal ">Subtotal:</span>
                 <br />
                 <br />
-                <span className="total">Subtotal:</span>
+                <span className="total">Subtotal: {cart.reduce((e,a)=>e + a.quantity * a.price,0)}</span>
                 <br />
                 <br />
               </div>

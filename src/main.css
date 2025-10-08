@@ -625,16 +625,41 @@ nav .active {
   color: var(--redcolor) !important;
 }
 
-.stars input[type="radio"] {
-  display: none;
-
+#product-image{
+    border-radius: 16px;
+    width: 600px;
+    height: 400px;
 }
 
+.stars {
+    display:inline-flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: -10px;
+    margin-left: -16px;
+}
+.stars input {
+    display: none;
+}
 .stars label {
-  cursor: pointer;
+    font-size: 2rem;
+    color: lightgray;
+    padding: 0 5px;
+}
+.stars input:checked ~ label,
+.stars input:hover ~ label {
+    color: #FFC700;
+}
+.size{
+    width: 10px;
+    text-transform: uppercase;    
+    height: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.size.active{
+    color: white;
+    background-color: var(--primary);
 }
 
-.stars input[type="radio"]:focus + label {
-  outline: none;
-  box-shadow: none;
-}
