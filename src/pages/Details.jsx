@@ -11,15 +11,14 @@ export default function Details() {
     const [userRating, setUserRating] = useState(null);
 
     const product = products.find((e) => e.id == id);
-    if (!product) return <div className="text-center my-5">Loading...</div>;
     const quantity = cart?.find((item) => item.id === product.id)?.quantity ?? 0;
     const productImages = [product.image, product.image1, product.image2, product.image3, product.image4].filter(Boolean);
     const [mainImage, setMainImage] = useState(productImages[0]); 
     const [selectedSize, setSelectedSize] = useState(cart.find((item) => item.id === product.id)?.size);
     const [selectedColor, setSelectedColor] = useState("primary");
+    
 
 function handleSizeSelect(productId, size) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const existingItem = cart.find((item) => item.id === productId);
   if (!existingItem) {
     togglePopup("Not In Cart");
@@ -30,7 +29,6 @@ function handleSizeSelect(productId, size) {
   togglePopup("Updated size")
 }
 function handleColorSelect(productId, color) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const existingItem = cart.find((item) => item.id === productId);
   if (!existingItem) {
     togglePopup("Not In Cart");
@@ -146,7 +144,7 @@ function handleColorSelect(productId, color) {
       key={index}
       className={`me-2 ${selectedColor === color ? "border" : ""}`}
       style={{ color, cursor: "pointer" }}
-      onClick={() =>{setSelectedSize(color); handleColorSelect(product.id, color)}}
+      onClick={() =>{setSelectedColor(color); handleColorSelect(product.id, color)}}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
