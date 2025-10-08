@@ -2,21 +2,29 @@ import { useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Productcart from "../comps/Productcart"
 import Landing from "../comps/Landing"
 export default function Details() {
   const { id } = useParams();
-    const { products, theme, togglePopup } = useAppContext(), {cart, addToCart, updateCartQuantity, removeFromCart }=useCart(),{ user }=useAuth();
+    const { products, theme, togglePopup } = useAppContext(), {cart, addToCart, updateCartQuantity, removeFromCart, syncCart }=useCart(),{ user }=useAuth();
     const [userRating, setUserRating] = useState(null);
+const product = products.find((e) => e.id == id);
+const [mainImage, setMainImage] = useState(null);
+const [selectedSize, setSelectedSize] = useState(null);
+const [quantity, setQuantity] = useState(0);
+const [productImages, setProductImages] = useState([]);
 
-    const product = products.find((e) => e.id == id);
-    const quantity = cart?.find((item) => item.id === product.id)?.quantity ?? 0;
-    const productImages = [product.image, product.image1, product.image2, product.image3, product.image4].filter(Boolean);
-    const [mainImage, setMainImage] = useState(productImages[0]); 
-    const [selectedSize, setSelectedSize] = useState(cart.find((item) => item.id === product.id)?.size);
-    const [selectedColor, setSelectedColor] = useState("primary");
-    
+useEffect(() => {
+  if (!product) return;
+  setQuantity(cart?.find((item) => item.id === product.id)?.quantity ?? 0);
+  setProductImages([ product.image, product.image1, product.image2, product.image3, product.image4 ].filter(Boolean));
+  setMainImage(product.image);
+  setSelectedSize(cart.find((item) => item.id === product.id)?.size || "l");
+}, [product]);
+
+
+    const [selectedColor, setSelectedColor] = useState("#");
 
 function handleSizeSelect(productId, size) {
   const existingItem = cart.find((item) => item.id === productId);
@@ -25,7 +33,7 @@ function handleSizeSelect(productId, size) {
     return;
   }
   const updatedCart = cart.map((item) =>item.id === productId ? { ...item, size } : item);
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
+  syncCart(updatedCart);
   togglePopup("Updated size")
 }
 function handleColorSelect(productId, color) {
@@ -35,7 +43,7 @@ function handleColorSelect(productId, color) {
     return;
   }
   const updatedCart = cart.map((item) =>item.id === productId ? { ...item, color } : item);
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
+  syncCart(updatedCart);
   togglePopup("Updated Color")
 }
 
@@ -81,6 +89,7 @@ function handleColorSelect(productId, color) {
     }
     updateCartQuantity(product.id, newQuantity);
   };
+  if (!product) return(<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>); 
   
   return (
     <>
@@ -91,7 +100,7 @@ function handleColorSelect(productId, color) {
             <div className="d-grid w-75 my-auto align-items-center">
               {productImages.slice(1).map((thumb, index) => (
                 <div key={index} className="text-center my-2">
-                  <img className="img-fluid w-100" src={thumb} alt={`thumb-${index}`} onClick={() => setMainImage(thumb)} style={{ height: "70px", cursor: "pointer", borderRadius:"10px" }} />
+                  <img className="img-fluid w-100 h-100" src={thumb} alt={`thumb-${index}`} onClick={() => setMainImage(thumb)} style={{ height: "70px", cursor: "pointer", borderRadius:"10px" }} />
                 </div>
               ))}
         </div>
