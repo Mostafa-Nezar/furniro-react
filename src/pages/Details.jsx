@@ -27,7 +27,7 @@ function handleSizeSelect(productId, size) {
   }
   const updatedCart = cart.map((item) =>item.id === productId ? { ...item, size } : item);
   localStorage.setItem("cart", JSON.stringify(updatedCart));
-  togglePopup("Updated Color")
+  togglePopup("Updated size")
 }
 function handleColorSelect(productId, color) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
