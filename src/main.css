@@ -645,7 +645,7 @@ nav .active {
 .stars label {
     font-size: 2rem;
     color: lightgray;
-    padding: 0 5px;
+    padding: 0px 5px;
 }
 .stars input:checked ~ label,
 .stars input:hover ~ label {

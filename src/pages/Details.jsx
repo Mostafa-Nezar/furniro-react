@@ -9,46 +9,34 @@ export default function Details() {
   const { id } = useParams();
     const { products, theme, togglePopup } = useAppContext(), {cart, addToCart, updateCartQuantity, removeFromCart, syncCart }=useCart(),{ user }=useAuth();
     const [userRating, setUserRating] = useState(null);
-const product = products.find((e) => e.id == id);
-const [mainImage, setMainImage] = useState(null);
-const [selectedSize, setSelectedSize] = useState(null);
-const [quantity, setQuantity] = useState(0);
-const [productImages, setProductImages] = useState([]);
-
-useEffect(() => {
-  if (!product) return;
-  setQuantity(cart?.find((item) => item.id === product.id)?.quantity ?? 0);
-  setProductImages([ product.image, product.image1, product.image2, product.image3, product.image4 ].filter(Boolean));
-  setMainImage(product.image);
-  setSelectedSize(cart.find((item) => item.id === product.id)?.size || "l");
-}, [product]);
-
-
-    const [selectedColor, setSelectedColor] = useState("#");
-
-function handleSizeSelect(productId, size) {
-  const existingItem = cart.find((item) => item.id === productId);
-  if (!existingItem) {
-    togglePopup("Not In Cart");
-    return;
-  }
-  const updatedCart = cart.map((item) =>item.id === productId ? { ...item, size } : item);
-  syncCart(updatedCart);
-  togglePopup("Updated size")
-}
-function handleColorSelect(productId, color) {
-  const existingItem = cart.find((item) => item.id === productId);
-  if (!existingItem) {
-    togglePopup("Not In Cart");
-    return;
-  }
-  const updatedCart = cart.map((item) =>item.id === productId ? { ...item, color } : item);
-  syncCart(updatedCart);
-  togglePopup("Updated Color")
-}
+    const product = products.find((e) => e.id == id);
+    const [mainImage, setMainImage] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(null);
+    const [quantity, setQuantity] = useState(0);
+    const [productImages, setProductImages] = useState([]);
+    const [selectedColor, setSelectedColor] = useState(null);
+    useEffect(() => {
+      if (!product) return;
+      setProductImages([ product.image, product.image1, product.image2, product.image3, product.image4 ].filter(Boolean));
+      setMainImage(product.image);
+    }, [product]);
+    useEffect(() => {
+      if (!product) return;
+      setQuantity(cart?.find((item) => item.id === product.id)?.quantity ?? 0);
+      setSelectedSize(cart.find((item) => item.id === product.id)?.size || "l");
+    }, [cart]);
 
 
-
+    function SelectOrColor(productId, key, value) {
+        const existingItem = cart.find((item) => item.id === productId);
+        if (!existingItem) {
+          togglePopup("Not In Cart");
+          return;
+        }
+        const updatedCart = cart.map((item) =>item.id === productId ? { ...item, [key]: value } : item);
+        syncCart(updatedCart);
+        togglePopup(`Updated ${key}`);
+      }
     const handleRatingSubmit = async (selectedRate) => {
        setUserRating(selectedRate);
       if (!user?.id) return;
@@ -70,25 +58,24 @@ function handleColorSelect(productId, color) {
         togglePopup(`Thanks! You rated this product ${selectedRate} stars `)
         product.averagerate = +avg.toFixed(1);
         product.ratecount = productRatings.length;
-      };
-      
-  const modifyCartQuantity = (type) => {
-     if (!product) return;
-    if (!quantity) {
-      if (type === "increase") {
-        addToCart(product);
-        togglePopup("Added to cart !")
+      }; 
+    const modifyCartQuantity = (type) => {
+      if (!product) return;
+      if (!quantity) {
+        if (type === "increase") {
+          addToCart(product);
+          togglePopup("Added to cart !")
+          return;
+        } 
+      }
+      const newQuantity = type === "increase" ? quantity + 1 : quantity - 1;
+      if (newQuantity < 1) {
+        removeFromCart(product.id);
+        togglePopup("Removed from cart")
         return;
-      } 
-    }
-    const newQuantity = type === "increase" ? quantity + 1 : quantity - 1;
-    if (newQuantity < 1) {
-      removeFromCart(product.id);
-      togglePopup("Removed from cart")
-      return;
-    }
-    updateCartQuantity(product.id, newQuantity);
-  };
+      }
+      updateCartQuantity(product.id, newQuantity);
+      };
   if (!product) return(<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>); 
   
   return (
@@ -106,7 +93,7 @@ function handleColorSelect(productId, color) {
         </div>
       </div>
       <div className="col-md-4">
-        <img id="product-image" className="img-fluid" src={mainImage} alt={product.name} style={{ height: "542px", objectFit: "cover" }}/>
+        <img id="product-image" className="img-fluid" src={mainImage} alt={product.name} style={{ height: "542px", objectFit: "cover" }} onClick={() => setMainImage(product.image)}/>
       </div>
     <div className="col-md-7 ps-5">
       <h1 id="product-name" className="fw-bold mb-3">
@@ -116,11 +103,11 @@ function handleColorSelect(productId, color) {
         Rs {`${product.price},000.00`}
       </h3>
       <div className="d-flex align-items-baseline">
-  <div className="stars w-25 d-flex align-items-center mb-2">
+  <div className="stars w-25 d-flex align-items-center">
     {[5, 4, 3, 2, 1].map((star) => (
       <span key={star}>
         <input type="radio" name="star" id={`star${star}`} value={star} checked={(userRating ?? product.averagerate) === star} onChange={() => handleRatingSubmit(star)} className="d-none"/>
-        <label htmlFor={`star${star}`} className="cursor-pointer">
+        <label htmlFor={`star${star}`}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" style={{ color: (userRating ?? product.averagerate) >= star ? "gold" : "gray" }}>
             <path fill="currentColor" d="m10 1l3 6l6 .75l-4.12 4.62L16 19l-6-3l-6 3l1.13-6.63L1 7.75L7 7z"/>
           </svg>
@@ -129,89 +116,53 @@ function handleColorSelect(productId, color) {
     ))}
   </div>
   <span className="d-inline-block gray ps-2 ms-2 mt-1" style={{ borderLeft: "2px solid var(--gray)" }}>
-    <span id="rating-value">{product.ratecount || 0}</span> Customers Reviews
+    <span id="rating-value">{product.averagerate || 0}</span> Customers Reviews
+  </span>
+  <span className="d-inline-block gray ps-2 ms-2 mt-1" style={{ borderLeft: "2px solid var(--gray)" }}>
+    <span id="rating-value">{product.ratecount || 0}</span> Customers
   </span>
 </div>
-
-      <p id="product-description" className="mt-4 gray">
-        {product.des}
-      </p>
-      <div className="mb-2 mt-3 fw-bold">Size</div>
-<p>
-  {["l", "xl", "xs"].map((size) => (
-    <span key={size} className={`p-2 size m-2 my-bg-color3 ${selectedSize === size ? "active" : ""}`}
-      style={{ cursor: "pointer" }} onClick={() => { setSelectedSize(size); handleSizeSelect(product.id, size)}}>
-      {size}
-    </span>
-  ))}
-</p>
+  <p id="product-description" className="mt-4 gray">
+    {product.des}
+  </p>
+  <div className="mb-2 mt-3 fw-bold">Size</div>
+  <p>
+    {["l", "xl", "xs"].map((size) => (
+      <span key={size} className={`p-2 size m-2 my-bg-color3 ${selectedSize === size ? "active" : ""}`}
+        style={{ cursor: "pointer" }} onClick={() => { setSelectedSize(size); SelectOrColor(product.id,"size", size)}}>
+        {size}
+      </span>
+    ))}
+  </p>
 
 <span className="fw-bold">Color</span>
 <div>
   {["mediumslateblue", "black", "#B88E2F"].map((color, index) => (
-    <svg
-      key={index}
-      className={`me-2 ${selectedColor === color ? "border" : ""}`}
-      style={{ color, cursor: "pointer" }}
-      onClick={() =>{setSelectedColor(color); handleColorSelect(product.id, color)}}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 15 15"
-    >
-      <path
-        fill="currentColor"
-        d="M7.5 0a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15"
-      />
+    <svg key={index} className={`me-2 ${selectedColor === color ? "border" : ""}`} style={{ color, cursor: "pointer" }} onClick={() =>{setSelectedColor(color); SelectOrColor(product.id,"color", color)}} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 15 15">
+      <path fill="currentColor" d="M7.5 0a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15"/>
     </svg>
   ))}
 </div>
 
 
       <div className="w-100">
-        <div
-          className="me-2 mb-2 d-inline-flex p-3 border border-dark px-0 justify-content-evenly rounded"
-          style={{ width: "15%", borderColor: "var(--gray)" }}
-        >
-          <div
-            className="dont plus me-3"
-            style={{ cursor: "pointer" }}
-            onClick={() => modifyCartQuantity("increase")}
-          >
-            +
-          </div>
+        <div className="me-2 mb-2 d-inline-flex p-3 border border-dark px-0 justify-content-evenly rounded" style={{ width: "15%", borderColor: "var(--gray)" }}>
+          <div className="dont plus me-3" style={{ cursor: "pointer" }} onClick={() => modifyCartQuantity("increase")}>+</div>
           <div className="q me-3">{quantity}</div>
-          <div
-            className="dont minus"
+          <div className=" minus"
             style={{ cursor: "pointer" }}
             onClick={() => modifyCartQuantity("decrease")}
           >
             -
           </div>
         </div>
-
-        <button
-          className="me-2 text-black p-3 w-25 bg-white"
-          style={{
-            borderRadius: "10px",
-            border: "1px solid var(--gray)",
-          }}
-          onClick={() => modifyCartQuantity("increase")}
-        >
+        <button className="me-2 text-black p-3 w-25 bg-white"style={{ borderRadius: "10px", border: "1px solid var(--gray)" }}  onClick={() => modifyCartQuantity("increase")}>
           Add to Cart
         </button>
-
-        <button
-          className="text-black p-3 w-25 bg-white"
-          style={{
-            borderRadius: "10px",
-            border: "1px solid var(--gray)",
-          }}
-        >
+        <button className="text-black p-3 w-25 bg-white" style={{ borderRadius: "10px", border: "1px solid var(--gray)" }}>
           + Compare
         </button>
       </div>
-
       <div className="m-5 ms-0 mt-0">
         <hr />
       </div>
@@ -278,10 +229,10 @@ function handleColorSelect(productId, color) {
 
     <div className="mx-5 mt-5 row">
       <div className="col-md-6">
-        <img className="img-fluid" src="../images/g.png" alt="" />
+        <img className="img-fluid" src="https://res.cloudinary.com/dutetsivc/image/upload/v1759269253/furniro/g.png" alt="" />
       </div>
       <div className="col-md-6">
-        <img className="img-fluid" src="../images/Group 107.png" alt="" />
+        <img className="img-fluid" src="https://res.cloudinary.com/dutetsivc/image/upload/v1759269253/furniro/Group 107.png" alt="" />
       </div>
     </div>
   </section>
@@ -290,9 +241,7 @@ function handleColorSelect(productId, color) {
     <h2 className="text-center fw-bold my-5">Related products</h2>
           <div className="p-5 product-list">
         <div className="row">
-          {products.filter((p) => p.id > product.id).slice(0, 4).map((product, index) => (
-              <Productcart key={index} product={product} />
-            ))}
+          {products.filter((p) => p.id > product.id).slice(0, 4).map((product, index) => (<Productcart key={index} product={product} />))}
         </div>
       </div>
     </>

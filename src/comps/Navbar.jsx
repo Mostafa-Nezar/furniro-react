@@ -54,7 +54,7 @@ function Navbar({ toggle }) {
       <div className="container-fluid">
         {/* Logo */}
         <Link className="ms-4 navbar-brand fw-bold fs-4 text-black" to="/">
-          <img src="/images/logo.png" className="d-inline-block align-text-top" alt="Furniro logo" />
+          <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1760013317/logo_ikqv7r.png" className="d-inline-block align-text-top" alt="Furniro logo" />
           Furniro
         </Link>
 

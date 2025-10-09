@@ -31,8 +31,8 @@ const Productcart = ({ product }) => {
         <div className="des">
           <h4 className="fw-bold">{product.name}</h4>
           <p className="text-black-50">{product.des}</p>
-          <div className="d-inline me-5" style={{ fontWeight: 700 }}> {product.price}.00 </div>
-          <del className="gray"> {product.oldprice ? `${product.oldprice}.000.00` : ""}</del>
+          <div className="d-inline me-5" style={{ fontWeight: 700 }}> {product.price}.000.00 </div>
+          <del className="gray"> {product.sale ? `${product.oldprice || 2}.00.000` : ""}</del>
         </div>
         <div className="lay my-bg-gray position-relative w-100 overflow-hidden d-grid align-items-center">
           <div className="text-center">

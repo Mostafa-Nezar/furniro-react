@@ -24,7 +24,7 @@ function Signin() {
     <div className="auth-page">
       <div className="auth-header navbar-brand fw-bold fs-4 mx-auto m-1">
         <img
-          src="/images/logo.png"
+          src="https://res.cloudinary.com/dutetsivc/image/upload/v1760013317/logo_ikqv7r.png"
           className="auth-logo d-inline-block align-text-top"
           alt="Furniro logo"
         />

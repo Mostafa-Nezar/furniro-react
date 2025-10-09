@@ -47,7 +47,7 @@ function Signup() {
     const result = await register(form);
 
     if (result.success && result.token) {
-      localStorage.setItem("token", result.token); // ✅ نفس المعاملة
+      localStorage.setItem("token", result.token);
       updateUser(result.user);
       alert("✅ Account created successfully");
       navigate("/");
@@ -60,7 +60,7 @@ function Signup() {
   return (
     <div className="auth-page">
       <div className="auth-header navbar-brand fw-bold fs-4 mx-auto m-1">
-        <img src="/images/logo.png" className="auth-logo d-inline-block align-text-top" alt="Furniro logo"/>
+        <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1760013317/logo_ikqv7r.png" className="auth-logo d-inline-block align-text-top" alt="Furniro logo"/>
         <span className="auth-brand">Furniro</span>
       </div>
       <div className="auth-container">
