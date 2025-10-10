@@ -26,7 +26,9 @@ const Productcart = ({ product }) => {
       <div className="cont semiwhite">
         <div className="innercontent">
           <img width="100%" className="img-fluid" src={product.image} alt={product.name} style={{ height: "316.85px" }}/>
-          <div className={`sale my-bg-redcolor position-absolute rounded-circle d-flex justify-content-center align-items-center text-white ${product.new ? "new my-bg-greencolor" : ""}`}>{product.new ? "New" : product.sale ? `${product.sale}%` : ""}</div>
+         <div className={`my-bg-redcolor sale position-absolute rounded-circle d-flex justify-content-center align-items-center text-white ${product.date && ((new Date() - new Date(product.date)) / (1000 * 60 * 60 * 24) < 30) ? "new my-bg-greencolor" : product.sale ? "my-bg-redcolor" : ""}`}>
+          {product.date && ((new Date() - new Date(product.date)) / (1000 * 60 * 60 * 24) < 30) ? "New" : product.sale ? `${product.sale}%` : ""}
+      </div>
         </div>
         <div className="des">
           <h4 className="fw-bold">{product.name}</h4>
