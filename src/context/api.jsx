@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:3001/api";
+const API_BASE_URL = "https://furniro-back-production.up.railway.app/api";
 
 export const fetchInstance = async (endpoint, options = {} ) => {
   const token = localStorage.getItem("token");
