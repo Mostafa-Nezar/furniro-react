@@ -76,7 +76,10 @@ export const AuthProvider = ({ children }) => {
         method: "POST",
         body: JSON.stringify(userData),
       });
-      return await login(data.user.email, userData.password);
+    localStorage.setItem("token", data.token); 
+    localStorage.setItem("user", JSON.stringify(data.user));
+    dispatch({ type: "REGISTER_SUCCESS", payload: data.user });
+    return { success: true, user: data.user, token: data.token }; 
     } catch (error) {
       if (error.status === 409 || error.message?.includes("already exists")) {
         try {

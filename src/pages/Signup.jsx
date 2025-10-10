@@ -3,10 +3,11 @@ import {Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../index.css";
 import { useAuth } from "../context/AuthContext";
+import { useAppContext } from "../context/AppContext";
 
 function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const { register,updateUser } = useAuth(); 
+  const { register,updateUser } = useAuth(), { togglePopup }=useAppContext() ; 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,10 +36,10 @@ function Signup() {
         updateUser(user);
       }
 
-      alert(msg || "Google account created!");
+      togglePopup(msg || "Google account created!");
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.msg || "Google sign-up error");
+      togglePopup(err.response?.data?.msg || "Google sign-up error");
     }
   };
 
@@ -49,10 +50,10 @@ function Signup() {
     if (result.success && result.token) {
       localStorage.setItem("token", result.token);
       updateUser(result.user);
-      alert("✅ Account created successfully");
+      togglePopup("✅ Account created successfully");
       navigate("/");
     } else {
-      alert(result.message || "Sign-up failed");
+      togglePopup(result.message || "Sign-up failed");
     }
   };
 

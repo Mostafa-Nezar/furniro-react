@@ -2,21 +2,23 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../index.css";
+import { useAppContext } from "../context/AppContext";
+ 
 
 function Signin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(), { togglePopup }=useAppContext() ;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login(form.email, form.password);
 
     if (result.success) {
-      alert("✅ Login successful");
+      togglePopup("✅ Login successful");
       navigate("/"); 
     } else {
-      alert(result.message || "Login failed");
+      togglePopup(result.message || "Login failed");
     }
   };
 
