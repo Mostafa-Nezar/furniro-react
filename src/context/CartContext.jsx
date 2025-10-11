@@ -80,7 +80,6 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCartAndUpdateOrsers = async (paymentMethod = "cash on delivery") => {
-    console.log("x");
     if (!user?.id) return;
     await fetchInstance("/orders", {
       method: "POST",

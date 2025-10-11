@@ -10,7 +10,12 @@ const Productcart = ({ product }) => {
   const isFavorite = favorites.includes(product.id);
 
   const handleAddToCart = useCallback(() => {
+    if(product.quantity <= 0){
+      togglePopup(`${product.name} is ${product.quantity} in stock`)
+      return
+    };
     addToCart(product);
+    togglePopup("Added To Cart !")
   }, [product, addToCart]);
 
   const handleToggleFavorite = useCallback(
@@ -38,7 +43,7 @@ const Productcart = ({ product }) => {
         </div>
         <div className="lay my-bg-gray position-relative w-100 overflow-hidden d-grid align-items-center">
           <div className="text-center">
-            <button className="addbutton mb-5" onClick={() => {handleAddToCart();togglePopup("Added To Cart !") }}>Add to Cart</button>
+            <button className="addbutton mb-5" onClick={() => {handleAddToCart()}}>Add to Cart</button>
             <div className="d-flex justify-content-center">
               <a className="text-white sharep fw-bold" href="/" onClick={(e) => { e.preventDefault(); toggleShareButtons(); }}>
                 {/* Share SVG */}

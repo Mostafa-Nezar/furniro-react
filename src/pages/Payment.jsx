@@ -99,14 +99,13 @@ const Payment = () => {
     }
   };
   const handleCashOrder = async () => {
-  if (paymentMethod !== "cod") return; // ❌ لو مش كاش.. متعملش أي حاجة
+  if (paymentMethod !== "cod") return; 
 
   if (cart.length === 0) {
     togglePopup("Your cart is empty!");
     return;
   }
 
-  // ✅ لو كاش أون دليفري
   await clearCartAndUpdateOrsers();
   togglePopup("Order placed successfully!");
   nav("/ordersuccessscreen");

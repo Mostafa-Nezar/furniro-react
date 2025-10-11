@@ -60,9 +60,13 @@ export default function Details() {
         product.ratecount = productRatings.length;
       }; 
     const modifyCartQuantity = (type) => {
-      if (!product) return;
+      if (!product.quantity) {
+        togglePopup("Not in stock")
+        return;
+      };
       if (!quantity) {
         if (type === "increase") {
+
           addToCart(product);
           togglePopup("Added to cart !")
           return;
