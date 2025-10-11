@@ -188,8 +188,8 @@ const Profile = () => {
   const hasLocation = !!user?.location;
 
   return (
-    <div className="p-3 border rounded my-bg-color3">
-      <h5 className="my-text-primary d-flex align-items-center gap-2">
+    <div className="p-3 border rounded mx-3 my-3 mt-4">
+      <h5 className="my-text-primary d-flex align-items-center gap-2 my-2">
         {hasLocation ? (
           <>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-greencolor">
@@ -209,12 +209,12 @@ const Profile = () => {
 
       {hasLocation && (
         <p className="my-text-black">
-          <strong className="my-text-primary">location:</strong> {user.location}
+          <strong >location:</strong> {user.location}
         </p>
       )}
 
       <button
-        className="btn my-bg-primary my-text-semi-white mt-2 d-flex align-items-center gap-2"
+        className="btn my-bg-primary my-text-semi-white mt-4 d-flex align-items-center gap-2"
         onClick={async () => {
           setLocationLoading(true);
           try {
@@ -227,7 +227,7 @@ const Profile = () => {
       >
         {locationLoading ? (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-semi-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" >
               <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/>
               <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
                 <animateTransform attributeName="transform" dur="1s" from="0 12 12" to="360 12 12" type="rotate" repeatCount="indefinite"/>
