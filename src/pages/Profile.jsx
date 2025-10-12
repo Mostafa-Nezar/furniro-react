@@ -44,7 +44,7 @@ const Profile = () => {
     <motion.div className="p-4 my-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="my-text-black mb-0">Notifications</h5>
-        <button className="btn my-bg-primary text-white btn-md" onClick={()=>{fetchNotifications(); markAllAsReadInDB();}} disabled={refreshing}>
+        <button className="my-btn my-bg-primary text-white btn-md" onClick={()=>{fetchNotifications(); markAllAsReadInDB();}} disabled={refreshing}>
           {refreshing ? "Refreshing..." : "Refresh"}
         </button>
       </div>
@@ -67,7 +67,7 @@ const Profile = () => {
               <small className="text-muted" style={{ fontSize: "13px" }}>{formatDate(notif.createdAt)}</small>
             </div>
           </div>
-          <button className="btn my-text-redcolor btn-sm" style={{ padding: "4px 8px" }} onClick={() => handleDeleteNotification(notif._id)}>
+          <button className="my-btn my-text-redcolor btn-sm" style={{ padding: "4px 8px" }} onClick={() => handleDeleteNotification(notif._id)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
           </button>
         </motion.div>
@@ -159,7 +159,7 @@ const Profile = () => {
             <strong className="my-text-black">{item.name}</strong>
             <p className="mb-0 text-muted">${item.price}</p>
           </div>
-          <button className="btn btn-outline-danger btn-sm" onClick={() => toggleFavorite(item.id)}>
+          <button className="my-btn btn-outline-danger btn-sm" onClick={() => toggleFavorite(item.id)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill={favorites.includes(item.id) ? "#dc3545" : "#6c757d"} className="bi bi-heart-fill" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
             </svg>
@@ -177,7 +177,7 @@ const Profile = () => {
             <strong className="my-text-black">{item.name}</strong>
             <p className="mb-0 text-muted">${item.price}</p>
           </div>
-          <button className="my-text-redcolor border-0 bg-transparent btn btn-sm" onClick={() => removeFromCart(item.id)}>
+          <button className="my-text-redcolor border-0 bg-transparent my-btn btn-sm" onClick={() => removeFromCart(item.id)}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
           </button>
         </motion.div>
@@ -214,7 +214,7 @@ const Profile = () => {
       )}
 
       <button
-        className="btn my-bg-primary my-text-semi-white mt-4 d-flex align-items-center gap-2"
+        className="my-btn my-bg-primary my-text-semi-white mt-4 d-flex align-items-center gap-2"
         onClick={async () => {
           setLocationLoading(true);
           try {
@@ -263,7 +263,7 @@ const Profile = () => {
       </svg> Your Phone Number
     </h5>
     <input type="text" className="mb-2 px-3 py-2 rounded border my-text-black w-100" style={{ borderColor: "#ced4da", fontSize: "1rem", outline: "none" }} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter your phone number"/>
-    <button className="btn my-bg-greencolor my-text-semi-white" onClick={handleSavePhone}>
+    <button className="my-btn my-bg-greencolor my-text-semi-white" onClick={handleSavePhone}>
       Save Phone Number
     </button>
   </div>
@@ -332,8 +332,8 @@ const Profile = () => {
     <motion.div className="text-center my-5" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
       <h2 className="my-text-black">Welcome</h2>
       <p className="text-muted">Please sign in to access your profile</p>
-      <button className="btn my-bg-primary me-2" onClick={() => navigate("/signin")}>Sign In</button>
-      <button className="btn my-bg-primary" onClick={() => navigate("/signup")}>Create Account</button>
+      <button className="my-btn my-bg-primary me-2" onClick={() => navigate("/signin")}>Sign In</button>
+      <button className="my-btn my-bg-primary" onClick={() => navigate("/signup")}>Create Account</button>
     </motion.div>
   );
 
@@ -345,7 +345,7 @@ const Profile = () => {
           <div className="col-auto">
             <motion.div className="position-relative" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
               <img src={user?.image || "/images/avatar-placeholder.png"} className="rounded-circle border" width="100" height="100" alt="avatar" style={{ objectFit: "cover" }} />
-              <label htmlFor="upload-image" className="btn btn-sm my-bg-gray my-text-black position-absolute bottom-0 end-0">
+              <label htmlFor="upload-image" className="my-btn btn-sm my-bg-gray my-text-black position-absolute bottom-0 end-0">
                 {isUploading ? "..." : "✎"}
               </label>
               <input id="upload-image" type="file" className="d-none" onChange={handleImageChange} />
@@ -393,7 +393,7 @@ const Profile = () => {
             </motion.div>
           ))}
         </div>
-        <motion.button className="btn my-bg-redcolor my-text-semi-white mt-3" onClick={handleLogout} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+        <motion.button className="my-btn my-bg-redcolor my-text-semi-white mt-3" onClick={handleLogout} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
           Logout
         </motion.button>
       </div>
