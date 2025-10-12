@@ -60,26 +60,36 @@ export default function Details() {
         product.ratecount = productRatings.length;
       }; 
     const modifyCartQuantity = (type) => {
-      if (!product.quantity) {
-        togglePopup("Not in stock")
-        return;
-      };
-      if (!quantity) {
-        if (type === "increase") {
+        if (!product.quantity) return togglePopup("Not in stock");
+        let newQuantity = quantity;
 
-          addToCart(product);
-          togglePopup("Added to cart !")
-          return;
-        } 
-      }
-      const newQuantity = type === "increase" ? quantity + 1 : quantity - 1;
-      if (newQuantity < 1) {
-        removeFromCart(product.id);
-        togglePopup("Removed from cart")
-        return;
-      }
-      updateCartQuantity(product.id, newQuantity);
+        if (type === "increase") {
+          if (quantity >= product.quantity)
+            return togglePopup(`Only ${product.quantity} in stock`);
+
+          if (quantity >= 10)
+            return togglePopup("You can only add up to 10 items of this product");
+
+          newQuantity = quantity + 1;
+
+          if (quantity === 0) {
+            addToCart(product);
+            togglePopup("Added to cart !");
+            return;
+          }
+        } else {
+          newQuantity = quantity - 1;
+
+          if (newQuantity < 1) {
+            removeFromCart(product.id);
+            togglePopup("Removed from cart");
+            return;
+          }
+        }
+
+        updateCartQuantity(product.id, newQuantity);
       };
+
   if (!product) return(<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>); 
   
   return (

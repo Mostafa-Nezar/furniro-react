@@ -8,15 +8,21 @@ const Productcart = ({ product }) => {
   const { addToCart } = useCart();
 
   const isFavorite = favorites.includes(product.id);
-
   const handleAddToCart = useCallback(() => {
-    if(product.quantity <= 0){
-      togglePopup(`${product.name} is ${product.quantity} in stock`)
-      return
-    };
-    addToCart(product);
-    togglePopup("Added To Cart !")
-  }, [product, addToCart]);
+  const cartItem = JSON.parse(localStorage.getItem("cart"))?.find((item) => item.id === product.id);
+  const cartQuantity = cartItem ? cartItem.quantity : 0;
+  if (cartQuantity >= product.quantity) {
+    togglePopup(`${product.name} is only ${product.quantity} in stock`);
+    return;
+  }
+  if (cartQuantity >= 10) {
+    togglePopup("You can only add 10 items");
+    return;
+  }
+  addToCart(product);
+  togglePopup("Added To Cart !");
+}, [product, addToCart]);
+
 
   const handleToggleFavorite = useCallback(
     (e) => {
