@@ -22,6 +22,7 @@ import Details from "./pages/Details.jsx";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import Paypal from "./pages/Paypal.jsx";
 
 const stripePromise = loadStripe("pk_test_51RfzAo4hpzh6swtTe5XoqvV6DcUlufkptuTb7Q4DKfuVgnDDH76ICrTlrw8pXwKGpHscUSZCr9vwniO6e0zc0VT900tEcvmgjR");
 
@@ -35,6 +36,7 @@ function Layout() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
         <Route path="/Payment" element={<Payment />} />
+        <Route path="/Paypal" element={<Paypal />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/About" element={<About />} />
         <Route path="/Cart" element={<Cart />} />

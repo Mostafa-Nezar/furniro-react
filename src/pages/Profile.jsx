@@ -16,7 +16,7 @@ const Profile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const { cart, removeFromCart } = useCart();
-  const { products } = useAppContext();
+  const { products, isDarkMode, toggleDarkMode } = useAppContext();
   const favoriteProducts = products.filter(p => favorites.includes(p.id));
   const [phone, setPhone] = useState(user?.phoneNumber);
   const token = localStorage.getItem("token");
@@ -67,9 +67,9 @@ const Profile = () => {
               <small className="text-muted" style={{ fontSize: "13px" }}>{formatDate(notif.createdAt)}</small>
             </div>
           </div>
-          <button className="my-btn my-text-redcolor btn-sm" style={{ padding: "4px 8px" }} onClick={() => handleDeleteNotification(notif._id)}>
+          <div className=" my-text-redcolor btn-sm" style={{ padding: "4px 8px", cursor:"pointer" }} onClick={() => handleDeleteNotification(notif._id)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
-          </button>
+          </div>
         </motion.div>
       )) : renderEmptyContent("notifications", "No Notifications", "You have no notifications")}
     </motion.div>
