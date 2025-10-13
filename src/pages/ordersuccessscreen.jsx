@@ -4,9 +4,10 @@ import { useAppContext } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext";
 
 export default function OrderSuccessScreen() {
-  const { clearCart } = useCart(), { fetchOrders } = useAppContext(),{ user }=useAuth();
+  const { clearCart } = useCart(), { fetchOrders, getProducts } = useAppContext(),{ user }=useAuth();
   useEffect(() => {
     clearCart();
+    getProducts();
     fetchOrders(user.id);
   }, []);
 
