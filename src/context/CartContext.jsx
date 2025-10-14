@@ -56,12 +56,7 @@ export const CartProvider = ({ children }) => {
     syncCart(updatedCart);
   };
   const removeFromCart = async (productId) => {
-    if (!user?.id) return;
     const updatedCart = state.cart.filter((item) => item.id !== productId);
-    await fetchInstance(`/auth/user/${user.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ cart: updatedCart }),
-    });
     syncCart(updatedCart);
   };
   const updateCartQuantity = async (productId, newQuantity) => {
