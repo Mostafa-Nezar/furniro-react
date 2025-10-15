@@ -47,7 +47,7 @@ const Productcart = ({ product }) => {
           <div className="d-inline me-5" style={{ fontWeight: 700 }}> {product.price}.000.00 </div>
           <del className="gray"> {product.sale ? `${product.oldprice || 2}.00.000` : ""}</del>
         </div>
-        <div className="lay my-bg-gray position-relative w-100 overflow-hidden d-grid align-items-center">
+        <div className="lay position-relative w-100 overflow-hidden d-grid align-items-center">
           <div className="text-center">
             <button className="addbutton mb-5" onClick={() => {handleAddToCart()}}>Add to Cart</button>
             <div className="d-flex justify-content-center">

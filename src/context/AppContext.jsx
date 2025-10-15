@@ -4,10 +4,11 @@ import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext"; 
 
 const AppContext = createContext();
-const initialState = { isDarkMode: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false };
+const initialState = { theme: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false };
 const appReducer = (state, action) => {
   switch (action.type) {
-    case "TOGGLE_DARK_MODE":return { ...state, isDarkMode: !state.isDarkMode };
+    case "TOGGLE_THEME":return { ...state, theme: !state.theme };
+    case "SET_THEME":return { ...state, theme: action.payload };
     case "SET_FAVORITES": return { ...state, favorites: action.payload };
     case "SHOW_POPUP": return { ...state, popup: { visible: true, message: action.payload || state.popup.message }};
     case "HIDE_POPUP": return { ...state, popup: { visible: false, message: state.popup.message }};
@@ -29,7 +30,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
     useEffect(() => {getProducts()}, []);
-  const toggleDarkMode = () => {dispatch({ type: "TOGGLE_DARK_MODE" })};
+  const toggleDarkMode = () => {dispatch({ type: "TOGGLE_THEME" })};
   const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
     const data = await fetchInstance(`/orders/user/${userId}`);
@@ -43,7 +44,7 @@ export const AppProvider = ({ children }) => {
       const appData = appDataRaw ? JSON.parse(appDataRaw) : {};
       const storedUser = userRaw ? JSON.parse(userRaw) : null;
 
-      dispatch({ type: "SET_DARK_MODE", payload: appData.isDarkMode || false });
+      dispatch({ type: "SET_THEME", payload: appData.theme || false });
       dispatch({ type: "SET_FAVORITES", payload: appData.favorites || [] });
 
       authDispatch({ type: "SET_USER", payload: storedUser });
@@ -54,7 +55,7 @@ export const AppProvider = ({ children }) => {
   };
   const saveDataToStorage = async () => {
     const appData = { 
-      isDarkMode: state.isDarkMode, 
+      theme: state.theme, 
       favorites: state.favorites, 
       isAuthenticated 
     };

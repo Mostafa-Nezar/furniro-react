@@ -1,15 +1,22 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-
+import { useAppContext } from "../context/AppContext"; 
 function Navbar({ toggle }) {
   const location = useLocation();
   const { user } = useAuth();
   const { cart } = useCart();
+  const { theme } = useAppContext();
 
   const isAuthenticated = !!user;
   const cartLength = cart.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
+  const navClass = theme ? "navbar bg-white text-dark" : "navbar bg-dark text-light border-bottom border-secondary";
+  const linkClass = (path) =>
+    `nav-link ms-5 ${theme ? "text-dark" : "text-light"} ${
+      isActive(path) ? "active text-primary" : ""
+    }`;
 
+  const iconColor = theme ? "text-dark" : "text-light";
 
   function Authicon() {
     if (!isAuthenticated) {
@@ -50,22 +57,21 @@ function Navbar({ toggle }) {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`navbar bg-white navbar-expand-md ${location.pathname === "/shop" ? "sticky-top" : ""} sticky-top top-0`}>
+    <nav className={`navbar ${navClass} navbar-expand-md ${location.pathname === "/shop" ? "sticky-top" : ""} sticky-top top-0`}>
       <div className="container-fluid">
         {/* Logo */}
-        <Link className="ms-4 navbar-brand fw-bold fs-4 text-black" to="/">
+        <Link className={`ms-4 navbar-brand fw-bold fs-4 ${theme ? "text-dark" : "text-light"}`} to="/">
           <img src="https://res.cloudinary.com/dutetsivc/image/upload/v1760013317/logo_ikqv7r.png" className="d-inline-block align-text-top" alt="Furniro logo" />
           Furniro
         </Link>
-
         {/* Toggler */}
         <button
-          className="navbar-toggler text-black"
+          className={`navbar-toggler text-black ${iconColor}`}
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
         >
-          <span className="text-black">
+          <span className={`text-black ${iconColor}`}>
             <svg width="20" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path d="M0 96C0 78.3 14.3 64 32 64H416..." />
             </svg>
@@ -76,22 +82,22 @@ function Navbar({ toggle }) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className={`nav-link ms-5 text-black ${isActive("/") ? "active text-primary" : ""}`} to="/">
+              <Link className={linkClass("/")} to="/">
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ms-5 text-black ${isActive("/shop") ? "active text-primary" : ""}`} to="/shop">
+              <Link className={linkClass("/shop")} to="/shop">
                 Shop
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ms-5 text-black ${isActive("/About") ? "active text-primary" : ""}`} to="/About">
+              <Link className={linkClass("/About")} to="/About">
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ms-5 text-black ${isActive("/contact") ? "active text-primary" : ""}`} to="/contact">
+              <Link className={linkClass("/contact")} to="/contact">
                 Contact
               </Link>
             </li>
@@ -99,12 +105,12 @@ function Navbar({ toggle }) {
 
           <ul className="navbar-nav ms-5 me-5">
             <li>
-              <Link className={`nav-link mt-0 mb-0 vali ${isActive("/Profile") ? "active text-primary" : ""}`} to={isAuthenticated ? "/Profile" : "/signin"}>
+              <Link className={`nav-link mt-0 mb-0  ${iconColor} ${isActive("/Profile") ? "active text-primary" : ""}`} to={isAuthenticated ? "/Profile" : "/signin"}>
                 <Authicon />
               </Link>
             </li>
             <li>
-              <Link className="nav-link mt-0 mb-0 text-black" to="#">
+              <Link className={`nav-link mt-0 mb-0 ${iconColor}`} to="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -123,7 +129,7 @@ function Navbar({ toggle }) {
             </li>
 
             <li>
-              <Link className="nav-link mt-0 mb-0 text-black" id="heart" to="#">
+              <Link className={`nav-link mt-0 mb-0 ${iconColor}`} id="heart" to="#">
                 <div id="heart" className={`heart-icon ${false ? "red" : ""}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 48 48" fill="none">
                     <path
@@ -142,7 +148,7 @@ function Navbar({ toggle }) {
 
             {/* سلة */}
             <li className="position-relative" onClick={toggle}>
-              <Link className={`nav-link mt-0 mb-0 vali ${isActive("/Cart") ? "active text-primary" : ""}`} to="Cart">
+              <Link className={`nav-link mt-0 mb-0 ${iconColor} ${isActive("/Cart") ? "active text-primary" : ""}`} to="Cart">
                 <svg className="icon-cart" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 1024 1024"><path className="icon-cart" fill="currentColor" d="M922.9 701.9H327.4l29.9-60.9l496.8-.9c16.8 0 31.2-12 34.2-28.6l68.8-385.1c1.8-10.1-.9-20.5-7.5-28.4a34.99 34.99 0 0 0-26.6-12.5l-632-2.1l-5.4-25.4c-3.4-16.2-18-28-34.6-28H96.5a35.3 35.3 0 1 0 0 70.6h125.9L246 312.8l58.1 281.3l-74.8 122.1a34.96 34.96 0 0 0-3 36.8c6 11.9 18.1 19.4 31.5 19.4h62.8a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7h161.1a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7H923c19.4 0 35.3-15.8 35.3-35.3a35.42 35.42 0 0 0-35.4-35.2M305.7 253l575.8 1.9l-56.4 315.8l-452.3.8zm96.9 612.7c-17.4 0-31.6-14.2-31.6-31.6s14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6m325.1 0c-17.4 0-31.6-14.2-31.6-31.6s14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6"></path></svg>
               </Link>
                 <span

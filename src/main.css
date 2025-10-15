@@ -1,16 +1,86 @@
 :root {
-  --color: #F6D8C6;
   --primary: #B88E2F;
+  --secondary: #F6D8C6;
   --black: #3A3A3A;
+  --lightBeige: #FFF3E3;
+  --green: #2EC1AC;
+  --red: #E97171;
+  --semiWhite: #F4F5F7;
+  --yellow: #F1C40F;
+  --gray: #898989;
+  --lightGray: #F9F1E7;
+  --cream: #FCF9F4;
+  --darkGray: #9F9F9F;
+  --white: #FFFFFF;
+  
+  --color: #F6D8C6;
   --color3: #FFF3E3;
   --greencolor: #2EC1AC;
   --redcolor: #E97171;
   --semi-white: #F4F5F7;
-  --gray: #898989a8;
   --wired: #F9F1E7;
   --x: #FCF9F4;
   --mygray: #9F9F9F;
 }
+
+
+/* Background */
+.my-bg-light-secondary { background-color: #F6D8C6; }
+.my-bg-light-lightBeige { background-color: #FFF3E3; }
+.my-bg-light-semiWhite { background-color: #F4F5F7; }
+.my-bg-light-gray { background-color: #898989; }
+.my-bg-light-lightGray { background-color: #F9F1E7; }
+.my-bg-light-cream { background-color: #FCF9F4; }
+.my-bg-light-darkGray { background-color: #9F9F9F; }
+.my-bg-light-white { background-color: #FFFFFF; }
+
+/* Text */
+.my-text-light-secondary { color: #F6D8C6; }
+.my-text-light-lightBeige { color: #FFF3E3; }
+.my-text-light-semiWhite { color: #F4F5F7; }
+.my-text-light-gray { color: #898989; }
+.my-text-light-lightGray { color: #F9F1E7; }
+.my-text-light-cream { color: #FCF9F4; }
+.my-text-light-darkGray { color: #9F9F9F; }
+.my-text-light-white { color: #FFFFFF; }
+
+
+
+/* Background */
+.my-bg-dark-secondary { background-color: #2C2416; }
+.my-bg-dark-lightBeige { background-color: #1A1A1A; }
+.my-bg-dark-semiWhite { background-color: #2A2A2A; }
+.my-bg-dark-gray { background-color: #CCCCCC; }
+.my-bg-dark-lightGray { background-color: #1F1F1F; }
+.my-bg-dark-cream { background-color: #1C1C1C; }
+.my-bg-dark-darkGray { background-color: #AAAAAA; }
+.my-bg-dark-white { background-color: #000000; }
+
+/* Text */
+.my-text-dark-secondary { color: #2C2416; }
+.my-text-dark-lightBeige { color: #1A1A1A; }
+.my-text-dark-semiWhite { color: #2A2A2A; }
+.my-text-dark-gray { color: #CCCCCC; }
+.my-text-dark-lightGray { color: #1F1F1F; }
+.my-text-dark-cream { color: #1C1C1C; }
+.my-text-dark-darkGray { color: #AAAAAA; }
+.my-text-dark-white { color: #000000; }
+
+.my-text-primary { color: var(--primary); }
+.my-text-green { color: var(--green); }
+.my-text-red { color: var(--red); }
+.my-text-yellow { color: var(--yellow); }
+
+.my-bg-primary { background-color: var(--primary); }
+.my-bg-green { background-color: var(--green); }
+.my-bg-red { background-color: var(--red); }
+.my-bg-yellow { background-color: var(--yellow); }
+
+/* Transition for smoother switching */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* Background classes */
 .my-bg-color { background-color: var(--color); }
 .my-bg-black { background-color: var(--black); }
@@ -134,9 +204,6 @@ button, a, .hover-red svg {
   background-color: var(--color3);
 }
 
-.features {
-  background-color: var(--color3);
-}
 
 *::selection {
   background-color: var(--color);
