@@ -30,7 +30,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
     useEffect(() => {getProducts()}, []);
-  const toggleDarkMode = () => {dispatch({ type: "TOGGLE_THEME" })};
+  const toggleTheme = () => {dispatch({ type: "TOGGLE_THEME" })};
   const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
     const data = await fetchInstance(`/orders/user/${userId}`);
@@ -135,7 +135,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, toggleDarkMode, toggleShareButtons, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
+    <AppContext.Provider value={{ ...state, toggleTheme, toggleShareButtons, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
       {children}
     </AppContext.Provider>
   );

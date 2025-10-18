@@ -8,7 +8,7 @@ const useScrollObserver = (selector, threshold = 0.1) => {
   const handleScroll = (entries, observer) => {
     const [entry] = entries;
     if (entry.isIntersecting) {
-      setIsVisible(true); 
+      setIsVisible(true);
       observer.unobserve(entry.target);
     }
   };
@@ -29,11 +29,10 @@ const useScrollObserver = (selector, threshold = 0.1) => {
   return isVisible;
 };
 
-
 const Banner = () => {
   return (
     <div
-      className="d-flex justify-content-center align-items-center"
+      className={`d-flex justify-content-center align-items-center`}
       style={{
         backgroundImage:
           'url("https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/banner.png")',
@@ -43,7 +42,7 @@ const Banner = () => {
       }}
     >
       <motion.div
-        className="container-fluid"
+        className="container-fluid text-dark"
         style={{
           backgroundColor: "var(--color3)",
           height: "55%",
@@ -71,7 +70,11 @@ const Banner = () => {
           New Arrival
         </span>
         <motion.h1
-          style={{ color: "var(--primary)", fontWeight: "bold", margin: "20px" }}
+          style={{
+            color: "var(--primary)",
+            fontWeight: "bold",
+            margin: "20px",
+          }}
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -91,7 +94,7 @@ const Banner = () => {
         </motion.p>
         <a href="/shop" className="ms-5">
           <motion.button
-            className="mt-4 text-white border-0"
+            className="mt-4 text-dark border-0"
             style={{
               backgroundColor: "var(--primary)",
               padding: "20px",
@@ -113,8 +116,9 @@ const Banner = () => {
 
 const Landing = () => {
   const isVisible = useScrollObserver(".landing");
+  const {theme} = useAppContext();
   return (
-    <div className="landing mt-5 p-4 text-center">
+    <div className={`landing mt-5 p-4 text-center`}>
       <div className="container">
         <motion.h1
           className="fw-bold"
@@ -125,7 +129,7 @@ const Landing = () => {
           Browse The Range
         </motion.h1>
         <motion.p
-          className="fs-5 mb-2 text-black-50"
+          className={`fs-5 mb-2 text-black-50 ${theme?"text-dark-50":"text-white-50"}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isVisible ? 1 : 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -179,12 +183,12 @@ const Landing = () => {
 };
 
 const Inspiration = () => {
+const {theme} = useAppContext();
   const isVisible = useScrollObserver(".inspiration");
 
   return (
-    <div className="inspiration pt-5">
+    <div className={`my-bg-cream pt-5 px-5 ${theme ? "" : "bg-dark"}`}>
       <div className="row">
-        {/* Text Section */}
         <div className="col-lg-4 col-md-6">
           <motion.div
             className="position-relative top-50 start-50 translate-middle mb-lg-0 mb-5"
@@ -195,7 +199,7 @@ const Inspiration = () => {
             <h1 className="fw-bold">
               50 + Beautiful rooms <br /> inspiration
             </h1>
-            <p className="p-3 text-black-50">
+            <p className={`p-3 ${theme ? "text-black-50" : "text-white-50"} `}>
               Our designer already made a lot of Beautiful prototype of rooms
               that inspire you
             </p>
@@ -216,9 +220,7 @@ const Inspiration = () => {
             </motion.button>
           </motion.div>
         </div>
-
-        {/* Image Section */}
-        <div className="col-lg-4 mb-0 pb-0 col-md-6">
+        <div className="col-lg-4 mb-0 pb-0 col-md-6 ">
           <motion.img
             src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/baby.png"
             alt="Baby Room"
@@ -232,7 +234,7 @@ const Inspiration = () => {
               backgroundColor: "rgba(255, 255, 255, 0.638)",
               width: "230px",
             }}
-            className="p-4"
+            className="p-4 text-dark"
             initial={{ opacity: 0, y: 20, x: "-85%" }}
             animate={{
               opacity: isVisible ? 1 : 0,
@@ -376,6 +378,7 @@ const Inspiration = () => {
 
 const Random = () => {
   const isVisible = useScrollObserver(".random");
+  const {theme} = useAppContext();
 
   const fadeIn = {
     initial: { opacity: 0, y: 30 },
@@ -387,7 +390,9 @@ const Random = () => {
     <>
       <motion.div className="random" {...fadeIn}>
         <motion.p
-          className="text-black-50 text-center mt-5"
+          className={`${
+            theme ? "text-black-50" : "text-white-50"
+          } text-center mt-5`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isVisible ? 1 : 0 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -475,7 +480,11 @@ const Random = () => {
             animate={{ opacity: isVisible ? 1 : 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <img className="img-fluid" src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/lunch.png" alt="" />
+            <img
+              className="img-fluid"
+              src="https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/lunch.png"
+              alt=""
+            />
           </motion.div>
 
           <motion.div
@@ -522,17 +531,15 @@ const Random = () => {
             />
           </motion.div>
         </motion.div>
-        <hr style={{ width: "90%", margin: "20px auto", height: "0.5px" }} />
       </motion.div>
     </>
   );
 };
 
 const Home = () => {
-    const { products } = useAppContext();
-
+  const { products,theme } = useAppContext();
   return (
-    <div>
+    <div className={`${theme ? "" : "bg-dark text-white"}`}>
       <Banner />
       <Landing />
       <h1 className="fw-bold text-center" id="our-products">
@@ -540,9 +547,12 @@ const Home = () => {
       </h1>
       <div className="p-5 product-list">
         <div className="row">
-          {products.sort((a,b)=> a.id - b.id).slice(0, 8).map((product, index) => (
-            <Productcart key={index} product={product} />
-          ))}
+          {products
+            .sort((a, b) => a.id - b.id)
+            .slice(0, 8)
+            .map((product, index) => (
+              <Productcart key={index} product={product} />
+            ))}
         </div>
       </div>
       <div className="text-center my-5">

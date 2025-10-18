@@ -22,90 +22,37 @@
   --x: #FCF9F4;
   --mygray: #9F9F9F;
 }
-
-
-/* Background */
-.my-bg-light-secondary { background-color: #F6D8C6; }
-.my-bg-light-lightBeige { background-color: #FFF3E3; }
-.my-bg-light-semiWhite { background-color: #F4F5F7; }
-.my-bg-light-gray { background-color: #898989; }
-.my-bg-light-lightGray { background-color: #F9F1E7; }
-.my-bg-light-cream { background-color: #FCF9F4; }
-.my-bg-light-darkGray { background-color: #9F9F9F; }
-.my-bg-light-white { background-color: #FFFFFF; }
-
-/* Text */
-.my-text-light-secondary { color: #F6D8C6; }
-.my-text-light-lightBeige { color: #FFF3E3; }
-.my-text-light-semiWhite { color: #F4F5F7; }
-.my-text-light-gray { color: #898989; }
-.my-text-light-lightGray { color: #F9F1E7; }
-.my-text-light-cream { color: #FCF9F4; }
-.my-text-light-darkGray { color: #9F9F9F; }
-.my-text-light-white { color: #FFFFFF; }
-
-
-
-/* Background */
-.my-bg-dark-secondary { background-color: #2C2416; }
-.my-bg-dark-lightBeige { background-color: #1A1A1A; }
-.my-bg-dark-semiWhite { background-color: #2A2A2A; }
-.my-bg-dark-gray { background-color: #CCCCCC; }
-.my-bg-dark-lightGray { background-color: #1F1F1F; }
-.my-bg-dark-cream { background-color: #1C1C1C; }
-.my-bg-dark-darkGray { background-color: #AAAAAA; }
-.my-bg-dark-white { background-color: #000000; }
-
-/* Text */
-.my-text-dark-secondary { color: #2C2416; }
-.my-text-dark-lightBeige { color: #1A1A1A; }
-.my-text-dark-semiWhite { color: #2A2A2A; }
-.my-text-dark-gray { color: #CCCCCC; }
-.my-text-dark-lightGray { color: #1F1F1F; }
-.my-text-dark-cream { color: #1C1C1C; }
-.my-text-dark-darkGray { color: #AAAAAA; }
-.my-text-dark-white { color: #000000; }
-
+/* text colors */
 .my-text-primary { color: var(--primary); }
+.my-text-secondary { color: var(--secondary); }
+.my-text-black { color: var(--black); }
+.my-text-lightBeige { color: var(--lightBeige); }
 .my-text-green { color: var(--green); }
 .my-text-red { color: var(--red); }
+.my-text-semiWhite { color: var(--semiWhite); }
 .my-text-yellow { color: var(--yellow); }
+.my-text-gray { color: var(--gray); }
+.my-text-lightGray { color: var(--lightGray); }
+.my-text-cream { color: var(--cream); }
+.my-text-darkGray { color: var(--darkGray); }
+.my-text-white { color: var(--white); }
 
+/* background colors */
 .my-bg-primary { background-color: var(--primary); }
+.my-bg-secondary { background-color: var(--secondary); }
+.my-bg-black { background-color: var(--black); }
+.my-bg-lightBeige { background-color: var(--lightBeige); }
 .my-bg-green { background-color: var(--green); }
 .my-bg-red { background-color: var(--red); }
+.my-bg-semiWhite { background-color: var(--semiWhite); }
 .my-bg-yellow { background-color: var(--yellow); }
-
-/* Transition for smoother switching */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Background classes */
-.my-bg-color { background-color: var(--color); }
-.my-bg-black { background-color: var(--black); }
-.my-bg-primary { background-color: var(--primary); }
-.my-bg-color3 { background-color: var(--color3); }
-.my-bg-redcolor { background-color: var(--redcolor); }
-.my-bg-greencolor { background-color: var(--greencolor); }
-.my-bg-semi-white { background-color: var(--semi-white); }
 .my-bg-gray { background-color: var(--gray); }
-.my-bg-wired { background-color: var(--wired); }
-.my-bg-x { background-color: var(--x); }
-.my-bg-mygray { background-color: var(--mygray); }
+.my-bg-lightGray { background-color: var(--lightGray); }
+.my-bg-cream { background-color: var(--cream); }
+.my-bg-darkGray { background-color: var(--darkGray); }
+.my-bg-white { background-color: var(--white); }
 
-/* Text classes */
-.my-text-color { color: var(--color); }
-.my-text-primary { color: var(--primary); }
-.my-text-black { color: var(--black); }
-.my-text-color3 { color: var(--color3); }
-.my-text-greencolor { color: var(--greencolor); }
-.my-text-redcolor { color: var(--redcolor); }
-.my-text-semi-white { color: var(--semi-white); }
-.my-text-gray { color: var(--gray); }
-.my-text-wired { color: var(--wired); }
-.my-text-x { color: var(--x); }
-.my-text-mygray { color: var(--mygray); }
+
 body {
   margin: 0px;
   font-family: "Poppins", sans-serif !important;
@@ -236,8 +183,6 @@ button, a, .hover-red svg {
   height: 460px;
   margin: 20px auto;
   overflow: hidden;
-  background-color: var(--redcolor);
-  background-color: var(--semi-white);
 }
 
 .sale {
@@ -247,16 +192,6 @@ button, a, .hover-red svg {
   top: 5%;
 }
 
-
-
-
-.des {
-  padding: 20px;
-}
-
-.cont .des {
-  color: black;
-}
 
 .lay {
   place-items: center;
@@ -402,12 +337,6 @@ nav .active {
 /* ----------------------------------------------------- */
 
 
-
-
-.inspiration {
-  background-color: var(--x);
-}
-
 .inspiration-carousel-control-next {
   position: absolute;
   color: var(--primary);
@@ -439,11 +368,6 @@ nav .active {
   left: -30%;
   bottom: 0px;
   padding: 30px;
-}
-
-.inspiration .row {
-  padding-inline: 100px !important;
-  padding-bottom: 0 !important;
 }
 
 /* hash */

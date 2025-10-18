@@ -7,7 +7,7 @@ export default function Features() {
   const data = [ ["trophy 1.svg", "High Quality", "crafted from top materials"], ["true.svg", "Warranty Protection", "over 2 years"], ["handcarrybox.svg", "Free Shipping", "order over 150 $"], ["girl.svg", "24 / 7 Support", "Dedicated Support"]];
 
   return (
-    <div className="my-bg-light-lightBeige p-5">
+    <div className="my-bg-lightBeige p-5">
       <div className="row">
         {data.map(([img, title, text], i) => (
           <motion.div key={i} ref={refs[i]} className="col-md-3 col-6 mb-md-0 mb-5" initial={{ opacity: 0, y: 50 }} animate={{ opacity: views[i] ? 1 : 0, y: views[i] ? 0 : 50 }} transition={{ duration: 1, delay: i * 0.2 }}>

@@ -11,12 +11,12 @@ import { useSocket } from "../context/SocketContext.jsx";
 const Profile = () => {
   const navigate = useNavigate();
   const { notifications,unreadCount, refreshing, fetchNotifications, handleDeleteNotification, formatDate, markAllAsReadInDB } = useSocket();
-  const { logout, favorites, fetchOrders, toggleFavorite, orders } = useAppContext();
+  const { logout, theme, toggleTheme, favorites, fetchOrders, toggleFavorite, orders } = useAppContext();
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const { cart, removeFromCart } = useCart();
-  const { products, isDarkMode, toggleDarkMode } = useAppContext();
+  const { products } = useAppContext();
   const favoriteProducts = products.filter(p => favorites.includes(p.id));
   const [phone, setPhone] = useState(user?.phoneNumber);
   const token = localStorage.getItem("token");
@@ -40,6 +40,17 @@ const Profile = () => {
       } else alert("❌ Upload failed");
     } catch (err) { alert("Error uploading image"); } finally { setIsUploading(false); }
   };
+  const SunIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" fillRule="evenodd" d="M13 3a1 1 0 1 0-2 0v2a1 1 0 1 0 2 0zM6.343 4.929A1 1 0 0 0 4.93 6.343l1.414 1.414a1 1 0 0 0 1.414-1.414zm12.728 1.414a1 1 0 0 0-1.414-1.414l-1.414 1.414a1 1 0 0 0 1.414 1.414zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10m-9 4a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zm16 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zM7.757 17.657a1 1 0 1 0-1.414-1.414l-1.414 1.414a1 1 0 1 0 1.414 1.414zm9.9-1.414a1 1 0 0 0-1.414 1.414l1.414 1.414a1 1 0 0 0 1.414-1.414zM13 19a1 1 0 1 0-2 0v2a1 1 0 1 0 2 0z" clipRule="evenodd" />
+    </svg>
+  );
+  const MoonIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22C6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981" />
+    </svg>
+  );
+  const Icon = theme ? MoonIcon : SunIcon;
   const renderNotificationsContent = () => (
     <motion.div className="p-4 my-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -338,7 +349,7 @@ const Profile = () => {
   );
 
   return (
-    <>
+    <div className={`${theme?"":"bg-dark"}`}>
       <Landing land="profile" />
       <div className="container my-5">
         <motion.div className="row align-items-center mb-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -356,11 +367,25 @@ const Profile = () => {
             <p className="text-muted mb-0">{user?.email}</p>
           </div>
         </motion.div>
+        <motion.div
+          className={`d-flex align-items-center justify-content-between p-2 px-4 rounded-3 shadow-sm my-5 ${theme ? 'my-bg-black my-text-white' : 'my-text-black'}`}
+          transition={{ duration: 0.3 }}
+          style={{ gap: '15px', border: '1px solid' }}>
+          <Icon />
+          <motion.button
+            onClick={toggleTheme}
+            className={`btn fw-bold ${theme ? 'bg-white my-text-black' : 'bg-dark text-white'}`}
+            transition={{ duration: 0.3 }}
+            style={{ padding: '10px 15px', fontSize: '16px', cursor: 'pointer', borderRadius: '5px', border: 'none' }}
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {theme ? 'light' : 'dark'}
+          </motion.button>
+        </motion.div>
         <div className="list-group">
           {menuItems.map((item, i) => (
             <motion.div key={i} initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
               <motion.button className="list-group-item list-group-item-action d-flex align-items-center" style={{borderRadius:12}} onClick={item.onClick} whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className={`bi bi-${item.icon} me-2 ${item.icon === "heart" ? "my-text-redcolor" : "my-text-primary"}`} viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className={`bi bi-${item.icon} me-2 ${item.icon === "heart" ? "my-text-red" : "my-text-primary"}`} viewBox="0 0 16 16">
                   <path d={item.icon === "heart" ? "m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385C2.885 9.279 5.481 11.9 8 14.058c2.519-2.158 5.115-4.78 6.286-6.62.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z" :
                     item.icon === "box-seam" ? "M8.44.146a.5.5 0 0 0-.88 0L5.162 3H2.5a.5.5 0 0 0-.5.5v9.6a.5.5 0 0 0 .257.437l6 3.2a.5.5 0 0 0 .486 0l6-3.2a.5.5 0 0 0 .257-.437V3.5a.5.5 0 0 0-.5-.5h-2.662L8.44.146zM3 4h2.661l1.377 2.297a.5.5 0 0 0 .866 0L9.339 4H13v1.5l-5 2.667L3 5.5V4z" :
                     item.icon === "geo-alt" ? "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" :
@@ -393,12 +418,12 @@ const Profile = () => {
             </motion.div>
           ))}
         </div>
-        <motion.button className="my-btn my-bg-redcolor my-text-semi-white mt-3" onClick={handleLogout} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+        <motion.button className="my-btn my-bg-red my-text-semiWhite mt-3" onClick={handleLogout} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
           Logout
         </motion.button>
       </div>
       <Features />
-    </>
+    </div>
   );
 };
 
