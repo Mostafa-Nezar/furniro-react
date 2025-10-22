@@ -143,15 +143,14 @@ const Carousel = () => {
 };
 
 const Shop = () => {
-  const showPopup = false ;
+  const { theme } = useAppContext();
   return (
-    <>
+    <div className={`${theme ? "" : "bg-dark -white"}`}>
       <Landing land="Shop" showImage={false} />
       <Edit />
       <Carousel />
       <Features />
-      {showPopup && <div className="popup show">Added To Cart!</div>}
-    </>
+    </div>
   );
 };
 

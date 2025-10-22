@@ -368,7 +368,7 @@ const Profile = () => {
           </div>
         </motion.div>
         <motion.div
-          className={`d-flex align-items-center justify-content-between p-2 px-4 rounded-3 shadow-sm my-5 ${theme ? 'my-bg-black my-text-white' : 'my-bg-white my-text-black'}`}
+          className={`d-flex align-items-center justify-content-between p-3 px-4 rounded-3 shadow-sm my-5 ${theme ? 'my-bg-black my-text-white' : 'my-bg-white my-text-black'}`}
           transition={{ duration: 0.3 }}
           style={{ gap: '15px', border: '1px solid' }}>
           <Icon />
