@@ -16,9 +16,9 @@ const InputField = ({ handleChange, handleBlur, value, placeholder, type = "text
 );
 
 const Payment = () => {
-  const nav = useNavigate(), { user } = useAuth(), { cart, clearCartAndUpdateOrsers } = useCart(), { togglePopup } = useAppContext();
+  const nav = useNavigate(), { user } = useAuth(), { cart, clearCartAndUpdateOrsers } = useCart(), {theme, togglePopup } = useAppContext();
   const stripe = useStripe(), elements = useElements();
-  const [loading, setLoading] = useState(false), [paymentMethod, setPaymentMethod] = useState("bank");
+  const [loading, setLoading] = useState(false), [loadingpaypal, setLoadingpaypal] = useState(false), [paymentMethod, setPaymentMethod] = useState("bank");
   const subtotal = cart.reduce((t, i) => t + i.price * i.quantity, 0), total = subtotal;
 
   const schema = Yup.object({
@@ -26,6 +26,41 @@ const Payment = () => {
     lastName: Yup.string().required(), address: Yup.string().required(),
     city: Yup.string().required(), state: Yup.string().required(), zipCode: Yup.string().required(),
   });
+    const handlePayPal = async () => {
+    try {
+      setLoadingpaypal(true);
+      const res = await fetch("https://furniro-back-production.up.railway.app/api/paypal2/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          total,
+          userId: user.id,
+          products: cart,
+          customerInfo: {
+            fullName: user.name,
+            email: user.email,
+            address: user.address || "",
+            city: user.city || "",
+            state: user.state || "",
+            zipCode: user.zipCode || ""
+          }
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Failed to create order");
+      const approveLink = data.links.find(l => l.rel === "approve")?.href;
+      if (!approveLink) throw new Error("No approval link found");
+
+      window.open(approveLink, "_blank");
+      setLoadingpaypal(false);
+    } catch (err) {
+      console.error(err);
+      togglePopup(err.message || "Payment failed");
+      setLoadingpaypal(false);
+    }
+  };
 
   const handlePaymentSubmit = async (formValues) => {
     if (cart.length === 0) {
@@ -113,9 +148,9 @@ const Payment = () => {
 
   
   return (
-    <>
+    <div className={`${theme ? "" : "bg-dark"}`}>
     <Landing land={"Check Out"}/>
-    <div className="container py-5">
+    <div className={`container py-5 ${theme ? "" : "text-white"}`}>
       <Formik initialValues={{ email: user?.email || "", firstName: user?.name || "", lastName: "", address: user?.location || "", city: "", state: "", zipCode: "" }} validationSchema={schema} onSubmit={handlePaymentSubmit}>
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <form onSubmit={handleSubmit} className="row">
@@ -125,14 +160,14 @@ const Payment = () => {
                 <div key={f} className="col-md-6 mb-1 d-inline-block pe-2">
                   <label className="form-label">{f.replace(/^\w/, c => c.toUpperCase())}</label>
                   <input type="text" className="my-form-control"  onChange={handleChange(f)} onBlur={handleBlur(f)} value={values[f]} />
-                  {errors[f] && touched[f] && <div className="my-text-redcolor small">{errors[f]}</div>}
+                  {errors[f] && touched[f] && <div className="my-text-red small">{errors[f]}</div>}
                 </div>
               ))}
               {["address", "city", "state", "zipCode", "email"].map((f) => (
                 <div key={f}>
                   <label className="form-label">{f.replace(/^\w/, c => c.toUpperCase())}</label>
                   <input type="text" className="my-form-control"  onChange={handleChange(f)} onBlur={handleBlur(f)} value={values[f]} />
-                  {errors[f] && touched[f] && <div className="my-text-redcolor small">{errors[f]}</div>}
+                  {errors[f] && touched[f] && <div className="my-text-red small">{errors[f]}</div>}
                 </div>
               ))}
               <div className="alert alert-light d-flex align-items-start my-3">
@@ -190,6 +225,10 @@ const Payment = () => {
                 <button   onClick={handleCashOrder} style={{border: "1px solid",    borderRadius: "20px", color: "black", backgroundColor: "transparent", padding: "1em 8em", margin: "2em auto", display: "block"}}>
                   Place Order
                 </button>
+                <button onClick={handlePayPal} disabled={loadingpaypal} className="my-bg-primary my-btn d-block mt-5 mx-auto  fw-semibold text-white" style={{ borderRadius: "20px", border: "none", padding: "1em 8em"}}>
+                  {loadingpaypal ? <><span className="spinner-border spinner-border-sm me-2"></span>Processing...</> : <>Pay ${total.toFixed(2)} with PayPal</>}
+                </button>
+                
               </div>
             </div>
           </form>
@@ -197,7 +236,7 @@ const Payment = () => {
       </Formik>
     </div>
     <Features/>
-    </>
+    </div>
   );
 };
 export default Payment;
