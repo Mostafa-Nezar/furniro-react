@@ -368,7 +368,7 @@ const Profile = () => {
           </div>
         </motion.div>
         <motion.div
-          className={`d-flex align-items-center justify-content-between p-2 px-4 rounded-3 shadow-sm my-5 ${theme ? 'my-bg-black my-text-white' : 'my-text-black'}`}
+          className={`d-flex align-items-center justify-content-between p-2 px-4 rounded-3 shadow-sm my-5 ${theme ? 'my-bg-black my-text-white' : 'my-bg-white my-text-black'}`}
           transition={{ duration: 0.3 }}
           style={{ gap: '15px', border: '1px solid' }}>
           <Icon />
@@ -384,7 +384,7 @@ const Profile = () => {
         <div className="list-group">
           {menuItems.map((item, i) => (
             <motion.div key={i} initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-              <motion.button className="list-group-item list-group-item-action d-flex align-items-center" style={{borderRadius:12}} onClick={item.onClick} whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+              <motion.button className={`list-group-item list-group-item-action d-flex align-items-center ${theme ? "my-bg-semiWhite":"my-bg-darkGray "}`} style={{borderRadius:12}} onClick={item.onClick} whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className={`bi bi-${item.icon} me-2 ${item.icon === "heart" ? "my-text-red" : "my-text-primary"}`} viewBox="0 0 16 16">
                   <path d={item.icon === "heart" ? "m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385C2.885 9.279 5.481 11.9 8 14.058c2.519-2.158 5.115-4.78 6.286-6.62.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748z" :
                     item.icon === "box-seam" ? "M8.44.146a.5.5 0 0 0-.88 0L5.162 3H2.5a.5.5 0 0 0-.5.5v9.6a.5.5 0 0 0 .257.437l6 3.2a.5.5 0 0 0 .486 0l6-3.2a.5.5 0 0 0 .257-.437V3.5a.5.5 0 0 0-.5-.5h-2.662L8.44.146zM3 4h2.661l1.377 2.297a.5.5 0 0 0 .866 0L9.339 4H13v1.5l-5 2.667L3 5.5V4z" :
@@ -396,7 +396,7 @@ const Profile = () => {
                     "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"} />
                 </svg>
                 {item.icon === "bell" && unreadCount > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge my-bg-redcolor d-flex justify-content-center " style={{borderRadius:"100%", padding:"12px"}}>
+                  <span className="position-absolute top-0 start-100 translate-middle badge my-bg-red d-flex justify-content-center " style={{borderRadius:"100%", padding:"12px"}}>
                     {unreadCount}
                   </span>
                 )}

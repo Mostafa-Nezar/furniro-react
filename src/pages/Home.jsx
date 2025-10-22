@@ -187,7 +187,7 @@ const {theme} = useAppContext();
   const isVisible = useScrollObserver(".inspiration");
 
   return (
-    <div className={`my-bg-cream pt-5 px-5 ${theme ? "" : "bg-dark"}`}>
+    <div className={`inspiration my-bg-cream pt-5 px-5 ${theme ? "" : "bg-dark"}`}>
       <div className="row">
         <div className="col-lg-4 col-md-6">
           <motion.div
