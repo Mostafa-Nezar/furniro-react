@@ -1,6 +1,9 @@
 import Landing from "../comps/Landing.jsx";
 import Features from "../comps/Features.jsx";
+import { useAppContext } from "../context/AppContext.jsx";
 const Blog = () => {
+  const { theme } = useAppContext();
+
   const blogPosts = [
     {
       image: "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/laptop-blog.png",
@@ -29,6 +32,7 @@ const Blog = () => {
   ];
 
   return (
+    <div className={`${theme ? "" : "bg-dark text-white"}`}>
     <div className="blog">
       <div className="container p-3 px-5">
         <div className="row">
@@ -218,16 +222,17 @@ const Blog = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
 const About = () => {
   return (
-    <>
-      <Landing land="Blog" />
+  <>
+    <Landing land="Blog" />
       <Blog />
-      <Features />
-    </>
+    <Features />
+  </>
   );
 };
 

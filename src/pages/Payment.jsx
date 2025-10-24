@@ -225,7 +225,7 @@ const Payment = () => {
                 <button   onClick={handleCashOrder} style={{border: "1px solid",    borderRadius: "20px", color: "black", backgroundColor: "transparent", padding: "1em 8em", margin: "2em auto", display: "block"}}>
                   Place Order
                 </button>
-                <button onClick={handlePayPal} disabled={loadingpaypal} className="my-bg-primary my-btn d-block mt-5 mx-auto  fw-semibold text-white" style={{ borderRadius: "20px", border: "none", padding: "1em 8em"}}>
+                <button onClick={(e)=>{e.preventDefault(); handlePayPal()}} disabled={loadingpaypal} className="my-bg-primary my-btn d-block mt-5 mx-auto  fw-semibold text-white" style={{ borderRadius: "20px", border: "none", padding: "1em 8em"}}>
                   {loadingpaypal ? <><span className="spinner-border spinner-border-sm me-2"></span>Processing...</> : <>Pay ${total.toFixed(2)} with PayPal</>}
                 </button>
                 

@@ -2,12 +2,32 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useAppContext } from "../context/AppContext"; 
+import { useState } from "react";
 function Navbar({ toggle }) {
   const location = useLocation();
   const { user } = useAuth();
   const { cart } = useCart();
-  const { theme } = useAppContext();
+  const { theme ,toggleTheme, searchQuery, setSearchQuery } = useAppContext();
+  const [likewebsite, setlikewebsite] = useState(JSON.parse(localStorage.getItem("likewebsite") ) || false)
+  const [showsearch, setshowsearch] =useState(false);
+  const SunIcon = () => (
+    <svg className="my-text-yellow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" fillRule="evenodd" d="M13 3a1 1 0 1 0-2 0v2a1 1 0 1 0 2 0zM6.343 4.929A1 1 0 0 0 4.93 6.343l1.414 1.414a1 1 0 0 0 1.414-1.414zm12.728 1.414a1 1 0 0 0-1.414-1.414l-1.414 1.414a1 1 0 0 0 1.414 1.414zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10m-9 4a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zm16 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2zM7.757 17.657a1 1 0 1 0-1.414-1.414l-1.414 1.414a1 1 0 1 0 1.414 1.414zm9.9-1.414a1 1 0 0 0-1.414 1.414l1.414 1.414a1 1 0 0 0 1.414-1.414zM13 19a1 1 0 1 0-2 0v2a1 1 0 1 0 2 0z" clipRule="evenodd" />
+    </svg>
+  );
+  const MoonIcon = () => (
+    <svg className="text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22C6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981" />
+    </svg>
+  );
+  const Icon = !theme ? MoonIcon : SunIcon;
 
+  const togglelikewebsite = () =>{
+      const newValue = !likewebsite;
+      setlikewebsite(newValue);
+      localStorage.setItem("likewebsite", JSON.stringify(newValue));
+
+  }
   const isAuthenticated = !!user;
   const cartLength = cart.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
   const navClass = theme ? "navbar bg-white text-dark" : "navbar bg-dark text-light border-bottom border-secondary";
@@ -102,14 +122,26 @@ function Navbar({ toggle }) {
               </Link>
             </li>
           </ul>
-
+            {showsearch && (
+              <input
+                type="text"
+                className="w-25 my-form-control mx-2"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  fontSize: "14px",
+                  maxWidth:"20%"
+                }}
+              />
+            )}
           <ul className="navbar-nav ms-5 me-5">
             <li>
               <Link className={`nav-link mt-0 mb-0  ${iconColor} ${isActive("/Profile") ? "active text-primary" : ""}`} to={isAuthenticated ? "/Profile" : "/signin"}>
                 <Authicon />
               </Link>
             </li>
-            <li>
+            <li onClick={()=>{setshowsearch(!showsearch)}}>
               <Link className={`nav-link mt-0 mb-0 ${iconColor}`} to="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -127,14 +159,16 @@ function Navbar({ toggle }) {
                 </svg>
               </Link>
             </li>
-
-            <li>
+            <li onClick={toggleTheme} className={`nav-link mt-0 mb-0 ${iconColor} ${theme?"my-text-yellow":"moon"}`} >
+             <Icon />
+            </li>
+            <li onClick = {togglelikewebsite}>
               <Link className={`nav-link mt-0 mb-0 ${iconColor}`} id="heart" to="#">
-                <div id="heart" className={`heart-icon ${false ? "red" : ""}`}>
+                <div id="heart" className={`heart-icon ${likewebsite ? "red" : ""}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 48 48" fill="none">
                     <path
                       className="pathsvg"
-                      fill={false ? "currentColor" : "none"}
+                      fill={likewebsite ? "currentColor" : "none"}
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"

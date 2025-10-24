@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function Landing({ land, showImage = true }) {
+export default function Landing({ land }) {
   return (
     <motion.div
       className="contacting"
@@ -15,7 +15,6 @@ export default function Landing({ land, showImage = true }) {
           animate={{ scale: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          {showImage && (
             <motion.img
               src="https://res.cloudinary.com/dutetsivc/image/upload/v1760013317/logo_ikqv7r.png"
               alt="Meubel House Logo"
@@ -25,7 +24,6 @@ export default function Landing({ land, showImage = true }) {
               transition={{ duration: 0.8, delay: 0.3 }}
               whileHover={{ scale: 1.1, rotate: 5 }}
             />
-          )}
           <motion.h1
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}

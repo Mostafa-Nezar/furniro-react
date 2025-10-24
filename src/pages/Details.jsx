@@ -7,9 +7,7 @@ import Productcart from "../comps/Productcart";
 import Landing from "../comps/Landing";
 export default function Details() {
   const { id } = useParams();
-  const { products, theme, togglePopup } = useAppContext(),
-    { cart, addToCart, updateCartQuantity, removeFromCart, syncCart } =
-      useCart(),
+  const { products, theme, togglePopup } = useAppContext(), { cart, addToCart, updateCartQuantity, removeFromCart, syncCart } =useCart(),
     { user } = useAuth();
   const [userRating, setUserRating] = useState(null);
   const product = products.find((e) => e.id == id);
@@ -198,7 +196,7 @@ export default function Details() {
     );
 
   return (
-    <div className="bg-dark">
+    <div className={`${theme ? "" : "bg-dark"}`}>
       <Landing land={`${product.name} Details`} />
       <div className="container mt-5">
         <div className="ms-5 row">

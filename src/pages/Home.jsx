@@ -1,33 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Productcart from "../comps/Productcart";
 import { useAppContext } from "../context/AppContext";
-const useScrollObserver = (selector, threshold = 0.1) => {
+import { Link } from "react-router-dom";
+
+const useScrollObserver = (threshold = 0.3) => {
   const [isVisible, setIsVisible] = useState(false);
-
-  const handleScroll = (entries, observer) => {
-    const [entry] = entries;
-    if (entry.isIntersecting) {
-      setIsVisible(true);
-      observer.unobserve(entry.target);
-    }
-  };
-
+  const ref = useRef(null);
   useEffect(() => {
-    const observer = new IntersectionObserver(handleScroll, {
-      threshold,
-    });
+    const observer = new IntersectionObserver(([entry], obs) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        obs.unobserve(entry.target);
+      }
+    }, { threshold });
 
-    const element = document.querySelector(selector);
-    if (element) observer.observe(element);
+    const current = ref.current;
+    if (current) observer.observe(current);
 
     return () => {
-      if (element) observer.unobserve(element);
+      if (current) observer.unobserve(current);
     };
-  }, [selector, threshold]);
+  }, [threshold]);
 
-  return isVisible;
+  return [ref, isVisible];
 };
+
 
 const Banner = () => {
   return (
@@ -92,9 +90,9 @@ const Banner = () => {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. ut aperiam
           aspernatur error itaque minima odio.
         </motion.p>
-        <a href="/shop" className="ms-5">
+        <Link to="/shop" className="ms-5">
           <motion.button
-            className="mt-4 text-dark border-0"
+            className="mt-4 text-white border-0"
             style={{
               backgroundColor: "var(--primary)",
               padding: "20px",
@@ -108,17 +106,17 @@ const Banner = () => {
           >
             Buy Now
           </motion.button>
-        </a>
+        </Link>
       </motion.div>
     </div>
   );
 };
 
 const Landing = () => {
-  const isVisible = useScrollObserver(".landing");
+const [landingRef, isVisible] = useScrollObserver();
   const {theme} = useAppContext();
   return (
-    <div className={`landing mt-5 p-4 text-center`}>
+    <div ref={landingRef} className={`landing mt-5 p-4 text-center`}>
       <div className="container">
         <motion.h1
           className="fw-bold"
@@ -184,10 +182,9 @@ const Landing = () => {
 
 const Inspiration = () => {
 const {theme} = useAppContext();
-  const isVisible = useScrollObserver(".inspiration");
-
+const [inspirationRef, isVisible] = useScrollObserver();
   return (
-    <div className={`inspiration my-bg-cream pt-5 px-5 ${theme ? "" : "bg-dark"}`}>
+    <div ref={inspirationRef} className={`inspiration my-bg-cream pt-5 px-5 ${theme ? "" : "bg-dark"}`}>
       <div className="row">
         <div className="col-lg-4 col-md-6">
           <motion.div
@@ -377,8 +374,8 @@ const {theme} = useAppContext();
 };
 
 const Random = () => {
-  const isVisible = useScrollObserver(".random");
   const {theme} = useAppContext();
+  const [randomRef, isVisible] = useScrollObserver();
 
   const fadeIn = {
     initial: { opacity: 0, y: 30 },
@@ -388,7 +385,7 @@ const Random = () => {
 
   return (
     <>
-      <motion.div className="random" {...fadeIn}>
+      <motion.div ref={randomRef} className="random" {...fadeIn}>
         <motion.p
           className={`${
             theme ? "text-black-50" : "text-white-50"
@@ -555,9 +552,9 @@ const Home = () => {
         </div>
       </div>
       <div className="text-center my-5">
-        <a href="/shop">
+        <Link to="/shop">
           <button className="show-more mb-5 mt-3 text-center">Show More</button>
-        </a>
+        </Link>
       </div>
       <div>
         <Inspiration />

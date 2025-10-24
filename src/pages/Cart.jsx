@@ -1,11 +1,13 @@
-import {  useCart } from "../context/CartContext";
+import { useCart } from "../context/CartContext";
+import { useAppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import Features from "../comps/Features";
 import Landing from "../comps/Landing";
 const Cart = () => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart } = useCart(), { theme } = useAppContext();
+
   return (
-    <>
+    <div className={`${theme ? "" : "bg-dark -white"}`}>
       <Landing land={"Cart"} />
       <div className="container">
         <div className="row py-5 my-5">
@@ -92,7 +94,7 @@ const Cart = () => {
         </div>
       </div>
       <Features />
-    </>
+    </div>
   );
 };
 

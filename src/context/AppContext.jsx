@@ -4,11 +4,15 @@ import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext"; 
 
 const AppContext = createContext();
-const initialState = { theme: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false };
+const initialState = { theme: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
 const appReducer = (state, action) => {
   switch (action.type) {
     case "TOGGLE_THEME":return { ...state, theme: !state.theme };
     case "SET_THEME":return { ...state, theme: action.payload };
+    case "SET_SEARCH_QUERY": return { ...state, searchQuery: action.payload };
+    case "SET_SORT_BY": return { ...state, sortBy: action.payload };
+    case "SET_FILTER_PRICE": return { ...state, filterPrice: action.payload };
+    case "SET_FILTERED_PRODUCTS": return { ...state, filteredProducts: action.payload };
     case "SET_FAVORITES": return { ...state, favorites: action.payload };
     case "SHOW_POPUP": return { ...state, popup: { visible: true, message: action.payload || state.popup.message }};
     case "HIDE_POPUP": return { ...state, popup: { visible: false, message: state.popup.message }};
@@ -29,7 +33,32 @@ export const AppProvider = ({ children }) => {
   useEffect(() => { loadStoredData();  }, []);
   useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
-    useEffect(() => {getProducts()}, []);
+  useEffect(() => {getProducts()}, []);
+  useEffect(() => {
+  let updated = [...state.products];
+
+  if (state.searchQuery.trim()) {
+    updated = updated.filter(
+      (p) =>
+        (p.name && p.name.toLowerCase().includes(state.searchQuery.toLowerCase())) ||
+        (p.des && p.des.toLowerCase().includes(state.searchQuery.toLowerCase()))
+    );
+  }
+
+  if (state.filterPrice !== null) {
+    updated = updated.filter((p) => p.price == state.filterPrice);
+  }
+
+  if (state.sortBy === "a-z") {
+    updated.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (state.sortBy === "z-a") {
+    updated.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  dispatch({ type: "SET_FILTERED_PRODUCTS", payload: updated });
+}, [state.products, state.searchQuery, state.sortBy, state.filterPrice]);
+
+
   const toggleTheme = () => {dispatch({ type: "TOGGLE_THEME" })};
   const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
@@ -70,9 +99,10 @@ export const AppProvider = ({ children }) => {
       dispatch({ type: "HIDE_POPUP" });
     }, 1500);
   };
-  const toggleShareButtons = () =>{
-    dispatch({type: "TOGGLE_SHARE"})
-  };
+  const toggleShareButtons = () =>{dispatch({type: "TOGGLE_SHARE"})};
+  const setSortBy = (value) => dispatch({ type: "SET_SORT_BY", payload: value });
+  const setFilterPrice = (value) => dispatch({ type: "SET_FILTER_PRICE", payload: value });
+  const setSearchQuery = (value) => {dispatch({ type: "SET_SEARCH_QUERY", payload: value })};
   const logout = async () => {
      localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -115,7 +145,7 @@ export const AppProvider = ({ children }) => {
       return [];
     }
   };
- const cancelOrder = async (orderId) => {
+  const cancelOrder = async (orderId) => {
     try {
       dispatch({ type: "SET_LOADING_CANCEL", payload: orderId });
       const data = await fetchInstance(`/orders/${orderId}/status`, {
@@ -135,7 +165,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, toggleTheme, toggleShareButtons, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders }} >
+    <AppContext.Provider value={{ ...state, toggleTheme, toggleShareButtons, togglePopup, toggleFavorite, getProducts, searchProducts,  cancelOrder, logout, user, isAuthenticated, updateUser, clearCartAndUpdateOrsers, fetchOrders, setSearchQuery, setSortBy, setFilterPrice }} >
       {children}
     </AppContext.Provider>
   );
