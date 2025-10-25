@@ -2,9 +2,11 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 import { fetchInstance } from "./api";
 import { useAuth } from "./AuthContext"; 
 import { useCart } from "./CartContext"; 
+const browsertheme = window.matchMedia("(prefers-color-scheme: light)");
+console.log(browsertheme.matches);
 
 const AppContext = createContext();
-const initialState = { theme: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
+const initialState = { theme: browsertheme.matches, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
 const appReducer = (state, action) => {
   switch (action.type) {
     case "TOGGLE_THEME":return { ...state, theme: !state.theme };

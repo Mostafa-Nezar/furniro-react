@@ -78,7 +78,7 @@ const Profile = () => {
               <small className="text-muted" style={{ fontSize: "13px" }}>{formatDate(notif.createdAt)}</small>
             </div>
           </div>
-          <div className=" my-text-redcolor btn-sm" style={{ padding: "4px 8px", cursor:"pointer" }} onClick={() => handleDeleteNotification(notif._id)}>
+          <div className=" my-text-red btn-sm" style={{ padding: "4px 8px", cursor:"pointer" }} onClick={() => handleDeleteNotification(notif._id)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
           </div>
         </motion.div>
@@ -188,7 +188,7 @@ const Profile = () => {
             <strong className="my-text-black">{item.name}</strong>
             <p className="mb-0 text-muted">${item.price}</p>
           </div>
-          <button className="my-text-redcolor border-0 bg-transparent my-btn btn-sm" onClick={() => removeFromCart(item.id)}>
+          <button className="my-text-red border-0 bg-transparent my-btn btn-sm" onClick={() => removeFromCart(item.id)}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5"/></svg>
           </button>
         </motion.div>
@@ -203,14 +203,14 @@ const Profile = () => {
       <h5 className="my-text-primary d-flex align-items-center gap-2 my-2">
         {hasLocation ? (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-greencolor">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-green">
               <path fill="currentColor" d="M10.115 21.811c.606.5 1.238.957 1.885 1.403a27 27 0 0 0 1.885-1.403a28 28 0 0 0 2.853-2.699C18.782 16.877 21 13.637 21 10a9 9 0 1 0-18 0c0 3.637 2.218 6.876 4.262 9.112a28 28 0 0 0 2.853 2.7M12 13.25a3.25 3.25 0 1 1 0-6.5a3.25 3.25 0 0 1 0 6.5"/>
             </svg>
             Your Saved Location
           </>
         ) : (
           <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-redcolor">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" className="my-text-red">
               <path fill="currentColor" d="M2.22 2.22a.75.75 0 0 1 1.06 0l18.5 18.5l.051.056a.75.75 0 0 1-1.055 1.055l-.056-.05l-3.738-3.738l-.012.014q-1.312 1.288-3.406 3.312a2.25 2.25 0 0 1-3.129 0l-3.49-3.396q-.66-.646-1.102-1.09A8.71 8.71 0 0 1 4.787 5.848L2.22 3.28a.75.75 0 0 1 0-1.06m4.65 1.468a8.708 8.708 0 0 1 12.166 12.166l-4.13-4.128A3 3 0 0 0 15 11a3 3 0 0 0-3.726-2.91zm2.245 6.488a3 3 0 0 0 3.708 3.708z"/>
             </svg>
             No location saved
@@ -225,7 +225,7 @@ const Profile = () => {
       )}
 
       <button
-        className="my-btn my-bg-primary my-text-semi-white mt-4 d-flex align-items-center gap-2"
+        className="my-btn  my-bg-primary text-white mt-4 d-flex align-items-center gap-2"
         onClick={async () => {
           setLocationLoading(true);
           try {
@@ -250,8 +250,7 @@ const Profile = () => {
       </button>
     </div>
   );
-};
-
+  };
   const renderPhoneContent = () => {
     const handleSavePhone = async () => {
       if (!/^0\d{9,11}$/.test(phone)) {
@@ -274,7 +273,7 @@ const Profile = () => {
       </svg> Your Phone Number
     </h5>
     <input type="text" className="mb-2 px-3 py-2 rounded border my-text-black w-100" style={{ borderColor: "#ced4da", fontSize: "1rem", outline: "none" }} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter your phone number"/>
-    <button className="my-btn my-bg-greencolor my-text-semi-white" onClick={handleSavePhone}>
+    <button className="my-btn my-bg-green text-white" onClick={handleSavePhone}>
       Save Phone Number
     </button>
   </div>
@@ -305,8 +304,8 @@ const Profile = () => {
               </p>
               <p className="mb-0 d-flex align-items-center gap-1">
                 {["paid", "deliverd"].includes(order.status)?
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 16" className="my-text-greencolor"><path fill="currentColor" d="m7.536 8.657l2.828-2.83a1 1 0 0 1 1.414 1.416l-3.535 3.535a1 1 0 0 1-1.415.001l-2.12-2.12a1 1 0 1 1 1.413-1.415zM8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16m0-2A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/></svg>:
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" className="my-text-redcolor"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="m20 33l6 2s15-3 17-3s2 2 0 4s-9 8-15 8s-10-3-14-3H4"/><path d="M4 29c2-2 6-5 10-5s13.5 4 15 6s-3 5-3 5M16 18v-8a2 2 0 0 1 2-2h24a2 2 0 0 1 2 2v16"/><path fill="currentColor" d="M25 8h10v9H25z"/></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 16" className="my-text-green"><path fill="currentColor" d="m7.536 8.657l2.828-2.83a1 1 0 0 1 1.414 1.416l-3.535 3.535a1 1 0 0 1-1.415.001l-2.12-2.12a1 1 0 1 1 1.413-1.415zM8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16m0-2A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/></svg>:
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" className="my-text-red"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="m20 33l6 2s15-3 17-3s2 2 0 4s-9 8-15 8s-10-3-14-3H4"/><path d="M4 29c2-2 6-5 10-5s13.5 4 15 6s-3 5-3 5M16 18v-8a2 2 0 0 1 2-2h24a2 2 0 0 1 2 2v16"/><path fill="currentColor" d="M25 8h10v9H25z"/></g></svg>
                   }
                 <span className="my-text-black">Status: {order.status}</span>
               </p>
