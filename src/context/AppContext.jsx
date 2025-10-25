@@ -2,14 +2,6 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 import { fetchInstance } from "./api";
 import { useAuth } from "./AuthContext"; 
 import { useCart } from "./CartContext"; 
-const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-console.log(mediaQuery.matches ? "🌙 المتصفح في الوضع الداكن" : "☀️ المتصفح في الوضع الفاتح");
-
-// عشان يتحدث لو المستخدم غير الثيم في النظام
-mediaQuery.addEventListener("change", (e) => {
-  console.log(e.matches ? "🌙 اتغير إلى الوضع الداكن" : "☀️ اتغير إلى الوضع الفاتح");
-});
 
 const AppContext = createContext();
 const initialState = { theme: false, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
