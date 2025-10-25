@@ -100,7 +100,7 @@ function Navbar({ toggle }) {
 
         {/* Links */}
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link className={linkClass("/")} to="/">
                 Home
@@ -159,7 +159,7 @@ function Navbar({ toggle }) {
                 </svg>
               </Link>
             </li>
-            <li onClick={toggleTheme} className={`nav-link mt-0 mb-0 ${iconColor} ${theme?"my-text-yellow":"moon"}`} >
+            <li onClick={toggleTheme} style={{cursor:"pointer"}} className={`nav-link mt-0 mb-0 ${iconColor} ${theme?"my-text-yellow":""}`} >
              <Icon />
             </li>
             <li onClick = {togglelikewebsite}>

@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
 export default function Landing({ land }) {
+  const {theme} = useAppContext();
   return (
     <motion.div
       className="contacting"
@@ -8,7 +11,7 @@ export default function Landing({ land }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
     >
-      <div className="container p-5">
+      <div className={`container p-5 ${theme ? "" :"text-white"}`}>
         <motion.div
           className="text-center"
           initial={{ scale: 0.8 }}
@@ -31,7 +34,7 @@ export default function Landing({ land }) {
           >
             {land}
           </motion.h1>
-          <a className="d-inline myhome" href="/">Home</a>
+          <Link className={`d-inline ${theme ? "" :"text-white"}`} to="/">Home</Link>
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
             width="26"
