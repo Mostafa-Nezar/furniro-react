@@ -11,7 +11,7 @@ import { useSocket } from "../context/SocketContext.jsx";
 const Profile = () => {
   const navigate = useNavigate();
   const { notifications,unreadCount, refreshing, fetchNotifications, handleDeleteNotification, formatDate, markAllAsReadInDB } = useSocket();
-  const { logout, theme, toggleTheme, favorites, fetchOrders, toggleFavorite, orders } = useAppContext();
+  const { logout, theme, toggleTheme, favorites, fetchOrders, toggleFavorite, orders, togglePopup } = useAppContext();
   const { user, isAuthenticated, updateUser } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
@@ -36,9 +36,9 @@ const Profile = () => {
         const updated = { ...user, image: data.imageUrl };
         updateUser(updated);
         localStorage.setItem("user", JSON.stringify(updated));
-        alert("✅ Image updated successfully");
-      } else alert("❌ Upload failed");
-    } catch (err) { alert("Error uploading image"); } finally { setIsUploading(false); }
+        togglePopup("✅ Image updated successfully");
+      } else togglePopup("❌ Upload failed");
+    } catch (err) { togglePopup("Error uploading image"); } finally { setIsUploading(false); }
   };
   const SunIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@ const Profile = () => {
   const getCurrentLocation = async () => {
     try {
       if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
+        togglePopup("Geolocation is not supported by your browser");
         return;
       }
 
@@ -137,12 +137,12 @@ const Profile = () => {
           updateUser({ ...user, location: address });
         },
         (err) => {
-          alert("Location permission denied or unavailable");
+          togglePopup("Location permission denied or unavailable");
         },
         { enableHighAccuracy: true }
       );
     } catch (e) {
-      alert(`Update failed: ${e.message}`);
+      togglePopup(`Update failed: ${e.message}`);
     } finally {
       setLocationLoading(false);
     }
@@ -254,14 +254,14 @@ const Profile = () => {
   const renderPhoneContent = () => {
     const handleSavePhone = async () => {
       if (!/^0\d{9,11}$/.test(phone)) {
-        return alert("Invalid phone number. Must start with 0 and be 10–12 digits.");
+        return togglePopup("Invalid phone number. Must start with 0 and be 10–12 digits.");
       }
       try {
         await updatePhone(user.id, phone); 
-        alert("Phone number saved successfully!");
+        togglePopup("Phone number saved successfully!");
       } catch (err) {
         console.error("Error saving phone number:", err);
-        alert("Failed to save phone number");
+        togglePopup("Failed to save phone number");
       }
     };
     return (
@@ -334,7 +334,7 @@ const Profile = () => {
     { icon: "credit-card", title: "Payment", subtitle: "Manage cards", onClick: () => setActiveSection(activeSection === "payment" ? null : "payment"), content: renderGenericContent("Payment Methods", "payment") },
     { icon: "bell", title: "Notifications", subtitle: "Notification settings", onClick: () => setActiveSection(activeSection === "notifications" ? null : "notifications"), content: renderNotificationsContent() },
     { icon: "phone", title: "Phone", subtitle: user?.phoneNumber ?"phone saved":"set phone number", onClick: () => setActiveSection(activeSection === "phone" ? null : "phone"), content: renderPhoneContent() },
-    { icon: "info-circle", title: "About App", subtitle: "App info", onClick: () => alert("Furniro v1.0.0", "Modern furniture app"), content: null },
+    { icon: "info-circle", title: "About App", subtitle: "App info", onClick: () => togglePopup("Furniro v1.0.0", "Modern furniture app"), content: null },
 
   ];
 
