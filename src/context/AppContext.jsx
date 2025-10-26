@@ -2,11 +2,9 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 import { fetchInstance } from "./api";
 import { useAuth } from "./AuthContext"; 
 import { useCart } from "./CartContext"; 
-const browsertheme = window.matchMedia("(prefers-color-scheme: light)");
-console.log(browsertheme.matches);
-
+const mytheme = JSON.parse(localStorage.getItem("mytheme")) || window.matchMedia("(prefers-color-scheme: light)").matches
 const AppContext = createContext();
-const initialState = { theme: browsertheme.matches, favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
+const initialState = { theme:mytheme , favorites: [], products: [],  loadingCancel: null, orders: [],popup: { visible: false, message: "" }, ShareButtons: false, searchQuery: "", filteredProducts: [], sortBy: "default", filterPrice: null };
 const appReducer = (state, action) => {
   switch (action.type) {
     case "TOGGLE_THEME":return { ...state, theme: !state.theme };
@@ -33,7 +31,7 @@ export const AppProvider = ({ children }) => {
   const { clearCartAndUpdateOrsers } = useCart();
   const [state, dispatch] = useReducer(appReducer, initialState);
   useEffect(() => { loadStoredData();  }, []);
-  useEffect(() => { saveDataToStorage(); }, [ state.favorites, user, isAuthenticated]);
+  useEffect(() => { saveDataToStorage(); }, [state.theme, state.favorites, user, isAuthenticated]);
   useEffect(() => { (user && user.id) ? fetchOrders(user.id):dispatch({ type: "SET_ORDERS", payload: [] }) }, [user]);
   useEffect(() => {getProducts()}, []);
   useEffect(() => {
@@ -59,9 +57,11 @@ export const AppProvider = ({ children }) => {
 
   dispatch({ type: "SET_FILTERED_PRODUCTS", payload: updated });
 }, [state.products, state.searchQuery, state.sortBy, state.filterPrice]);
-
-
-  const toggleTheme = () => {dispatch({ type: "TOGGLE_THEME" })};
+  const toggleTheme = () => {
+    dispatch({ type: "TOGGLE_THEME" });
+    const newTheme = !state.theme;
+    localStorage.setItem("mytheme", JSON.stringify(newTheme));
+  };
   const toggleFavorite = (id) => { dispatch({ type: "TOGGLE_FAVORITE", payload: id })};
   const fetchOrders = async (userId) => {
     const data = await fetchInstance(`/orders/user/${userId}`);

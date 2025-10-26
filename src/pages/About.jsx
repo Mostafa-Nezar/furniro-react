@@ -4,97 +4,37 @@ import { useAppContext } from "../context/AppContext.jsx";
 import { useState, useEffect } from "react";
 const Blog = () => {
   const { theme } = useAppContext();
-  const blogPosts = [
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/laptop-blog.png",
-      date: "24 Oct 2022",
-      category: "Wood",
-      title: "Going all-in With Millennial design",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mus mauris vitae ultricies leo integer malesuada nunc. In nulla posuere sollicitudin aliquam ultrices. Morbi blandit cursus risus at ultrices mi tempus imperdiet. Libero enim sed faucibus turpis in.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 68.png",
-      date: "24 Oct 2022",
-      category: "Wood",
-      title: "Exploring new ways of decorating",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mus mauris vitae ultricies leo integer malesuada nunc. In nulla posuere sollicitudin aliquam ultrices.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 68(1).png",
-      date: "24 Oct 2022",
-      category: "Wood",
-      title: "Experimenting with color palettes",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi blandit cursus risus at ultrices mi tempus imperdiet.",
-    },
-
-    // 👇 هنا الستة الجداد بدل الصور القديمة بصور recent posts
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69.png",
-      date: "03 Aug 2022",
-      category: "Design",
-      title: "Going all-in With Millennial design",
-      content:
-        "Discover the secrets behind modern millennial design trends that redefine simplicity, comfort, and sustainability for today’s homes.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69(1).png",
-      date: "03 Aug 2022",
-      category: "Craft",
-      title: "Mastering the art of handmade furniture",
-      content:
-        "Learn how craftsmanship and creativity combine to bring stunning handmade furniture pieces to life in the modern age.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69(2).png",
-      date: "03 Aug 2022",
-      category: "Decor",
-      title: "Minimalist interiors: less is more",
-      content:
-        "A deep dive into the beauty of minimalism — explore how to create clean, elegant, and calm interiors with fewer but better choices.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69(3).png",
-      date: "03 Aug 2022",
-      category: "Art",
-      title: "The return of natural textures",
-      content:
-        "Why natural textures like wood, linen, and clay are making a huge comeback in interior design and how to use them effectively.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69(4).png",
-      date: "03 Aug 2022",
-      category: "Handmade",
-      title: "Crafting a timeless workspace",
-      content:
-        "Explore ideas for building workspaces that balance comfort, creativity, and timeless design aesthetics.",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 68.png",
-      date: "03 Aug 2022",
-      category: "Design",
-      title: "Bringing personality into small spaces",
-      content:
-        "Transform your compact living areas with color, lighting, and decor tips that add character without clutter.",
-    },
-  ];
+  const [blogPosts, setblogPosts] = useState([])
+  
+  const fetchPosts = async () => {
+    try {
+      const res = await fetch("https://furniro-back-production.up.railway.app/api/post");
+      const data = await res.json();
+      setblogPosts(data)
+      localStorage.setItem("blogPosts", JSON.stringify(data));
+    } catch (err) {
+      console.log("Error fetching posts:", err);
+    }
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
+    const loadPosts = async () => {
+      const cached = localStorage.getItem("blogPosts");
+      if (cached) {
+        setblogPosts(JSON.parse(cached));
+      } else {
+        await fetchPosts();
+      }
+    };
+    loadPosts();
+  }, []);
+
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
+
   const postsPerPage = 3;
   const filteredPosts = blogPosts.filter(
     (post) =>
