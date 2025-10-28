@@ -23,6 +23,8 @@ import Details from "./pages/Details.jsx";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Paypal from "./pages/Paypal.jsx";
+import { Provider } from "react-redux";
+import store from "./redux/store.jsx";
 
 const stripePromise = loadStripe("pk_test_51RfzAo4hpzh6swtTe5XoqvV6DcUlufkptuTb7Q4DKfuVgnDDH76ICrTlrw8pXwKGpHscUSZCr9vwniO6e0zc0VT900tEcvmgjR");
 
@@ -55,6 +57,7 @@ function App() {
         <CartProvider>
           <AppProvider>
             <SocketProvider>
+                <Provider store={store}>
               <Router>
                 <Scrollbutton />
                 <Layout />
@@ -62,6 +65,7 @@ function App() {
                 <ShareButtons />
                 <Popup />
               </Router>
+              </Provider>
             </SocketProvider>
           </AppProvider>
         </CartProvider>
