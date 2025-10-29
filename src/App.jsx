@@ -25,6 +25,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import Paypal from "./pages/Paypal.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.jsx";
+import Contact from "./pages/Contact.jsx";
 
 const stripePromise = loadStripe("pk_test_51RfzAo4hpzh6swtTe5XoqvV6DcUlufkptuTb7Q4DKfuVgnDDH76ICrTlrw8pXwKGpHscUSZCr9vwniO6e0zc0VT900tEcvmgjR");
 
@@ -41,6 +42,7 @@ function Layout() {
         <Route path="/Paypal" element={<Paypal />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/About" element={<About />} />
+        <Route path="/Contact" element={<Contact />} />
         <Route path="/Cart" element={<Cart />} />
         <Route path="/Details/:id" element={<Details />} />
         <Route path="/ordersuccessscreen" element={<Ordersuccessscreen />} />
