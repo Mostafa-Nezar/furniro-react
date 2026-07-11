@@ -7,7 +7,7 @@ import Productcart from "../comps/Productcart";
 import Landing from "../comps/Landing";
 export default function Details() {
   const { id } = useParams();
-  const { products, theme, togglePopup } = useAppContext(), { cart, addToCart, updateCartQuantity, removeFromCart, syncCart } =useCart(),
+  const { products, theme, togglePopup } = useAppContext(), { cart, addToCart, updateCartQuantity, removeFromCart, syncCart } = useCart(),
     { user } = useAuth();
   const [userRating, setUserRating] = useState(null);
   const product = products.find((e) => e.id == id);
@@ -23,7 +23,7 @@ export default function Details() {
     settoprates(
       await (
         await fetch(
-          `https://furniro-back-production.up.railway.app/api/ratings/top-ratings/${product.id}`
+          `https://furniro-back.vercel.app/api/ratings/top-ratings/${product.id}`
         )
       ).json()
     );
@@ -37,7 +37,7 @@ export default function Details() {
     try {
       const rateId = `${user.id}-${product.id}`;
       const res = await fetch(
-        "https://furniro-back-production.up.railway.app/api/ratings",
+        "https://furniro-back.vercel.app/api/ratings",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -109,7 +109,7 @@ export default function Details() {
     const rateId = `${user.id}-${product.id}`;
 
     try {
-      const res = await fetch("https://furniro-back-production.up.railway.app/api/ratings/test", {
+      const res = await fetch("https://furniro-back.vercel.app/api/ratings/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -294,9 +294,8 @@ export default function Details() {
               {["l", "xl", "xs"].map((size) => (
                 <span
                   key={size}
-                  className={`p-2 size m-2 my-bg-color3 ${
-                    selectedSize === size ? "active" : ""
-                  }`}
+                  className={`p-2 size m-2 my-bg-color3 ${selectedSize === size ? "active" : ""
+                    }`}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setSelectedSize(size);
@@ -528,17 +527,15 @@ export default function Details() {
 
       <div className="container">
         <div
-          className={`p-4 mt-4 rounded-4 shadow-sm ${
-            theme ? "bg-dark text-light" : "bg-light text-dark"
-          }`}
+          className={`p-4 mt-4 rounded-4 shadow-sm ${theme ? "bg-dark text-light" : "bg-light text-dark"
+            }`}
           style={{ border: theme ? "1px solid #444" : "1px solid #ddd" }}
         >
           <h5 className="fw-bold mb-3">Leave a Comment</h5>
           <form onSubmit={sendcomment}>
             <textarea
-              className={`my-form-control mb-3 ${
-                theme ? "bg-dark text-light" : "bg-white text-dark"
-              }`}
+              className={`my-form-control mb-3 ${theme ? "bg-dark text-light" : "bg-white text-dark"
+                }`}
               rows="4"
               placeholder="Write your comment..."
               value={comment}
@@ -548,9 +545,8 @@ export default function Details() {
             <button
               type="submit"
               disabled={loading}
-              className={`btn w-100 fw-semibold ${
-                theme ? "btn-light text-dark" : "btn-dark text-light"
-              }`}
+              className={`btn w-100 fw-semibold ${theme ? "btn-light text-dark" : "btn-dark text-light"
+                }`}
               style={{ borderRadius: "10px", opacity: loading ? 0.7 : 1 }}
             >
               {loading ? "Submitting..." : "Submit Comment"}

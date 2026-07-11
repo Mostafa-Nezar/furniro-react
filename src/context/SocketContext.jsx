@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 const SocketContext = createContext();
 
-const API = "https://furniro-back-production.up.railway.app/api/notifications";
+const API = "https://furniro-back.vercel.app/api/notifications";
 
 export const useSocket = ( ) => {
   const context = useContext(SocketContext);
@@ -86,7 +86,7 @@ export const SocketProvider = ({ children }) => {
           await fetchNotifications();
 
           const userData = JSON.parse(userString);
-          const newSocket = io('https://furniro-back-production.up.railway.app', {
+          const newSocket = io('https://furniro-back.vercel.app', {
             auth: { token: token }
           } );
 

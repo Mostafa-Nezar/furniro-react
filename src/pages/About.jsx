@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 const Blog = () => {
   const { theme } = useAppContext();
   const [blogPosts, setblogPosts] = useState([])
-  
+
   const fetchPosts = async () => {
     try {
-      const res = await fetch("https://furniro-back-production.up.railway.app/api/post");
+      const res = await fetch("https://furniro-back.vercel.app/api/post");
       const data = await res.json();
       setblogPosts(data)
       localStorage.setItem("blogPosts", JSON.stringify(data));
@@ -53,18 +53,16 @@ const Blog = () => {
         <div className="container py-5 px-4 px-md-5">
           <div className="row gy-5">
             <div
-              className={`col-md-8 ${
-                theme
+              className={`col-md-8 ${theme
                   ? ""
                   : "bg-secondary bg-opacity-25 rounded-4 p-4 shadow-sm"
-              }`}
+                }`}
             >
               {currentPosts.map((post, index) => (
                 <div
                   key={index}
-                  className={`mb-5 pb-4 border-bottom ${
-                    theme ? "border-light-subtle" : "border-secondary"
-                  }`}
+                  className={`mb-5 pb-4 border-bottom ${theme ? "border-light-subtle" : "border-secondary"
+                    }`}
                 >
                   <img
                     className="img-fluid rounded-3 mb-3 shadow-sm"
@@ -73,9 +71,8 @@ const Blog = () => {
                   />
 
                   <div
-                    className={`d-flex flex-wrap gap-4 mb-3 small align-items-center ${
-                      theme ? "text-muted" : "text-light opacity-75"
-                    }`}
+                    className={`d-flex flex-wrap gap-4 mb-3 small align-items-center ${theme ? "text-muted" : "text-light opacity-75"
+                      }`}
                   >
                     <div className="d-flex align-items-center">
                       <svg
@@ -124,16 +121,14 @@ const Blog = () => {
 
                   <h2 className="fw-bold mb-3">{post.title}</h2>
                   <p
-                    className={`${
-                      theme ? "text-secondary" : "text-light opacity-75"
-                    } mb-4`}
+                    className={`${theme ? "text-secondary" : "text-light opacity-75"
+                      } mb-4`}
                   >
                     {post.content}
                   </p>
                   <button
-                    className={`${
-                      theme ? "read-more" : "read-more text-white"
-                    }`}
+                    className={`${theme ? "read-more" : "read-more text-white"
+                      }`}
                   >
                     Read More
                   </button>
@@ -144,9 +139,8 @@ const Blog = () => {
             <div className="col-md-4">
               <div className="p-3">
                 <div
-                  className={`d-flex align-items-center position-relative ${
-                    theme ? "" : "bg-dark border-secondary"
-                  }`}
+                  className={`d-flex align-items-center position-relative ${theme ? "" : "bg-dark border-secondary"
+                    }`}
                   style={{
                     borderRadius: "8px",
                     border: theme ? "1px solid #ced4da" : "1px solid #444",
@@ -158,9 +152,8 @@ const Blog = () => {
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`flex-grow-1 border-0 ps-3 py-2 ${
-                      theme ? "text-dark" : "bg-dark text-light"
-                    }`}
+                    className={`flex-grow-1 border-0 ps-3 py-2 ${theme ? "text-dark" : "bg-dark text-light"
+                      }`}
                     style={{
                       outline: "none",
                       background: "transparent",
@@ -168,9 +161,8 @@ const Blog = () => {
                   />
 
                   <svg
-                    className={`${
-                      theme ? "text-muted" : "text-light opacity-75"
-                    }`}
+                    className={`${theme ? "text-muted" : "text-light opacity-75"
+                      }`}
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
                     height="18"
@@ -195,11 +187,10 @@ const Blog = () => {
                   (cat, i) => (
                     <div
                       key={i}
-                      className={`d-flex justify-content-between align-items-center border-bottom py-2 ${
-                        theme
+                      className={`d-flex justify-content-between align-items-center border-bottom py-2 ${theme
                           ? "text-muted"
                           : "text-light opacity-75 border-secondary"
-                      }`}
+                        }`}
                     >
                       <span>{cat}</span>
                       <span>{Math.floor(Math.random() * 10) + 1}</span>
@@ -217,9 +208,8 @@ const Blog = () => {
                     className="d-flex align-items-center gap-3 mb-4"
                   >
                     <img
-                      src={`https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69${
-                        index > 0 ? `(${index})` : ""
-                      }.png`}
+                      src={`https://res.cloudinary.com/dutetsivc/image/upload/v1752665093/furniro/Rectangle 69${index > 0 ? `(${index})` : ""
+                        }.png`}
                       className="rounded-3 shadow-sm"
                       width="70"
                       height="70"
@@ -231,9 +221,8 @@ const Blog = () => {
                         Going all-in With Millennial design
                       </div>
                       <span
-                        className={`${
-                          theme ? "text-muted" : "text-light opacity-75"
-                        } small`}
+                        className={`${theme ? "text-muted" : "text-light opacity-75"
+                          } small`}
                       >
                         03 Aug 2022
                       </span>

@@ -34,7 +34,7 @@ const Productcart = ({ product }) => {
     <div className="col-md-6 col-lg-3">
       <div className={`cont rounded-4 ${theme ? "my-bg-semiWhite":"my-bg-black my-text-white"}`}>
         <div className="innercontent position-relative">
-          <img width="100%" className="img-fluid" src={product.image} alt={product.name} style={{ height: "316.85px" }}/>
+          <img width="100%" className="img-fluid" src={product.images[0]} alt={product.name} style={{ height: "316.85px" }}/>
           <div className={`position-absolute rounded-circle d-flex justify-content-center align-items-center text-white fw-bold sale
               ${ product.date && (new Date() - new Date(product.date)) / (1000 * 60 * 60 * 24) < 30
                   ? "my-bg-green"

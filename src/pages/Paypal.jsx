@@ -10,12 +10,12 @@ export default function PayPalCheckout() {
   const [loading, setLoading] = useState(false);
 
   const subtotal = cart.reduce((t, i) => t + i.price * i.quantity, 0);
-  const total = subtotal; 
+  const total = subtotal;
 
   const handlePayPal = async () => {
     try {
       setLoading(true);
-      const res = await fetch("https://furniro-back-production.up.railway.app/api/paypal2/orders", {
+      const res = await fetch("https://furniro-back.vercel.app/api/paypal2/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
